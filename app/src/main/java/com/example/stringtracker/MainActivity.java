@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Configuration.class);
         startActivity(intent);
     }
+
+    public void gotoAnalytics(View v){
+        Intent intent = new Intent(this, Analytics.class);
+        startActivity(intent);
+    }
 }
