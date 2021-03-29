@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StringTracker-test</string>
+    <string name="app_state_fname">STRunState.dat</string>
+</resources>
