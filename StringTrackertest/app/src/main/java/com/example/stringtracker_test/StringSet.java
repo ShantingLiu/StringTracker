@@ -1,5 +1,7 @@
 package com.example.stringtracker_test;
 
+import android.util.Log;
+
 import java.util.Arrays;
 
 // StringSet Data Class with supporting functions   WKD 3-4-21
@@ -20,6 +22,7 @@ public class StringSet {
     private String AvgIntonStr;
 
     final int INTERVALS = 10;  // (constant) number of percent life per intervals
+    private final String DELIM = "; ";  // delimiter for state passing data
 
     private float [] AvgProj = new float [INTERVALS];   // holds avg sentiment floats internal
     private float [] AvgTone = new float [INTERVALS];   // processing
@@ -115,17 +118,58 @@ public class StringSet {
     }
 
 
+    // Method returns a string of Instr State data using comma delimiters
+    public String getStrState(){
+        String outstr =
+                String.valueOf(StringsID)+DELIM+
+                        String.valueOf(Brand)+DELIM+
+                        String.valueOf(Model)+DELIM+
+                        String.valueOf(Type)+DELIM+
+                        String.valueOf(Cost)+DELIM+
+                        String.valueOf(AvgLife)+DELIM+
+                        String.valueOf(ChangeCnt)+DELIM+
+                        String.valueOf(FirstSession)+DELIM+
+                        String.valueOf(AvgProjStr)+DELIM+
+                        String.valueOf(AvgToneStr)+DELIM+
+                        String.valueOf(AvgIntonStr);
+        return outstr;
+    }
+
+
+    // Method to set Instr State parameters from a string using comma delimiters
+    public void setStrState(String line){
+        if (line != null) {
+            String tokens[] = line.split(DELIM.trim());
+
+            StringsID = Integer.parseInt(tokens[0].trim());
+            Brand = tokens[1].trim();
+            Model = tokens[2].trim();
+            Type = tokens[3].trim();
+            Cost = Float.parseFloat(tokens[4].trim());
+            AvgLife = Integer.parseInt(tokens[5].trim());
+            ChangeCnt = Integer.parseInt(tokens[6].trim());
+            FirstSession = Boolean.parseBoolean(tokens[7].trim());
+            AvgProjStr = tokens[8].trim();
+            AvgToneStr = tokens[9].trim();
+            AvgIntonStr = tokens[10].trim();
+        }
+    }
+
     // method to copy and convert string lists into float array of avg sentiment values
     void convStr2Float() {
         String ptokens [] = AvgProjStr.split(",");
         String ttokens [] = AvgToneStr.split(",");
         String itokens [] = AvgIntonStr.split(",");
+        Log.d("ConvStr2Float:", AvgProjStr+"|"+AvgToneStr+"|"+AvgIntonStr);
         for (int i = 0; i<INTERVALS; ++i) {
-            AvgProj[i] = Float.valueOf(ptokens[i].trim());
-            AvgTone[i] = Float.valueOf(ttokens[i].trim());
-            AvgInton[i] = Float.valueOf(itokens[i].trim());
+            if(i<ptokens.length) {
+                AvgProj[i] = Float.valueOf(ptokens[i].trim());
+                AvgTone[i] = Float.valueOf(ttokens[i].trim());
+                AvgInton[i] = Float.valueOf(itokens[i].trim());
+            }
         }
     }
+
 
     // method to build strings containing avg sentiment values lists for DB storage
     void convFloat2Str() {
@@ -166,7 +210,7 @@ public class StringSet {
         Arrays.fill(SessTone, 0.0f);
         Arrays.fill(SessInton, 0.0f);
 
-        ++ChangeCnt;   //increment upon update = strings change event
+
         convStr2Float();
 
         SessionSent s = sentlist.get(0);
@@ -243,6 +287,7 @@ public class StringSet {
         }//System.out.println(interval+" i = "+i+" binCnt = "+binindex+" SessProj[]="+SessProj[binindex]+"  sessCnt[]="+sessCntT[binindex]);
 
         updateAvgLife(totaltime); // update avg life
+        ++ChangeCnt;   //increment upon update = strings change event
         convFloat2Str();
         FirstSession = false;
 

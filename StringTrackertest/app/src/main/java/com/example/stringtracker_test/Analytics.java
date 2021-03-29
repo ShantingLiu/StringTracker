@@ -19,11 +19,16 @@ public class Analytics extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analytics);
         String appState;
+        String instState;
+        String strState;
         Intent mIntent = getIntent();
         appState = mIntent.getStringExtra("appstate");
+        instState = mIntent.getStringExtra("inststate");
+        strState = mIntent.getStringExtra("strstate");
 
-        //A1.setAppState(appState);
-        A1.loadRunState();
+        A1.setAppState(appState);  // init objects from intent
+        I1.setInstState(instState);
+        S1.setStrState(strState);
 
         TextView analyticsTV;
         analyticsTV = (TextView) findViewById(R.id.analyticsTV);
@@ -38,6 +43,8 @@ public class Analytics extends AppCompatActivity {
                 //A1.setInstrumentID(888);
                 //A1.saveRunState();  // DEBUG using stored data file for messaging
                 resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

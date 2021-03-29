@@ -44,6 +44,7 @@ public class AppState extends Activity { //AppCompatActivity {
     //private final String path = "/Internal shared storage/Android/data/com.example.stringtracker_test/";  // hardcoded path not good on moto g6
 
     private final String path = Environment.getExternalStorageDirectory().getPath()+"/Documents/StringTrackerData/";
+    private final String DELIM = "; ";  // delimiter for state passing data
 
     private static boolean FirstRun;       // flag to indicate initial run of app for setup purposes
     private static int InstrumentID;                // currently selected instrument
@@ -129,23 +130,22 @@ public class AppState extends Activity { //AppCompatActivity {
 
     // Method returns a string of AppState data using comma delimiters
     public String getAppState(){
-        String delim = ", ";
-
         String outstr =
-                String.valueOf(InstrumentID)+delim+
-                        String.valueOf(SessionStarted)+delim+
-                        String.valueOf(EnableSent)+delim+
-                        String.valueOf(MaxSessionTime)+delim+
-                        String.valueOf(LastSessionTime)+delim+
-                        String.valueOf(LifeThresholds[0])+delim+
-                        String.valueOf(LifeThresholds[1])+delim+
-                        String.valueOf(LifeThresholds[2])+delim+
-                        String.valueOf(LifeThresholds[3])+delim+
-                        String.valueOf(StringsCnt)+delim+
-                        String.valueOf(InstrumentCnt)+delim+
-                        CurrSessionStart+delim+
-                        String.valueOf(StartT)+delim+
-                        String.valueOf(StopT);
+                String.valueOf(InstrumentID)+DELIM+
+                        String.valueOf(SessionStarted)+DELIM+
+                        String.valueOf(EnableSent)+DELIM+
+                        String.valueOf(MaxSessionTime)+DELIM+
+                        String.valueOf(LastSessionTime)+DELIM+
+                        String.valueOf(LifeThresholds[0])+DELIM+
+                        String.valueOf(LifeThresholds[1])+DELIM+
+                        String.valueOf(LifeThresholds[2])+DELIM+
+                        String.valueOf(LifeThresholds[3])+DELIM+
+                        String.valueOf(StringsCnt)+DELIM+
+                        String.valueOf(InstrumentCnt)+DELIM+
+                        CurrSessionStart+DELIM+
+                        String.valueOf(StartT)+DELIM+
+                        String.valueOf(StopT)+DELIM+
+                        String.valueOf(testMode);
         return outstr;
     }
 
@@ -153,7 +153,7 @@ public class AppState extends Activity { //AppCompatActivity {
     // Method to set App State parameters from a string using comma delimiters
     public void setAppState(String line){
         if (line != null) {
-            String tokens[] = line.split(",");
+            String tokens[] = line.split(DELIM.trim());
 
             InstrumentID = Integer.parseInt(tokens[0].trim());
             SessionStarted = Boolean.parseBoolean(tokens[1].trim());
@@ -169,6 +169,8 @@ public class AppState extends Activity { //AppCompatActivity {
             CurrSessionStart = tokens[11];
             StartT = Long.parseLong(tokens[12].trim());
             StopT = Long.parseLong(tokens[13].trim());
+            testMode = Boolean.parseBoolean(tokens[14].trim());
+
         }
     }
 
