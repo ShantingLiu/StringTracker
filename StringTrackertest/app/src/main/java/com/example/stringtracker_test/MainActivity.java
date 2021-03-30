@@ -12,10 +12,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static android.graphics.Color.GREEN;
+import static android.graphics.Color.RED;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,12 +67,6 @@ public class MainActivity extends AppCompatActivity {
             selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
             selStrTV.setVisibility(View.VISIBLE);
 
-            /*selInstTV.setText("FirstRun:" +A1.getAppState() );
-            selInstTV.setVisibility(View.VISIBLE);
-            selStrTV.setText("Strings - " +I1.getStringsID() );
-            selStrTV.setVisibility(View.VISIBLE);
-            */
-
         } else {
             A1.loadRunState();  // load prev app state
 
@@ -78,11 +75,6 @@ public class MainActivity extends AppCompatActivity {
             selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
             selStrTV.setVisibility(View.VISIBLE);
 
-            /*selInstTV.setText("SubsequentRun:" +A1.getAppState() );
-            selInstTV.setVisibility(View.VISIBLE);
-            selStrTV.setText("Strings - " +I1.getStringsID() );
-            selStrTV.setVisibility(View.VISIBLE);
-            */
 
             // TODO - populate S1 and I1 from DB
             // DB.getInstrument(I1, A1.getInstrID());
@@ -91,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
         A1.setTestMode(true);
         A1.setEnableSent(true);
         A1.setMaxSessionTime(200);
-
-       // selInstTV.setText("Instrument - " +A1.getInstrumentID() );
 
         buttonStartSes = findViewById(R.id.startButton);
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     I1.setLastSessionTime(A1.getLastSessionTime());
                     I1.setPlayTime(I1.getPlayTime()+I1.getLastSessionTime());
                     A1.saveRunState();
-
+                    buttonStartSes.setText("Start");
+                    buttonStartSes.setBackgroundColor(GREEN);
                     if(A1.getEnableSent()){
                         // TODO call user sent dialog
                         ////////////////////////
@@ -114,9 +105,11 @@ public class MainActivity extends AppCompatActivity {
                     timeDebugTV.setText(I1.getSessionCnt()+" Elapsed t = "+(A1.getStopT()-A1.getStartT())+" LastSessT = "+ I1.getLastSessionTime()+" PlayT = "+I1.getPlayTime());
                     timeDebugTV.setVisibility(View.VISIBLE);
 
-
                 } else {                // Start session
                     A1.startSession();
+                    buttonStartSes.setText("Stop");
+                    buttonStartSes.setBackgroundColor(RED);
+
                     timeDebugTV.setText("StartT = " + A1.getStartT() );
                     timeDebugTV.setVisibility(View.VISIBLE);
                     A1.saveRunState();
@@ -156,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     // Methods to launch activities
     public void launchConfig(View view){
         Log.d(LOG_TAG, "Config Button clicked!");
@@ -187,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     // Method collects returned appState strings (or other messages) and updates object
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -209,13 +200,6 @@ public class MainActivity extends AppCompatActivity {
                 selInstTV.setVisibility(View.VISIBLE);
                 selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
                 selStrTV.setVisibility(View.VISIBLE);
-
-                // DEBUG messages
-                /*selStrTV.setText("Returned InstrID = " +A1.getInstrumentID() );
-                selStrTV.setVisibility(View.VISIBLE);
-                selInstTV.setText("Updated InstrID:" +A1.getAppState() );
-                selInstTV.setVisibility(View.VISIBLE);
-                */
             }
             // DEBUG MESSAGES
             if (resultCode == RESULT_CANCELED) {
@@ -228,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 /////////////////////////////////////////////////////////////////////////
+
     // DEBUG test code randomly generates instrument and stringset values for A1 and S1
     public void genStrInst(){
         Random rand = new Random();
@@ -279,6 +264,8 @@ public class MainActivity extends AppCompatActivity {
 
         return S;
     }
+
+//////////////////////////////////////////////////////////
 
 /*  // TODO make this work!
     public void displayFragment() {

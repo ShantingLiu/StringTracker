@@ -97,10 +97,6 @@ public class AppState extends Activity { //AppCompatActivity {
         testMode = false;
     }
 
-    // Method returns this state value for initialization sequence
-    public boolean firstRun() {
-        return FirstRun;
-    }
 
     // Method called by Start button click event
     public void startSession() {
@@ -269,15 +265,16 @@ public class AppState extends Activity { //AppCompatActivity {
 
 
     // getters
+    // Method returns the state value for initialization sequence
+    public boolean firstRun() {
+        return FirstRun;
+    }
     int getInstrumentID() {
         return InstrumentID;
     }
     String getFilename() {
         return filename;     // read only
     }
-    //boolean getSessionStarted() {
-    //	return SessionStarted;
-    //}
     boolean sessionStarted() {  // shorter name for ease of use
         return SessionStarted;
     }

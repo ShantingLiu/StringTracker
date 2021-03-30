@@ -105,7 +105,6 @@ public class Instrument {
         data.delete();
     }
 
-
     // Method returns a string of Instr State data using comma delimiters
     public String getInstState(){
             String outstr =
@@ -146,9 +145,6 @@ public class Instrument {
             SessionInProgress = Boolean.parseBoolean(tokens[12].trim());
         }
     }
-
-
-
 
     // method to store user sentiment in log file
     void logSessionSent(SessionSent s) {
@@ -206,7 +202,6 @@ public class Instrument {
         }
         return rdata;
     }
-
 
     // Method to store instrument data upon string change event
     // does not affect present state of instrument data. This must be reset separately.
@@ -272,7 +267,6 @@ public class Instrument {
         }
         return rdata;
     }
-
 
     // getters
     int getInstrID() {

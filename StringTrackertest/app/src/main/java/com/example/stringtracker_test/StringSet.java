@@ -31,7 +31,6 @@ public class StringSet {
     private float [] SessTone = new float [INTERVALS];   // for internal processing
     private float [] SessInton = new float [INTERVALS];
 
-
     // Constructors
     StringSet(StringSet x) {
         StringsID = x.getStringsID();

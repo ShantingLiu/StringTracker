@@ -48,8 +48,6 @@ public class Analytics extends AppCompatActivity {
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
-
-
         });
 
     }
