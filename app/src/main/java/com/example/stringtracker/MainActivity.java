@@ -2,6 +2,7 @@ package com.example.stringtracker;
 
 import android.content.Intent;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     static final String STATE_FRAGMENT = "state_of_fragment";
     Button buttonStartSes;
     Button buttonSelInst;
+    private String selInstrText;
+    private String selStrText;
 
     // main data objects
     AppState A1 = new AppState();
@@ -61,19 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
-
-            selInstTV.setText("FirstRun: " + A1.getInstrID() + " Instrument:" + I1.getInstrID() + " " + I1.getBrand() + " " + I1.getModel());
-            selInstTV.setVisibility(View.VISIBLE);
-            selStrTV.setText(S1.getStringsID() + " Strings: " + S1.getStringsID() + " " + S1.getBrand() + " " + S1.getModel() + " " + S1.getAvgProjStr());
-            selStrTV.setVisibility(View.VISIBLE);
+            updateSelDisplay("FirstRun: ");
 
         } else {
             loadAppState();
-
-            selInstTV.setText(A1.getInstrID() + " Instrument:" + I1.getInstrID() + " " + I1.getBrand() + " " + I1.getModel());
-            selInstTV.setVisibility(View.VISIBLE);
-            selStrTV.setText(S1.getStringsID() + " Strings: " + S1.getStringsID() + " " + S1.getBrand() + " " + S1.getModel() + " " + S1.getAvgProjStr());
-            selStrTV.setVisibility(View.VISIBLE);
+            updateSelDisplay(null);
 
 
             // TODO - populate S1 and I1 from DB
@@ -83,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         A1.setTestMode(true);
         A1.setEnableSent(true);
         A1.setMaxSessionTime(200);
-
+        S1.setAvgLife(800);
         buttonStartSes = findViewById(R.id.startButton);
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
                             I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
                         }
                     }
-
+                    updateSelDisplay(null);
+                    timeDebugTV.setBackgroundResource(R.color.background1);
                     timeDebugTV.setText(I1.getSessionCnt() + " Elapsed t = " + (A1.getStopT() - A1.getStartT()) + " LastSessT = " + I1.getLastSessionTime() + " PlayT = " + I1.getPlayTime());
                     timeDebugTV.setVisibility(View.VISIBLE);
 
@@ -111,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     buttonStartSes.setText("Stop");
                     buttonStartSes.setBackgroundColor(RED);
 
-                    timeDebugTV.setText("StartT = " + A1.getStartT());
+                    timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
                 }
                 saveAppState();
@@ -148,10 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
                 saveAppState();
 
-                selInstTV.setText(A1.getInstrID() + " Instrument:" + I1.getInstrID() + " " + I1.getBrand() + " " + I1.getModel());
-                selInstTV.setVisibility(View.VISIBLE);
-                selStrTV.setText(S1.getStringsID() + " Strings: " + S1.getStringsID() + " " + S1.getBrand() + " " + S1.getModel() + " " + S1.getAvgProjStr());
-                selStrTV.setVisibility(View.VISIBLE);
+                updateSelDisplay(null);
 
             }
         });
@@ -224,11 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
-
-                selInstTV.setText(A1.getInstrID() + " Instrument:" + I1.getInstrID() + " " + I1.getBrand() + " " + I1.getModel());
-                selInstTV.setVisibility(View.VISIBLE);
-                selStrTV.setText(S1.getStringsID() + " Strings: " + S1.getStringsID() + " " + S1.getBrand() + " " + S1.getModel() + " " + S1.getAvgProjStr());
-                selStrTV.setVisibility(View.VISIBLE);
+                updateSelDisplay(null);
             }
             // DEBUG MESSAGES
             if (resultCode == RESULT_CANCELED) {
@@ -239,6 +228,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Helper to update instrument and strings selected
+    public void updateSelDisplay(String prefix){
+        if(prefix != null) {
+            selInstrText = prefix + "Instrument: " + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
+        } else {
+            selInstrText = "Instrument: " + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
+        }
+        selInstTV.setText(selInstrText);
+        selInstTV.setBackgroundResource(R.color.background1);
+        selInstTV.setVisibility(View.VISIBLE);
+        selStrText = "Strings: " + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel();
+        ///selStrText = "Strings: " + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel() + "\n AvgProj: " + S1.getAvgProjStr();
+        // select background color based on strings AvgLife
+        if(S1.getAvgLife()>0) {
+            int pctlife = (int) (((float) I1.getPlayTime() / (float) S1.getAvgLife()) * 100.0f);
+            if (pctlife < A1.getLifeThresholds()[1]) {
+                selStrTV.setBackgroundResource(R.color.lifecolor1);
+            } else if (pctlife < A1.getLifeThresholds()[2]) {
+                selStrTV.setBackgroundResource(R.color.lifecolor2);
+            } else if (pctlife < A1.getLifeThresholds()[3]) {
+                selStrTV.setBackgroundResource(R.color.lifecolor3);
+            } else {
+                selStrTV.setBackgroundResource(R.color.lifecolor4);
+            }
+        } else{
+            selStrTV.setBackgroundResource(R.color.lifecolor0);   // color for 1st stringset
+        }
+        selStrTV.setText(selStrText);
+        selStrTV.setVisibility(View.VISIBLE);
+    }
 
 /////////////////////////////////////////////////////////////////////////
 
