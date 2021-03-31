@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">String Tracker</string>
+    <string name="toast_message">Data Saved</string>
 </resources>

@@ -1,21 +1,66 @@
 package com.example.stringtracker;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class Analytics extends AppCompatActivity {
+    // main data objects
+    AppState A1 = new AppState();
+    StringSet S1 = new StringSet();
+    Instrument I1 = new Instrument();
+    Button buttonRet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analytics);
-    }
+        String appState;
+        String instState;
+        String strState;
+        Intent mIntent = getIntent();
+        appState = mIntent.getStringExtra("appstate");
+        instState = mIntent.getStringExtra("inststate");
+        strState = mIntent.getStringExtra("strstate");
+
+        A1.setAppState(appState);  // init objects from intent
+        I1.setInstState(instState);
+        S1.setStrState(strState);
+
+        TextView analyticsTV;
+        analyticsTV = (TextView) findViewById(R.id.analyticsTV);
+        analyticsTV.setText("AppState InstrID - " +A1.getInstrID() );
+        analyticsTV.setVisibility(View.VISIBLE);
+
+        buttonRet = findViewById(R.id.buttonRet2);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                //A1.setInstrumentID(888);
+                //A1.saveRunState();  // DEBUG using stored data file for messaging
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+    }   // OnCreate
 
     public void gotoCompareStrings(View v){
         Intent intent = new Intent(this, CompareStrings.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
         startActivity(intent);
     }
+
 }
