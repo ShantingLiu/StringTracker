@@ -40,6 +40,8 @@ public class Instrument {
     private final String DELIM = "; ";  // delimiter for state passing data
 
     public String filename;
+    StringTrackerDBHelper DB;
+
 
     // constructor default values
     Instrument(){
