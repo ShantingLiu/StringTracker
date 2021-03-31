@@ -54,7 +54,9 @@ public class Configuration extends AppCompatActivity {
                 I1.setBrand(iBrand.getText().toString());
                 I1.setModel(iModel.getText().toString());
 
-                showToast(v);
+                if(I1.insertInstr()){
+                    showToast(v);
+                }
             }
         });
         /////////////////////////////////////////////////////////////////

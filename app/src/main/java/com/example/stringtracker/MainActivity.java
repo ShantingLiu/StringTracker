@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -51,16 +52,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // initialize AppState.
-        String appstate = null;
+        //String appstate = null;
         selInstTV = (TextView) findViewById(R.id.selInstrTV);
         selStrTV = (TextView) findViewById(R.id.selStringsTV);
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
-
+        timeDebugTV.setBackgroundResource(R.color.background1);
 
         if (A1.init()) {      // if .init() returns true it is the first time the app has been run
             // TODO - direct user to Configuration to add StingSet and Instrument
             //genStrInst();  // DEBUG test stuff
-            appstate = A1.getAppState();
+            //appstate = A1.getAppState();
 
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
@@ -89,8 +90,14 @@ public class MainActivity extends AppCompatActivity {
                     I1.setLastSessionTime(A1.getLastSessionTime());
                     I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
                     buttonStartSes.setText("Start");
-                    buttonStartSes.setBackgroundColor(GREEN);
-                    if (A1.getEnableSent()) {
+
+                    // TODO - make color change via @color resource
+//                    buttonStartSes.setBackgroundResource( R.color.buttonGreen);
+//                   buttonStartSes.setBackgroundColor( getColor(R.color.buttonGreen));
+                    buttonStartSes.setBackgroundColor( GREEN);
+
+                    //getResources().getColor(R.color.colorPrimary)
+                     if (A1.getEnableSent()) {
                         // TODO call user sent dialog
                         ////////////////////////
                         if (A1.getTestMode()) {
@@ -105,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {                // Start session
                     A1.startSession();
                     buttonStartSes.setText("Stop");
+//                    buttonStartSes.setBackgroundResource(R.color.buttonRed);
                     buttonStartSes.setBackgroundColor(RED);
+
 
                     timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
@@ -145,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
                 saveAppState();
 
                 updateSelDisplay(null);
+                timeDebugTV.setText("Session Time");
+                timeDebugTV.setVisibility(View.VISIBLE);
+
 
             }
         });
