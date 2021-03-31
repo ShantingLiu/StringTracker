@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,20 +58,24 @@ public class MainActivity extends AppCompatActivity {
         selStrTV = (TextView) findViewById(R.id.selStringsTV);
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
 
+
         if(A1.init()){      // if .init() returns true it is the first time the app has been run
             // TODO - direct user to Configuration to add StingSet and Instrument
             //genStrInst();  // DEBUG test stuff
             appstate = A1.getAppState();
 
-            selInstTV.setText("FirstRun: "+A1.getInstrumentID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
+            A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
+            A1.setStrState(S1.getStrState());
+
+            selInstTV.setText("FirstRun: "+A1.getInstrID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
             selInstTV.setVisibility(View.VISIBLE);
             selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
             selStrTV.setVisibility(View.VISIBLE);
 
         } else {
-            A1.loadRunState();  // load prev app state
+            loadAppState();
 
-            selInstTV.setText(A1.getInstrumentID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
+            selInstTV.setText(A1.getInstrID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
             selInstTV.setVisibility(View.VISIBLE);
             selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
             selStrTV.setVisibility(View.VISIBLE);
@@ -93,13 +98,14 @@ public class MainActivity extends AppCompatActivity {
                     I1.setSessionCnt(I1.getSessionCnt()+1); // inc session cnt
                     I1.setLastSessionTime(A1.getLastSessionTime());
                     I1.setPlayTime(I1.getPlayTime()+I1.getLastSessionTime());
-                    A1.saveRunState();
                     buttonStartSes.setText("Start");
                     buttonStartSes.setBackgroundColor(GREEN);
                     if(A1.getEnableSent()){
                         // TODO call user sent dialog
                         ////////////////////////
-                        I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
+                        if(A1.getTestMode()) {
+                            I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
+                        }
                     }
 
                     timeDebugTV.setText(I1.getSessionCnt()+" Elapsed t = "+(A1.getStopT()-A1.getStartT())+" LastSessT = "+ I1.getLastSessionTime()+" PlayT = "+I1.getPlayTime());
@@ -112,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
 
                     timeDebugTV.setText("StartT = " + A1.getStartT() );
                     timeDebugTV.setVisibility(View.VISIBLE);
-                    A1.saveRunState();
                 }
+                saveAppState();
            }
         });
 
@@ -123,23 +129,31 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /// DEBUG simulates string change ////
                 I1.logStringChange();
-                // do not attempt to update if there are no sessions
+                    // do not attempt to update if there are no sessions
                 if(I1.getPlayTime()>0) {
+
                     S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-                    //List<SessionSent> x = I1.getSentLog();
+
+                    if(!A1.getTestMode()) {  // if in normal operating mode clear sent log
+                        try {
+                            I1.clearSentLog();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
                 // TODO this is where DBs are updated at string change
                 I1.init();
                 //////////////////////
                 genStrInst();  // DEBUG test stuff generate a random instr strings combo
-                A1.setInstrumentID(I1.getInstrID());
-                I1.setStringsID(S1.getStringsID());
+                A1.setInstrID(I1.getInstrID());
                 A1.setInstrumentCnt(1);
                 A1.setStringsCnt(1);
-                A1.saveRunState();
-                
-                selInstTV.setText(A1.getInstrumentID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
+
+                saveAppState();
+
+                selInstTV.setText(A1.getInstrID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
                 selInstTV.setVisibility(View.VISIBLE);
                 selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
                 selStrTV.setVisibility(View.VISIBLE);
@@ -147,12 +161,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }  // end OnCreate
+
+    // helper to restore app and data object states
+    public void loadAppState(){
+        A1.loadRunState();  // load prev app state and restore data objects
+        I1.setInstState(A1.getInstState());
+        S1.setStrState(A1.getStrState());
+    }
+
+    // helper to store app and data object states
+    public void saveAppState(){
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
     }
 
     // Methods to launch activities
     public void launchConfig(View view){
         Log.d(LOG_TAG, "Config Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
         A1.saveRunState();
+
         Intent intent = new Intent(this, Configuration.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -166,7 +197,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchAnalytics(View view){
         Log.d(LOG_TAG, "Analytics Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
         A1.saveRunState();
+
         Intent intent = new Intent(this, Analytics.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -196,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 I1.setInstState(instState);
                 S1.setStrState(strState);
 
-                selInstTV.setText(A1.getInstrumentID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
+                selInstTV.setText(A1.getInstrID()+" Instrument:"+I1.getInstrID() +" "+I1.getBrand()+" "+I1.getModel() );
                 selInstTV.setVisibility(View.VISIBLE);
                 selStrTV.setText(S1.getStringsID()+" Strings: "+S1.getStringsID()+" "+S1.getBrand()+" "+S1.getModel() +" "+ S1.getAvgProjStr());
                 selStrTV.setVisibility(View.VISIBLE);

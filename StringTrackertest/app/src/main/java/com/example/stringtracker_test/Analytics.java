@@ -32,7 +32,7 @@ public class Analytics extends AppCompatActivity {
 
         TextView analyticsTV;
         analyticsTV = (TextView) findViewById(R.id.analyticsTV);
-        analyticsTV.setText("AppState InstrID - " +A1.getInstrumentID() );
+        analyticsTV.setText("AppState InstrID - " +A1.getInstrID() );
         analyticsTV.setVisibility(View.VISIBLE);
 
         buttonRet = findViewById(R.id.buttonRet2);

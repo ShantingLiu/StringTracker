@@ -47,7 +47,7 @@ public class AppState extends Activity { //AppCompatActivity {
     private final String DELIM = "; ";  // delimiter for state passing data
 
     private static boolean FirstRun;       // flag to indicate initial run of app for setup purposes
-    private static int InstrumentID;                // currently selected instrument
+    private static int InstrID;                // currently selected instrument
     private static boolean SessionStarted;     // set true at Start button event, false at Stop event
     private static boolean EnableSent;         // pref - enable user sent feedback
     private static int MaxSessionTime;         // max time for any given session
@@ -59,11 +59,13 @@ public class AppState extends Activity { //AppCompatActivity {
 
     private static long StartT, StopT;         // internal timestamps in mSec
     private static boolean testMode;           // true sets timescale to 0.01 sec instead of 1 min for session time
+    private static String InstrState = null;
+    private static String StringsState = null;
 
     // Constructors
     AppState(){      // defaults
         FirstRun = false;
-        InstrumentID = 0;
+        InstrID = 0;
         SessionStarted = false;
         EnableSent = false;
         MaxSessionTime = 180;  // 3 hour default
@@ -83,7 +85,7 @@ public class AppState extends Activity { //AppCompatActivity {
     AppState( int insid, boolean sstart, boolean ensent, int maxsess, int lastsess,
                  int [] lifet, int scnt, int icnt, String currses){
         FirstRun = false;
-        InstrumentID = insid;
+        InstrID = insid;
         SessionStarted = sstart;
         EnableSent = ensent;
         MaxSessionTime = maxsess;  // 3 hour default
@@ -127,7 +129,7 @@ public class AppState extends Activity { //AppCompatActivity {
     // Method returns a string of AppState data using comma delimiters
     public String getAppState(){
         String outstr =
-                String.valueOf(InstrumentID)+DELIM+
+                String.valueOf(InstrID)+DELIM+
                         String.valueOf(SessionStarted)+DELIM+
                         String.valueOf(EnableSent)+DELIM+
                         String.valueOf(MaxSessionTime)+DELIM+
@@ -151,7 +153,7 @@ public class AppState extends Activity { //AppCompatActivity {
         if (line != null) {
             String tokens[] = line.split(DELIM.trim());
 
-            InstrumentID = Integer.parseInt(tokens[0].trim());
+            InstrID = Integer.parseInt(tokens[0].trim());
             SessionStarted = Boolean.parseBoolean(tokens[1].trim());
             EnableSent = Boolean.parseBoolean(tokens[2].trim());
             MaxSessionTime = Integer.parseInt(tokens[3].trim());
@@ -204,6 +206,9 @@ public class AppState extends Activity { //AppCompatActivity {
             InputStream f = new FileInputStream(data);
             BufferedReader br = new BufferedReader(new InputStreamReader(f));
             line = br.readLine();
+            InstrState = br.readLine();
+            StringsState = br.readLine();
+
             br.close();
         } catch (IOException e) {
              e.printStackTrace();
@@ -213,7 +218,7 @@ public class AppState extends Activity { //AppCompatActivity {
         if (line != null) {
             String tokens[] = line.split(",");
 
-            InstrumentID = Integer.parseInt(tokens[0].trim());
+            InstrID = Integer.parseInt(tokens[0].trim());
             SessionStarted = Boolean.parseBoolean(tokens[1].trim());
             EnableSent = Boolean.parseBoolean(tokens[2].trim());
             MaxSessionTime = Integer.parseInt(tokens[3].trim());
@@ -240,7 +245,7 @@ public class AppState extends Activity { //AppCompatActivity {
             PrintWriter outfile = new PrintWriter(filewriter);
 
             String outstr =
-                    String.valueOf(InstrumentID)+delim+
+                    String.valueOf(InstrID)+delim+
                             String.valueOf(SessionStarted)+delim+
                             String.valueOf(EnableSent)+delim+
                             String.valueOf(MaxSessionTime)+delim+
@@ -255,7 +260,10 @@ public class AppState extends Activity { //AppCompatActivity {
                             String.valueOf(StartT)+delim+
                             String.valueOf(StopT);
 
-             outfile.println(outstr);
+            outfile.println(outstr);
+            outfile.println(InstrState);
+            outfile.println(StringsState);
+
              outfile.close();
 
         } catch (IOException e) {
@@ -269,8 +277,8 @@ public class AppState extends Activity { //AppCompatActivity {
     public boolean firstRun() {
         return FirstRun;
     }
-    int getInstrumentID() {
-        return InstrumentID;
+    int getInstrID() {
+        return InstrID;
     }
     String getFilename() {
         return filename;     // read only
@@ -301,14 +309,22 @@ public class AppState extends Activity { //AppCompatActivity {
     }
     long getStartT(){ return StartT; }
     long getStopT(){ return StopT; }
+    boolean getTestMode(){ return testMode; }
+    // for returning stored data object states
+    String getInstState(){
+        return InstrState;
+    }
+    String getStrState(){
+        return StringsState;
+    }
 
     // setters
     void setFirstRun(boolean f) {  // for debug purposes
         FirstRun = f;
     }
-    void setInstrumentID(int iid) {
-        InstrumentID = iid;
-        System.out.println("*** InstrumentID = "+InstrumentID);
+    void setInstrID(int iid) {
+        InstrID = iid;
+        System.out.println("*** InstrumentID = "+InstrID);
     }
     void setSessionStarted(boolean ss) {
         SessionStarted = ss;
@@ -333,5 +349,6 @@ public class AppState extends Activity { //AppCompatActivity {
         CurrSessionStart = cs;
     }
     void setTestMode(boolean b) { testMode = b; }
-
+    void setInstState(String is){InstrState = is; }
+    void setStrState(String ss){StringsState = ss; }
 }

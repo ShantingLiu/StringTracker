@@ -48,7 +48,7 @@ public class Configuration extends AppCompatActivity {
 
         if (false){   //A1.init()) {      // if .init() returns true it is the first time the app has been run
             configText = (TextView) findViewById(R.id.configTextView);
-            configText.setText("AppState file not found - " + A1.getInstrumentID());
+            configText.setText("AppState file not found - " + A1.getInstrID());
             configText.setVisibility(View.VISIBLE);
 
             //A1.saveRunState();
@@ -56,7 +56,7 @@ public class Configuration extends AppCompatActivity {
         } else {
             A1.loadRunState();  // load prev app state
             configText = (TextView) findViewById(R.id.configTextView);
-            configText.setText("Config Screen - " + A1.getInstrumentID());
+            configText.setText("Config Screen - " + A1.getInstrID());
             configText.setVisibility(View.VISIBLE);
             // TODO - populate S1 and I1 from DB
          }
@@ -80,7 +80,6 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent resultIntent = new Intent();
-                //A1.saveRunState();  // DEBUG test using stored file for messaging
                 resultIntent.putExtra("appstate", A1.getAppState());
                 resultIntent.putExtra("inststate", I1.getInstState());
                 resultIntent.putExtra("strstate", S1.getStrState());
@@ -89,8 +88,21 @@ public class Configuration extends AppCompatActivity {
             }
 
         });
+    } // OnCreate
+
+    // helper to restore app and data object states - needed?
+    public void loadAppState(){
+        A1.loadRunState();  // load prev app state and restore data objects
+        I1.setInstState(A1.getInstState());
+        S1.setStrState(A1.getStrState());
     }
 
+    // helper to store app and data object states - needed?
+    public void saveAppState(){
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
+    }
 
     public void showToast(View view) {
         Toast toast = Toast.makeText(this, R.string.toast_message,
