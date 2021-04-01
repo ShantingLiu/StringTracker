@@ -1,5 +1,6 @@
 package com.example.stringtracker;
 
+import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,8 +54,8 @@ public class Configuration extends AppCompatActivity {
             public void onClick(View v) {
                 I1.setBrand(iBrand.getText().toString());
                 I1.setModel(iModel.getText().toString());
-
-                if(I1.insertInstr()){
+                Context context = Configuration.this;
+                if(I1.insertInstr(context)){
                     showToast(v);
                 }
             }
