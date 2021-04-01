@@ -22,8 +22,10 @@ public class Configuration extends AppCompatActivity {
 
     Button buttonRet;
     Button buttonSave;
+    Button buttonLoad;
     EditText iBrand;
     EditText iModel;
+    EditText iInstID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class Configuration extends AppCompatActivity {
         ////////// EXAMPLE DEBUG CODE - EditText and save button //////////
         iBrand = (EditText) findViewById(R.id.editTextBrand);
         iModel = (EditText) findViewById(R.id.editTextModel);
+        iInstID = (EditText) findViewById(R.id.editTextInstrID);
+        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
 
@@ -52,6 +56,7 @@ public class Configuration extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                I1.setInstrID(Integer.parseInt(iInstID.getText().toString()));
                 I1.setBrand(iBrand.getText().toString());
                 I1.setModel(iModel.getText().toString());
                 Context context = Configuration.this;
@@ -60,6 +65,24 @@ public class Configuration extends AppCompatActivity {
                 }
             }
         });
+
+
+        ////// LOAD RECORD //////
+        buttonLoad = findViewById(R.id.buttonLoad);
+        buttonLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = Configuration.this;
+                if(I1.loadInstr(Integer.parseInt(iInstID.getText().toString()), context)){
+                    showToast(v);
+                }
+                I1.setInstrID(Integer.parseInt(iInstID.getText().toString()));
+                I1.setBrand(iBrand.getText().toString());
+                I1.setModel(iModel.getText().toString());
+
+             }
+        });
+
         /////////////////////////////////////////////////////////////////
 
         // Return button - a good idea to keep this with state passing intact
