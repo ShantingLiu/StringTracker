@@ -27,16 +27,16 @@ public class StringTrackerDBHelper extends SQLiteOpenHelper {
                     + "AvgToneStr text not null,"
                     + "AvgIntonStr text not null)";
     //Instruments
-    private static final String DATABASE_NAME1 = "instruments.db";
+    private static final String DATABASE_NAME1 = "instruments";
     private static final int DATABASE_VERSION1 = 1;
     private static final String CREATE_TABLE_INSTRUMENTS =
-            "create table strings (InstrumentID integer primary key autoincrement, "
+            "create table instruments (InstrumentID integer primary key autoincrement, "
                     + "Brand text not null,"
                     + "Model text not null,"
                     + "InstrType text not null,"
                     + "Acoustic boolean not null,"
                     + "StringsID not null,"
-                    + "InstalTimeStamp text not null,"
+                    + "InstallTimeStamp text not null,"
                     + "ChangeTimeStamp text not null,"
                     + "PlayTime integer not null,"
                     + "SessionCnt integer not null,"
@@ -44,15 +44,8 @@ public class StringTrackerDBHelper extends SQLiteOpenHelper {
                     + "LastSessionTime integer,"
                     + "SessionInProgress boolean);";
 
-
-    private static String DB_PATH = "";
-    private static String DB_NAME = "database.db";
-    private SQLiteDatabase myDataBase;
-
-    private SQLiteOpenHelper sqLiteOpenHelper;
-
     public StringTrackerDBHelper(@Nullable Context context){
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME1, null, DATABASE_VERSION1);
    }
 
 

@@ -319,7 +319,7 @@ public class Instrument extends Activity {
             initialValues.put("SessionInProgress", SessionInProgress);
             initialValues.put("CurrSessionStart", CurrSessionStart);
 
-            didSucceed = database.insert("instruments.db", null, initialValues) > 0;
+            didSucceed = database.insert("instruments", null, initialValues) > 0;
             if(didSucceed){
                 System.out.println("*** Start DB INSERT SUCCESS!");
             }
