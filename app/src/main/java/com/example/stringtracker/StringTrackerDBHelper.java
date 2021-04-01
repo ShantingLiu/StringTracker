@@ -40,7 +40,7 @@ public class StringTrackerDBHelper extends SQLiteOpenHelper {
                     + "ChangeTimeStamp text not null,"
                     + "PlayTime integer not null,"
                     + "SessionCnt integer not null,"
-                    + "CurrentSessStart text not null,"
+                    + "CurrSessionStart text not null,"
                     + "LastSessionTime integer,"
                     + "SessionInProgress boolean);";
 
