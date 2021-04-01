@@ -1,6 +1,7 @@
 package com.example.stringtracker;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -58,8 +59,19 @@ public class StringTrackerDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_INSTRUMENTS);
-        db.execSQL(CREATE_TABLE_STRINGS);
+        try {
+            db.execSQL(CREATE_TABLE_INSTRUMENTS);
+        } catch (SQLException e){
+            System.out.println("### ERROR SQL Create Instruments Table");
+            e.printStackTrace();
+        }
+
+        try {
+            db.execSQL(CREATE_TABLE_STRINGS);
+        } catch (SQLException e){
+            System.out.println("### ERROR SQL Create Strings Table");
+            e.printStackTrace();
+        }
 
     }
 
@@ -69,7 +81,7 @@ public class StringTrackerDBHelper extends SQLiteOpenHelper {
         Log.w(StringTrackerDBHelper.class.getName(),
                 "Upgrading database from version" + oldVersion + "to "
             + newVersion + ", which will destroy all old data");
-         db.execSQL("DROP TABLE IF EXISTS STRINGS");
+         db.execSQL("DROP TABLE IF EXISTS STRINGS ;");
         onCreate(db);
 
     }
