@@ -2,6 +2,7 @@ package com.example.stringtracker;
 
 import android.content.Intent;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -93,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
                     // TODO - make color change via @color resource
 //                    buttonStartSes.setBackgroundResource( R.color.buttonGreen);
-//                   buttonStartSes.setBackgroundColor( getColor(R.color.buttonGreen));
-                    buttonStartSes.setBackgroundColor( GREEN);
+//                   buttonStartSes.setBackgroundColor( R.color.buttonGreen);
+//                    buttonStartSes.setBackgroundColor( GREEN);
+                    buttonStartSes.setBackgroundColor( 0xff00A020);
 
                     //getResources().getColor(R.color.colorPrimary)
                      if (A1.getEnableSent()) {
@@ -106,14 +108,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
-                    timeDebugTV.setText(I1.getSessionCnt() + " Elapsed t = " + (A1.getStopT() - A1.getStartT()) + " LastSessT = " + I1.getLastSessionTime() + " PlayT = " + I1.getPlayTime());
+                    timeDebugTV.setText(I1.getSessionCnt() + " Elapsed T = " + (A1.getStopT() - A1.getStartT()) + "\n LastSessT = " + I1.getLastSessionTime() + " PlayT = " + I1.getPlayTime());
                     timeDebugTV.setVisibility(View.VISIBLE);
 
                 } else {                // Start session
                     A1.startSession();
                     buttonStartSes.setText("Stop");
 //                    buttonStartSes.setBackgroundResource(R.color.buttonRed);
-                    buttonStartSes.setBackgroundColor(RED);
+//                    buttonStartSes.setBackgroundColor(RED);
+                    buttonStartSes.setBackgroundColor(0xffb02020);
 
 
                     timeDebugTV.setText("Session Started");
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                System.out.println("*** RETURN to MAIN InstrID = "+I1.getInstrID());
                 updateSelDisplay(null);
             }
             // DEBUG MESSAGES
@@ -301,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
         S1.setModel(sModel[rand_sMo]);
         S1.setTension(sTension[rand_sTe]);
         S1.setType(sType[rand_sTy]);
+        S1.setAvgLife(800);  // set this value for DEBUG test purposes
 
         I1.setInstrID(rand_iID);
         I1.setBrand(iBrand[rand_iBr]);

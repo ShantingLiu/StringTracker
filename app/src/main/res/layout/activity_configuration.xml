@@ -28,26 +28,25 @@
 
     <EditText
         android:id="@+id/editTextBrand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="39dp"
         android:ems="10"
         android:inputType="textShortMessage"
         android:text="Instrument Brand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextInstrID" />
 
     <EditText
         android:id="@+id/editTextModel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="188dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Instrument Model"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextBrand" />
 
@@ -65,24 +64,72 @@
         android:id="@+id/buttonLoad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="36dp"
         android:layout_marginBottom="32dp"
         android:text="Load"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRet"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUpd"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSave"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSave" />
 
     <EditText
         android:id="@+id/editTextInstrID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="InstrumentID"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/configTextView" />
+
+    <Button
+        android:id="@+id/buttonUpd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Update"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextStrID"
+        android:layout_width="169dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="StringsID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextInstrID"
+        app:layout_constraintTop_toBottomOf="@+id/configTextView" />
+
+    <EditText
+        android:id="@+id/editTextStrBrand"
+        android:layout_width="158dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="39dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="StrBrand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextBrand"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStrID" />
+
+    <EditText
+        android:id="@+id/editTextStrModel"
+        android:layout_width="156dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="StrModel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextModel"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStrBrand" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
