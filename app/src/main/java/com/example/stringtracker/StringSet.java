@@ -39,6 +39,7 @@ public class StringSet {
 
     private static Context mContext;
     private SQLiteDatabase database;
+    private final String DB_NAME = "stringsdb";
 
     // Constructors
     StringSet(StringSet x) {
@@ -347,7 +348,7 @@ public class StringSet {
             initialValues.put("AvgToneStr", AvgToneStr);
             initialValues.put("AvgIntonStr", AvgIntonStr);
 
-            didSucceed = database.insert("strings", null, initialValues) > 0;
+            didSucceed = database.insert(DB_NAME, null, initialValues) > 0;
             if(didSucceed){
                 System.out.println("*** Start DB INSERT StringSet SUCCESS!");
             }
@@ -387,7 +388,7 @@ public class StringSet {
             contentValues.put("AvgToneStr", AvgToneStr);
             contentValues.put("AvgIntonStr", AvgIntonStr);
 
-            didSucceed = database.update("strings", contentValues,  "StringsID=?" , new String[]{String.valueOf(StrID)}) > 0;
+            didSucceed = database.update(DB_NAME, contentValues,  "StringsID=?" , new String[]{String.valueOf(StrID)}) > 0;
             if(didSucceed){
                 System.out.println("*** Start DB StringSet UPDATE SUCCESS!");
             }
@@ -420,7 +421,7 @@ public class StringSet {
 
             String query = "Select StringsID, Brand, Model, Tension, InstrType, Cost, " +
                     "AvgLife, ChangeCnt, FirstSession, AvgProjStr, AvgToneStr, " +
-                    "AvgIntonStr from strings where StringsID="+StrID;
+                    "AvgIntonStr from "+DB_NAME+" where StringsID="+StrID;
             Cursor cursor = database.rawQuery(query, null);
 
             cursor.moveToFirst();

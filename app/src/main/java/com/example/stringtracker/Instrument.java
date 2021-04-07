@@ -44,7 +44,7 @@ public class Instrument extends Activity {
     //private final String path = "data/";   //path to data files
     private final String path = Environment.getExternalStorageDirectory().getPath()+"/Documents/StringTrackerData/";
     private final String DELIM = "; ";  // delimiter for state passing data
-
+    private final String DB_NAME = "instrumentsdb";
     public String filename;
 
     private static Context mContext;
@@ -314,7 +314,7 @@ public class Instrument extends Activity {
             initialValues.put("SessionInProgress", SessionInProgress);
             initialValues.put("CurrSessionStart", CurrSessionStart);
 
-            didSucceed = database.insert("instruments", null, initialValues) > 0;
+            didSucceed = database.insert(DB_NAME, null, initialValues) > 0;
             if(didSucceed){
                 System.out.println("*** Start DB INSERT SUCCESS!");
             }
@@ -356,7 +356,7 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
         contentValues.put("SessionInProgress", SessionInProgress);
         contentValues.put("CurrSessionStart", CurrSessionStart);
 
-        didSucceed = database.update("instruments", contentValues,  "InstrumentID=?" , new String[]{String.valueOf(InsID)}) > 0;
+        didSucceed = database.update(DB_NAME, contentValues,  "InstrumentID=?" , new String[]{String.valueOf(InsID)}) > 0;
         if(didSucceed){
             System.out.println("*** Start DB UPDATE SUCCESS!");
         }
@@ -377,17 +377,15 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
         boolean didSucceed = false;
         InstrDBHelper dbHelper = new InstrDBHelper(context);
 
-        System.out.println("*** Start DB LOAD  InsID = "+InsID);
-
         try {
             ContentValues initialValues = new ContentValues();
             //setContext(this);
-            database = dbHelper.getWritableDatabase();
+            database = dbHelper.getReadableDatabase();
 
 
             String query = "Select InstrumentID, Brand, Model, InstrType, Acoustic, StringsID, " +
                     "InstallTimeStamp, ChangeTimeStamp, PlayTime, SessionCnt, CurrSessionStart, " +
-                    "LastSessionTime, SessionInProgress  from instruments where InstrumentID="+InsID;
+                    "LastSessionTime, SessionInProgress  from "+DB_NAME+" where InstrumentID="+InsID;
             Cursor cursor = database.rawQuery(query, null);
 
             cursor.moveToFirst();

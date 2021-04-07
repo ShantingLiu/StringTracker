@@ -147,20 +147,22 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-
-                S1.updateStrings(S1.getStringsID(), context);
-                I1.updateInstr(I1.getInstrID(), context);    //  may need to be after new selection
-
-                // TODO this is where DBs are updated at string change
+                // TODO -- restore update of DB when instrument slect added
+                if(!A1.firstRun()) {
+                    //S1.updateStrings(S1.getStringsID(), context);
+                    //I1.updateInstr(I1.getInstrID(), context);    //  may need to be after new selection
+                }
+                
                 I1.init();
-                //////////////////////
+
+                //////// DEBUG Gen Random Instr Stuff //////////////
                 genStrInst();  // DEBUG test stuff generate a random instr strings combo
                 A1.setInstrID(I1.getInstrID());
                 A1.setInstrumentCnt(1);
                 A1.setStringsCnt(1);
+                ///////////////////////////////////////
 
                 saveAppState();
-
                 updateSelDisplay(null);
                 timeDebugTV.setText("Session Time");
                 timeDebugTV.setVisibility(View.VISIBLE);
@@ -200,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("strstate", strState);
         startActivityForResult(intent, TEXT_REQUEST);
     }
-
 
     public void launchAnalytics(View view) {
         Log.d(LOG_TAG, "Analytics Button clicked!");
@@ -337,42 +338,5 @@ public class MainActivity extends AppCompatActivity {
 
         return S;
     }
-
-//////////////////////////////////////////////////////////
-
-/*  // TODO make this work!
-    public void displayFragment() {
-        selectInstr selinstr = selectInstr.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager(); // use fragment manager
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
-        // Add the SimpleFragment.
-        fragmentTransaction.add(R.id.fragment_container  ,
-               selinstr).addToBackStack(null).commit();
-        // Update the Button text.
-        mButton.setText(R.string.close);
-        // Set boolean flag to indicate fragment is open.
-        isFragmentDisplayed = true;
-
-    }
-
-    public void closeFragment() {
-        // Get the FragmentManager.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // Check to see if the fragment is already showing.
-        SimpleFragment simpleFragment = (SimpleFragment) fragmentManager
-                .findFragmentById(R.id.fragment_container);
-        if (simpleFragment != null) {
-            // Create and commit the transaction to remove the fragment.
-            FragmentTransaction fragmentTransaction =
-                    fragmentManager.beginTransaction();
-            fragmentTransaction.remove(simpleFragment).commit();
-        }
-        // Update the Button text.
-        mButton.setText(R.string.open);
-        // Set boolean flag to indicate fragment is closed.
-        isFragmentDisplayed = false;
-    }
-*/
 
 }
