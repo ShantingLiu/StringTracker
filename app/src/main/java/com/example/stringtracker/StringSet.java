@@ -7,11 +7,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
-// StringSet Data Class with supporting functions   WKD 3-4-21
-
+// StringSet Data Class with integrated DB and supporting functions   WKD 4-7-21
 public class StringSet {
     private int StringsID;
     private String Brand;
@@ -312,6 +313,16 @@ public class StringSet {
     }
 
     //////////////////////// DB //////////////////////////////////
+
+    // Method to return a Hashmap (dictionary) list from the DB of all stringsets with
+    // data keys StringsID = "stringsID" , Brand = "brand", Model = "model" in each hash item (note all values are String data type)
+    // Use for strings select spinners/scroll views wkd
+    public ArrayList<HashMap<String, String>> getStringsList(Context context){
+        StringsDBHelper dbHelper = new StringsDBHelper(context);
+        ArrayList<HashMap<String, String>> slist = dbHelper.getStringsList();
+        dbHelper.close();
+        return slist;
+    }
 
     public boolean insertStrings(Context context) throws SQLException {   //Rating???
         boolean didSucceed = false;

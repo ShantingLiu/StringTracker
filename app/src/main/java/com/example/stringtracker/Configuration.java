@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+// Configuration Activity class for test/debug purposes  WKD
 public class Configuration extends AppCompatActivity {
     // main data objects
     AppState A1 = new AppState();
@@ -47,6 +51,25 @@ public class Configuration extends AppCompatActivity {
         A1.setAppState(appState);  // init objects from intent
         I1.setInstState(instState);
         S1.setStrState(strState);
+
+        // DEBUG to test instrument and strings list from DB methods ///////////////
+        Context context = Configuration.this;
+        ArrayList<HashMap<String, String>> ilist =  I1.getInstrList(context);
+        HashMap<String, String> x;
+        System.out.println("========== LIST DB Instruments ============ ");
+        for(int i = 0; i < ilist.size(); ++i){
+            x = ilist.get(i);
+            System.out.println("instID:"+x.get("instrID")+" Brand:"+x.get("brand")+" Model:"+x.get("model"));
+        }
+
+        ArrayList<HashMap<String, String>> slist =  S1.getStringsList(context);
+        HashMap<String, String> y;
+        System.out.println("========== LIST DB Strings ============ ");
+        for(int i = 0; i < slist.size(); ++i){
+            y = slist.get(i);
+            System.out.println("stringsID:"+y.get("instrID")+" Brand:"+y.get("brand")+" Model:"+y.get("model"));
+        }
+        //////////////////////////////////////////////////////////////
 
         System.out.println("*** Config OnCreate InstrID = "+I1.getInstrID()+" Brand = "+I1.getBrand());
         System.out.println("*** Config OnCreate StringsID = "+S1.getStringsID()+" Brand = "+S1.getBrand());
@@ -159,7 +182,6 @@ public class Configuration extends AppCompatActivity {
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
-
         });
     } ///////////////// end of OnCreate
 

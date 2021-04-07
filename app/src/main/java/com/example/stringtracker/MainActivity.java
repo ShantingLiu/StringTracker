@@ -1,5 +1,6 @@
 package com.example.stringtracker;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.ColorInt;
@@ -20,6 +21,7 @@ import java.util.Random;
 import static android.graphics.Color.GREEN;
 import static android.graphics.Color.RED;
 
+// StringTracker main activity class WKD
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG =
             MainActivity.class.getSimpleName();
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView selInstTV;
     private TextView selStrTV;
     private TextView timeDebugTV;
+    Context context = MainActivity.this;  // activity context needed for DB calls
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +75,9 @@ public class MainActivity extends AppCompatActivity {
             loadAppState();
             updateSelDisplay(null);
 
-
-            // TODO - populate S1 and I1 from DB
-            // DB.getInstrument(I1, A1.getInstrID());
-            // DB.getStringSet(S1, I1.getStringsID());
+            // restore Instrument and Strings fro DB
+            I1.loadInstr(A1.getInstrID(), context);
+            S1.loadStrings(I1.getStringsID(), context);
         }
         A1.setTestMode(true);
         A1.setEnableSent(true);
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
-                    timeDebugTV.setText(I1.getSessionCnt() + " Elapsed T = " + (A1.getStopT() - A1.getStartT()) + "\n LastSessT = " + I1.getLastSessionTime() + " PlayT = " + I1.getPlayTime());
+                    timeDebugTV.setText("SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT()) + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime());
                     timeDebugTV.setVisibility(View.VISIBLE);
 
                 } else {                // Start session
@@ -146,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                S1.updateStrings(S1.getStringsID(), context);
+                I1.updateInstr(I1.getInstrID(), context);    //  may need to be after new selection
+
                 // TODO this is where DBs are updated at string change
                 I1.init();
                 //////////////////////
@@ -159,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
                 updateSelDisplay(null);
                 timeDebugTV.setText("Session Time");
                 timeDebugTV.setVisibility(View.VISIBLE);
-
 
             }
         });
@@ -247,14 +251,14 @@ public class MainActivity extends AppCompatActivity {
     // Helper to update instrument and strings selected
     public void updateSelDisplay(String prefix){
         if(prefix != null) {
-            selInstrText = prefix + "Instrument: " + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
+            selInstrText = prefix + "Instrument ID:" + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
         } else {
-            selInstrText = "Instrument: " + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
+            selInstrText = "Instrument ID:" + A1.getInstrID() + " - " + I1.getBrand() + ": " + I1.getModel();
         }
         selInstTV.setText(selInstrText);
         selInstTV.setBackgroundResource(R.color.background1);
         selInstTV.setVisibility(View.VISIBLE);
-        selStrText = "Strings: " + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel();
+        selStrText = "Strings ID:" + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel();
         ///selStrText = "Strings: " + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel() + "\n AvgProj: " + S1.getAvgProjStr();
         // select background color based on strings AvgLife
         if(S1.getAvgLife()>0) {
@@ -273,6 +277,10 @@ public class MainActivity extends AppCompatActivity {
         }
         selStrTV.setText(selStrText);
         selStrTV.setVisibility(View.VISIBLE);
+        timeDebugTV.setBackgroundResource(R.color.background1);
+        timeDebugTV.setText("SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT()) + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime());
+        timeDebugTV.setVisibility(View.VISIBLE);
+
     }
 
 /////////////////////////////////////////////////////////////////////////
@@ -282,22 +290,22 @@ public class MainActivity extends AppCompatActivity {
         Random rand = new Random();
         rand.setSeed(System.currentTimeMillis());
         String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
-        String sModel[] = {"A-180", "G-42", "Bronze", "ToneKing", "Slinky"};
+        String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
         String sTension[] = {"XL", "Light", "Medium", "Heavy"};
         String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
 
         String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
-        String iModel[] = {"A-180", "G-42", "Bronze", "ToneKing", "Slinky"};
+        String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};
 
         int rand_sBr = rand.nextInt(5);
         int rand_sMo = rand.nextInt(5);
         int rand_sTe = rand.nextInt(4);
         int rand_sTy = rand.nextInt(5);
-        int rand_sID = rand.nextInt(20) + 10;
+        int rand_sID = rand.nextInt(4)+1;
 
         int rand_iBr = rand.nextInt(5);
         int rand_iMo = rand.nextInt(5);
-        int rand_iID = rand.nextInt(20) + 100;
+        int rand_iID = rand.nextInt(4)+1;
 
         S1.setStringsID(rand_sID);
         S1.setBrand(sBrand[rand_sBr]);

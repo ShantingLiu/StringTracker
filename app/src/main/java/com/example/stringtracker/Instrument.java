@@ -25,7 +25,7 @@ import java.util.List;
 
 import static java.security.AccessController.getContext;
 
-// Instrument data class and supporting functions  WKD 3-21-21
+// Instrument data class with integrated DB and supporting functions  WKD $-7-21
 public class Instrument extends Activity {
     private  int InstrID;
     private String Brand;
@@ -49,7 +49,6 @@ public class Instrument extends Activity {
 
     private static Context mContext;
     private SQLiteDatabase database;
-
 
     // constructor default values
     Instrument(){
@@ -280,6 +279,17 @@ public class Instrument extends Activity {
 
 //////////////////////// DB //////////////////////////////////
 
+    // Method to return a Hashmap (dictionary) list from the DB of all instruments with
+    // data keys InstrID = "instrID" , Brand = "brand", Model = "model" in each hash item (note all values are String data type)
+    // Use for instrument select spinners/scroll views wkd
+    public ArrayList<HashMap<String, String>> getInstrList(Context context){
+        InstrDBHelper dbHelper = new InstrDBHelper(context);
+        ArrayList<HashMap<String, String>> ilist = dbHelper.getInstrList();
+        dbHelper.close();
+        return ilist;
+    }
+
+/// Add new Instrument record to DB
     public boolean insertInstr(Context context) throws SQLException {   //Rating???
         boolean didSucceed = false;
         InstrDBHelper dbHelper = new InstrDBHelper(context);
@@ -321,7 +331,7 @@ public class Instrument extends Activity {
         return didSucceed;
     }
 
-///
+///  Update Instrument record in DB using specified ID
 public boolean updateInstr(int InsID, Context context) throws SQLException {   //Rating???
     boolean didSucceed = false;
     InstrDBHelper dbHelper = new InstrDBHelper(context);
@@ -362,8 +372,7 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
     return didSucceed;
 }
 
-
-    ///
+    ///  Load an Instrument record from the DB by ID
     public boolean loadInstr(int InsID, Context context) throws SQLException {   //Rating???
         boolean didSucceed = false;
         InstrDBHelper dbHelper = new InstrDBHelper(context);
@@ -409,7 +418,6 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
         database.close();
         dbHelper.close();
         return didSucceed;
-
     }
 
 ////////////////////////////////////////////////////////////////////

@@ -10,11 +10,16 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+// Instrument DB helper class AZ, WKD
 public class InstrDBHelper extends SQLiteOpenHelper {
 
     //Instruments
     private static final String DATABASE_NAME1 = "instruments";
+    private static final String KEY_INSTR_ID = "InstrumentID";
+    private static final String KEY_BRAND = "Brand";
+    private static final String KEY_MODEL = "Model";
     private static final int DATABASE_VERSION1 = 1;
     private static final String CREATE_TABLE_INSTRUMENTS =
             "create table instruments (InstrumentID integer primary key autoincrement, "
@@ -50,6 +55,24 @@ public class InstrDBHelper extends SQLiteOpenHelper {
         }
 
     }
+
+    // Method to return a Hashmap (dictionary) list from the DB of all instruments with
+    // data keys InstrID = "instrID" , Brand = "brand", Model = "model" in each hash item (note all values are String data type) wkd
+    public ArrayList<HashMap<String, String>> getInstrList(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<HashMap<String, String>> instrList = new ArrayList<>();
+        String query = "SELECT "+KEY_INSTR_ID+", "+KEY_BRAND+", "+KEY_MODEL+" FROM "+ DATABASE_NAME1;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            HashMap<String,String> instr = new HashMap<>();
+            instr.put("instrID",cursor.getString(Integer.parseInt(String.valueOf(cursor.getColumnIndex(KEY_INSTR_ID)))));
+            instr.put("brand",cursor.getString(cursor.getColumnIndex(KEY_BRAND)));
+            instr.put("model",cursor.getString(cursor.getColumnIndex(KEY_MODEL)));
+            instrList.add(instr);
+        }
+        return  instrList;
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
