@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+
+import static com.example.stringtracker.MainActivity.TEXT_REQUEST;
 
 // Configuration Activity class for test/debug purposes  WKD
 public class Configuration extends AppCompatActivity {
@@ -28,12 +31,18 @@ public class Configuration extends AppCompatActivity {
     Button buttonSave;
     Button buttonLoad;
     Button buttonUpd;
+    Button buttonRandInstr;
+    Button buttonSelStr;
+
     EditText iBrand;
     EditText iModel;
     EditText iInstID;
     EditText sBrand;
     EditText sModel;
     EditText sStrID;
+
+    TextView configTextView;
+    Context context = Configuration.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,33 +61,8 @@ public class Configuration extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
 
-        // DEBUG to test instrument and strings list from DB methods ///////////////
-        Context context = Configuration.this;
-        if (!A1.firstRun()) {  // only run this DEBUG list test if NOT first run
-
-            ArrayList<HashMap<String, String>> ilist = I1.getInstrList(context);
-            HashMap<String, String> x;
-            System.out.println("========== LIST DB Instruments ============ ");
-            for (int i = 0; i < ilist.size(); ++i) {
-                x = ilist.get(i);
-                System.out.println("instID:" + x.get("instrID") + " Brand:" + x.get("brand") + " Model:" + x.get("model"));
-            }
-
-            ArrayList<HashMap<String, String>> slist = S1.getStringsList(context);
-            HashMap<String, String> y;
-            System.out.println("========== LIST DB Strings ============ ");
-            for (int i = 0; i < slist.size(); ++i) {
-                y = slist.get(i);
-                System.out.println("stringsID:" + y.get("stringsID") + " Brand:" + y.get("brand") + " Model:" + y.get("model"));
-            }
-
-        }
-        //////////////////////////////////////////////////////////////
-
-        System.out.println("*** Config OnCreate InstrID = "+I1.getInstrID()+" Brand = "+I1.getBrand());
-        System.out.println("*** Config OnCreate StringsID = "+S1.getStringsID()+" Brand = "+S1.getBrand());
-
         ////////// EXAMPLE DEBUG CODE WITH DB ACCESS - EditText and save button //////////
+        configTextView = (TextView) findViewById(R.id.configTextView);
         iBrand = (EditText) findViewById(R.id.editTextBrand);
         iModel = (EditText) findViewById(R.id.editTextModel);
         iInstID = (EditText) findViewById(R.id.editTextInstrID);
@@ -94,8 +78,24 @@ public class Configuration extends AppCompatActivity {
         sModel.setText(S1.getModel());
 
 
+        buttonSelStr = findViewById(R.id.buttonSelStr);
+        buttonSelStr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Configuration.this, SelectStrings.class);
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivityForResult(intent, TEXT_REQUEST);
 
-        // ///// INSERT NEW INSTR TO DB /////
+            }
+        });
+
+
+        // ///// BUTTON INSERT NEW INSTR TO DB /////
         buttonSave = findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,12 +111,16 @@ public class Configuration extends AppCompatActivity {
                 if(I1.insertInstr(context) && S1.insertStrings(context)){
                     showToast(v);
                 }
+
+                A1.setInstrumentCnt(I1.getInstrStrList(context).size());
+                A1.setStringsCnt(S1.getStringsStrList(context).size());
+
             }
         });
 
         // TODO - Check that all data written to DB is correctly stored and retrieved
 
-        ////// LOAD INSTR FROM DB //////
+        ////// BUTTON LOAD INSTR FROM DB //////
         buttonLoad = findViewById(R.id.buttonLoad);
         buttonLoad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +152,7 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
-        ////// UPDATE INSTR IN  DB //////
+        ////// BUTTON UPDATE INSTR IN  DB //////
         buttonUpd = findViewById(R.id.buttonUpd);
         buttonUpd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +175,26 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
+        // ///// BUTTON GENERATE NEW RANDOM INSTR  /////
+        buttonRandInstr = findViewById(R.id.buttonRandInst);
+        buttonRandInstr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                genStrInst();
+                A1.setInstrumentCnt(I1.getInstrStrList(context).size());
+                A1.setStringsCnt(S1.getStringsStrList(context).size());
+
+                iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
+                iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
+                iModel.setText(I1.getModel());
+
+                sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
+                sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
+                sModel.setText(S1.getModel());
+
+
+            }
+        });
 
         /////////////////////////////////////////////////////////////////
 
@@ -195,5 +219,84 @@ public class Configuration extends AppCompatActivity {
                 Toast.LENGTH_SHORT);
         toast.show();
     }
+
+    // Method receives results from String Select
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String appState;
+        String instState;
+        String strState;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                //A1.loadRunState();  // DEBUG tests using file for message passing
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+
+                System.out.println("*** RETURN to CONFIG InstrID = "+I1.getInstrID());
+                iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
+                iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
+                iModel.setText(I1.getModel());
+
+                sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
+                sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
+                sModel.setText(S1.getModel());
+
+            }
+            // DEBUG MESSAGES
+            if (resultCode == RESULT_CANCELED) {
+                configTextView.setText("CANCELED!");
+                configTextView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////
+    // DEBUG test code randomly generates instrument and stringset values for A1 and S1
+    public void genStrInst() {
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
+        String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
+        String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
+        String sTension[] = {"XL", "Light", "Medium", "Heavy"};
+        String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
+
+        String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
+        String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};
+
+        int rand_sBr = rand.nextInt(5);
+        int rand_sMo = rand.nextInt(5);
+        int rand_sTe = rand.nextInt(4);
+        int rand_sTy = rand.nextInt(5);
+        int rand_sID = rand.nextInt(4)+1;
+
+        int rand_iBr = rand.nextInt(5);
+        int rand_iMo = rand.nextInt(5);
+        int rand_iID = rand.nextInt(4)+1;
+
+        S1.setStringsID(rand_sID);
+        S1.setBrand(sBrand[rand_sBr]);
+
+        S1.setModel(sModel[rand_sMo]);
+        S1.setTension(sTension[rand_sTe]);
+        S1.setType(sType[rand_sTy]);
+        S1.setAvgLife(800);  // set this value for DEBUG test purposes
+        S1.setChangeCnt(0);
+        S1.setCost(10.0f);
+
+        I1.setInstrID(rand_iID);
+        I1.setBrand(iBrand[rand_iBr]);
+        I1.setModel(iModel[rand_iMo]);
+        I1.setType(sType[rand_sTy]);
+        I1.setPlayTime(0);
+        I1.setSessionCnt(0);
+        I1.setStringsID(rand_sID);  // match up strings with instrument
+
+    }
+
 
 }

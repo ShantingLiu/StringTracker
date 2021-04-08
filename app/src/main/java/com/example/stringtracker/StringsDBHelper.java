@@ -67,6 +67,25 @@ public class StringsDBHelper extends SQLiteOpenHelper {
         return  strList;
     }
 
+    // Method combines DB items into single string list for ListView
+    public ArrayList< String> getStringsStrList(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> strList = new ArrayList<>();
+        String query = "SELECT "+KEY_STRINGS_ID+", "+KEY_BRAND+", "+KEY_MODEL+", "+KEY_TENSION+", "+KEY_INSTRTYPE+" FROM "+ DATABASE_NAME;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            String str = new String();
+            //System.out.println("*** DB strings ID="+cursor.getString(cursor.getColumnIndex(KEY_STRINGS_ID)));
+
+            str = "ID:"+cursor.getString(cursor.getColumnIndex(KEY_STRINGS_ID))+" ("
+                    +cursor.getString(cursor.getColumnIndex(KEY_INSTRTYPE))+") "
+                    +cursor.getString(cursor.getColumnIndex(KEY_BRAND))+"-"
+                    +cursor.getString(cursor.getColumnIndex(KEY_MODEL));
+
+            strList.add(str);
+        }
+        return  strList;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

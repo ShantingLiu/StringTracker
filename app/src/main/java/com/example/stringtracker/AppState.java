@@ -160,6 +160,8 @@ public class AppState extends Activity { //AppCompatActivity {
         if(filechk.exists()) {
             loadRunState();  // if file exists load the data
             FirstRun = false;
+            StartT = 0;
+            StopT = 0;
         } else {
             File f = new File(path);
             f.mkdirs();   // create missing directories path

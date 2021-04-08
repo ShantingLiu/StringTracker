@@ -221,11 +221,12 @@ public class StringSet {
         Arrays.fill(SessTone, 0.0f);
         Arrays.fill(SessInton, 0.0f);
 
-
+        SessionSent s;
         convStr2Float();
         // TOTO - add is file exists
-        SessionSent s = sentlist.get(0);
-
+        if(sentlist.size()>0) {
+            s = sentlist.get(0);
+        }
         int [] sessSumT = new int[INTERVALS];
         int [] sessCntT = new int[INTERVALS];
 
@@ -321,6 +322,14 @@ public class StringSet {
     public ArrayList<HashMap<String, String>> getStringsList(Context context){
         StringsDBHelper dbHelper = new StringsDBHelper(context);
         ArrayList<HashMap<String, String>> slist = dbHelper.getStringsList();
+        dbHelper.close();
+        return slist;
+    }
+
+    // Method returns an ArrayList of single strings for DB entries
+    public ArrayList<String> getStringsStrList(Context context){
+        StringsDBHelper dbHelper = new StringsDBHelper(context);
+        ArrayList<String> slist = dbHelper.getStringsStrList();
         dbHelper.close();
         return slist;
     }

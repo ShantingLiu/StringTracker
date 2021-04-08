@@ -104,6 +104,8 @@ public class Instrument extends Activity {
     void init() {
         PlayTime = 0;
         SessionCnt = 0;
+        LastSessionTime = 0;
+        SessionInProgress = false;
         InstallTimeStamp = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date());
     }
 
@@ -132,7 +134,6 @@ public class Instrument extends Activity {
                         String.valueOf(SessionInProgress);
         return outstr;
     }
-
 
     // Method to set Instr State parameters from a string using comma delimiters
     public void setInstState(String line){
@@ -289,7 +290,16 @@ public class Instrument extends Activity {
         return ilist;
     }
 
-/// Add new Instrument record to DB
+    // Method returns a single list of strings for DB entries
+    public ArrayList<String> getInstrStrList(Context context){
+        InstrDBHelper dbHelper = new InstrDBHelper(context);
+        ArrayList<String> ilist = dbHelper.getInstrStrList();
+        dbHelper.close();
+        return ilist;
+    }
+
+
+    /// Add new Instrument record to DB
     public boolean insertInstr(Context context) throws SQLException {   //Rating???
         boolean didSucceed = false;
         InstrDBHelper dbHelper = new InstrDBHelper(context);
@@ -402,7 +412,6 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
             CurrSessionStart = cursor.getString(10);
             LastSessionTime = cursor.getInt(11);
             SessionInProgress = Boolean.valueOf(cursor.getString(12));  //???
-
 
             cursor.close();
             System.out.println("*** DB Load Record Success!  InstrID = "+InstrID+" PlayTime = "+PlayTime+" SessCnt = "+SessionCnt);

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView selectedInstrTV;
     private TextView mStringsSel;
     private Button mButton;
-    private boolean isFragmentDisplayed = false;
+    //private boolean isFragmentDisplayed = false;
     static final String STATE_FRAGMENT = "state_of_fragment";
     Button buttonStartSes;
     Button buttonSelInst;
@@ -79,28 +79,28 @@ public class MainActivity extends AppCompatActivity {
             I1.loadInstr(A1.getInstrID(), context);
             S1.loadStrings(I1.getStringsID(), context);
         }
+        // DEBUG forced settings for preferences
         A1.setTestMode(true);
         A1.setEnableSent(true);
         A1.setMaxSessionTime(200);
         S1.setAvgLife(800);
+
+        // Start/Stop Session Button
         buttonStartSes = findViewById(R.id.startButton);
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (A1.sessionStarted()) {  // Stop session
+                if(A1.sessionStarted()) {  // Stop session
                     A1.stopSession();
                     I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
                     I1.setLastSessionTime(A1.getLastSessionTime());
                     I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
                     buttonStartSes.setText("Start");
-
-                    // TODO - make color change via @color resource
-//                    buttonStartSes.setBackgroundResource( R.color.buttonGreen);
-//                   buttonStartSes.setBackgroundColor( R.color.buttonGreen);
-//                    buttonStartSes.setBackgroundColor( GREEN);
                     buttonStartSes.setBackgroundColor( 0xff00A020);
+                    // update DB items
+                    I1.updateInstr(I1.getInstrID(), context);
+                    S1.updateStrings(S1.getStringsID(), context);
 
-                    //getResources().getColor(R.color.colorPrimary)
                      if (A1.getEnableSent()) {
                         // TODO call user sent dialog
                         ////////////////////////
@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
-                    timeDebugTV.setText("SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT()) + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime());
+                    String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+                            + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+                    timeDebugTV.setText(timeText);
                     timeDebugTV.setVisibility(View.VISIBLE);
 
                 } else {                // Start session
                     A1.startSession();
                     buttonStartSes.setText("Stop");
-//                    buttonStartSes.setBackgroundResource(R.color.buttonRed);
-//                    buttonStartSes.setBackgroundColor(RED);
                     buttonStartSes.setBackgroundColor(0xffb02020);
 
 
@@ -128,45 +128,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Select Instrument Button
         buttonSelInst = findViewById(R.id.selInstrButton);
         buttonSelInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /// DEBUG simulates string change ////
-                I1.logStringChange();
-                // do not attempt to update if there are no sessions
-                if (I1.getPlayTime() > 0) {
 
-                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
+                if (A1.sessionStarted()) {  // Stop session if running
+                    A1.stopSession();
+                    I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
+                    I1.setLastSessionTime(A1.getLastSessionTime());
+                    I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
+                    buttonStartSes.setText("Start");
+                    buttonStartSes.setBackgroundColor(0xff00A020);
 
-                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
-                        try {
-                            I1.clearSentLog();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    if (A1.getEnableSent()) {
+                        // TODO call user sent dialog
+                        ////////////////////////
+                        if (A1.getTestMode()) {
+                            I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
                         }
                     }
                 }
-                // TODO -- restore update of DB when instrument slect added
+                // update DB items and save app run state
+                I1.updateInstr(I1.getInstrID(), context);
+                S1.updateStrings(S1.getStringsID(), context);
+
+                // lock button if first run of the program => no data in DB yet
                 if(!A1.firstRun()) {
-                    //S1.updateStrings(S1.getStringsID(), context);
-                    //I1.updateInstr(I1.getInstrID(), context);    //  may need to be after new selection
+                    launchSelectInstrument(v);
                 }
-                
-                I1.init();
-
-                //////// DEBUG Gen Random Instr Stuff //////////////
-                genStrInst();  // DEBUG test stuff generate a random instr strings combo
-                A1.setInstrID(I1.getInstrID());
-                A1.setInstrumentCnt(1);
-                A1.setStringsCnt(1);
-                ///////////////////////////////////////
-
                 saveAppState();
-                updateSelDisplay(null);
-                timeDebugTV.setText("Session Time");
-                timeDebugTV.setVisibility(View.VISIBLE);
-
             }
         });
 
@@ -217,7 +209,31 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
 
-        startActivityForResult(intent, TEXT_REQUEST);
+        // button lockout for first rum
+        if (!A1.firstRun()) {
+            startActivityForResult(intent, TEXT_REQUEST);
+        }
+
+    }
+
+    public void launchSelectInstrument(View view) {
+        Log.d(LOG_TAG, "Sel Instrument Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
+
+        Intent intent = new Intent(this, SelectInstrument.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);    // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+
+        // button lockout for first rum
+        if (!A1.firstRun()) {
+            startActivityForResult(intent, TEXT_REQUEST);
+        }
 
     }
 
@@ -239,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 S1.setStrState(strState);
                 System.out.println("*** RETURN to MAIN InstrID = "+I1.getInstrID());
                 updateSelDisplay(null);
+                saveAppState();
             }
             // DEBUG MESSAGES
             if (resultCode == RESULT_CANCELED) {
@@ -279,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
         selStrTV.setText(selStrText);
         selStrTV.setVisibility(View.VISIBLE);
         timeDebugTV.setBackgroundResource(R.color.background1);
-        timeDebugTV.setText("SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT()) + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime());
+        String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+        timeDebugTV.setText(timeText);
         timeDebugTV.setVisibility(View.VISIBLE);
 
     }

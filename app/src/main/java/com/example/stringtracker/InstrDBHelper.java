@@ -82,6 +82,24 @@ public class InstrDBHelper extends SQLiteOpenHelper {
         return  instrList;
     }
 
+    //  Method combines DB items into single string for ListView
+    public ArrayList<String> getInstrStrList(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> instrList = new ArrayList<>();
+        String query = "SELECT "+KEY_INSTR_ID+", "+KEY_BRAND+", "+KEY_MODEL+", "+KEY_INSTRTYPE+ ", "+KEY_PLAYTIME+ ", "
+                +KEY_INSTALLTIME+  " FROM "+ DATABASE_NAME1;
+        Cursor cursor = db.rawQuery(query,null);
+        while (cursor.moveToNext()){
+            String instr = new String();
+
+            instr = "ID:"+cursor.getString(cursor.getColumnIndex(KEY_INSTR_ID))+" ("
+                    +cursor.getString(cursor.getColumnIndex(KEY_INSTRTYPE))+") "
+                    +cursor.getString(cursor.getColumnIndex(KEY_BRAND))+"-"
+                    + cursor.getString(cursor.getColumnIndex(KEY_MODEL));
+            instrList.add(instr);
+        }
+        return  instrList;
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
