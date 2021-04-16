@@ -5,13 +5,17 @@ import android.content.Intent;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -22,7 +26,7 @@ import static android.graphics.Color.GREEN;
 import static android.graphics.Color.RED;
 
 // StringTracker main activity class WKD
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SessionSentiment.SaveSentListener {
     private static final String LOG_TAG =
             MainActivity.class.getSimpleName();
 
@@ -102,11 +106,15 @@ public class MainActivity extends AppCompatActivity {
                     S1.updateStrings(S1.getStringsID(), context);
 
                      if (A1.getEnableSent()) {
-                        // TODO call user sent dialog
-                        ////////////////////////
-                        if (A1.getTestMode()) {
-                            I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
-                        }
+                         SessionSentiment SentDialog = new SessionSentiment();
+                         FragmentManager fmanager = getSupportFragmentManager();
+                         SentDialog.show(fmanager, "RateStrings");
+
+                         // TODO call user sent dialog
+                         ////////////////////////
+                         //if (A1.getTestMode()) {
+                         //    I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
+                         // }
                     }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
@@ -117,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {                // Start session
                     A1.startSession();
+                    I1.setCurrSessionStart(A1.getCurrSessionStart());
                     buttonStartSes.setText("Stop");
                     buttonStartSes.setBackgroundColor(0xffb02020);
 
@@ -264,6 +273,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    // Method called by SessionSentiment dialog to report back ratings
+    @Override
+    public void didFinishSentDialog(float ratingProj, float ratingTone, float ratingInton) {
+        Sent1.setProj(ratingProj);
+        Sent1.setTone(ratingTone);
+        Sent1.setInton(ratingInton);
+        Sent1.setSessTime(I1.getLastSessionTime());
+        Sent1.setTimeStamp(I1.getCurrSessionStart());
+        I1.logSessionSent(Sent1);
+
+        Toast.makeText(MainActivity.this, "Strings Ratings: "
+                + String.format("Proj=%.2f Tone=%.2f Inton=%.2f", ratingProj, ratingTone, ratingInton), Toast.LENGTH_LONG).show();
+
     }
 
     // Helper to update instrument and strings selected

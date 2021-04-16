@@ -30,8 +30,11 @@
         android:id="@+id/lv_instruments"
         android:layout_width="404dp"
         android:layout_height="568dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonRet5"
-        app:layout_constraintTop_toBottomOf="@+id/strSelTV"
-        tools:layout_editor_absoluteX="5dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/strSelTV" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -78,7 +78,6 @@ public class AppState extends Activity { //AppCompatActivity {
         testMode = false;
     }
 
-
     // Method called by Start button click event
     public void startSession() {
         SessionStarted = true;
@@ -104,7 +103,6 @@ public class AppState extends Activity { //AppCompatActivity {
         }
     }
 
-
     // Method returns a string of AppState data using comma delimiters
     public String getAppState(){
         String outstr =
@@ -125,7 +123,6 @@ public class AppState extends Activity { //AppCompatActivity {
                         String.valueOf(testMode);
         return outstr;
     }
-
 
     // Method to set App State parameters from a string using comma delimiters
     public void setAppState(String line){
@@ -251,7 +248,6 @@ public class AppState extends Activity { //AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     // getters
     // Method returns the state value for initialization sequence

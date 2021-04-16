@@ -77,22 +77,14 @@ public class Configuration extends AppCompatActivity {
 
         updateDisplay();
 
+        ////// BUTTON SELECT STRINGS  //////
         buttonSelStr = findViewById(R.id.buttonSelStr);
         buttonSelStr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Configuration.this, SelectStrings.class);
-                String appState = A1.getAppState();
-                String instState = I1.getInstState();
-                String strState = S1.getStrState();
-                intent.putExtra("appstate", appState);   // forward object states
-                intent.putExtra("inststate", instState);
-                intent.putExtra("strstate", strState);
-                startActivityForResult(intent, TEXT_REQUEST);
-
+                launchSelectStrings(v);
             }
         });
-
 
         // ///// BUTTON INSERT NEW INSTR TO DB /////
         buttonSave = findViewById(R.id.buttonSave);
@@ -181,29 +173,8 @@ public class Configuration extends AppCompatActivity {
                 if(A1.getInstrumentCnt() > 0) {  // decrement total instrument count in AppState
                     A1.setInstrumentCnt(A1.getInstrumentCnt() - 1);
                 }
-                // Find next ID in DB
-                //
-                //     TODO THIS ALGORITHM NEEDS WORK!
-                //     TODO : Force the user to select another instrument once deleted.
-                //
-               /* if(nextInstrID > 1 ){   // if ID > 1 the first instrument search for next Instr below
-                    while(nextInstrID>1){
-                        --nextInstrID;
-                        if(I1.loadInstr(nextInstrID, context)){
-                            System.out.println("*** Load Success New InstrID="+nextInstrID+" new InstrCnt="+A1.getInstrumentCnt());
-                            break;
-                        }
-                    }
-                } else {    // if ID = 1 search for next Instr above
-                    while(nextInstrID < A1.getInstrumentCnt()){
-                        ++nextInstrID;
-                        if(I1.loadInstr(nextInstrID, context)){
-                            System.out.println("*** Load Success New InstrID="+nextInstrID+" new InstrCnt="+A1.getInstrumentCnt());
-                            break;
-                        }
-                    }
-                } */
-                // finally launch select new instrument
+
+                // finally launch select new instrument to force user to choose another
                 launchSelectInstrument(v);
                 // update AppState
                 A1.setInstrID(I1.getInstrID());
@@ -246,6 +217,27 @@ public class Configuration extends AppCompatActivity {
         });
     } ///////////////// end of OnCreate
 
+    //  Launcher for Select Strings Screen
+    public void launchSelectStrings(View view){
+        Log.d(LOG_TAG, "Sel Instrument Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
+
+        Intent intent = new Intent(Configuration.this, SelectStrings.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        // button lockout for first rum
+        if (!A1.firstRun()) {
+            startActivityForResult(intent, TEXT_REQUEST);
+        }
+    }
+
+    // Launcher for Select Instrument Screen
     public void launchSelectInstrument(View view) {
         Log.d(LOG_TAG, "Sel Instrument Button clicked!");
         A1.setInstState(I1.getInstState());  // update object state strings in AppState

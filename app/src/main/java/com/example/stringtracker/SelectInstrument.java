@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
+// Select Instrument ListView Screen -wkd
 public class SelectInstrument extends AppCompatActivity {
 
     AppState A1 = new AppState();
@@ -63,7 +63,6 @@ public class SelectInstrument extends AppCompatActivity {
                 String token = tmp.split(":")[1];
                 int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
 
-
                 // set new instrumentID load new Instrument and StringSet from DB
                 A1.setInstrID(newinstrid);
                 I1.loadInstr(newinstrid, context);
@@ -73,8 +72,6 @@ public class SelectInstrument extends AppCompatActivity {
                 String selInstText = "Selected Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel();
                 insSelTV.setText(selInstText);
                 insSelTV.setVisibility(View.VISIBLE);
-
-
             }
          });
 
@@ -92,7 +89,5 @@ public class SelectInstrument extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
 }
