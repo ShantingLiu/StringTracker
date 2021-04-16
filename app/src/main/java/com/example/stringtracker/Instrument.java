@@ -298,6 +298,12 @@ public class Instrument extends Activity {
         return ilist;
     }
 
+    // Method to deleted Instrument from DB
+    public void delInstr(Context context, int instrID){
+        InstrDBHelper dbHelper = new InstrDBHelper(context);
+        dbHelper.delete(instrID);
+        dbHelper.close();
+    }
 
     /// Add new Instrument record to DB
     public boolean insertInstr(Context context) throws SQLException {   //Rating???

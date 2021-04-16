@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,8 @@ import static com.example.stringtracker.MainActivity.TEXT_REQUEST;
 
 // Configuration Activity class for test/debug purposes  WKD
 public class Configuration extends AppCompatActivity {
+    private static final String LOG_TAG =
+            Configuration.class.getSimpleName();
     // main data objects
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
@@ -34,6 +37,7 @@ public class Configuration extends AppCompatActivity {
     Button buttonUpd;
     Button buttonRandInstr;
     Button buttonSelStr;
+    Button buttonDel;
 
     EditText iBrand;
     EditText iModel;
@@ -67,17 +71,11 @@ public class Configuration extends AppCompatActivity {
         iBrand = (EditText) findViewById(R.id.editTextBrand);
         iModel = (EditText) findViewById(R.id.editTextModel);
         iInstID = (EditText) findViewById(R.id.editTextInstrID);
-        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
-        iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
-        iModel.setText(I1.getModel());
-
         sBrand = (EditText) findViewById(R.id.editTextStrBrand);
         sModel = (EditText) findViewById(R.id.editTextStrModel);
         sStrID = (EditText) findViewById(R.id.editTextStrID);
-        sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
-        sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
-        sModel.setText(S1.getModel());
 
+        updateDisplay();
 
         buttonSelStr = findViewById(R.id.buttonSelStr);
         buttonSelStr.setOnClickListener(new View.OnClickListener() {
@@ -137,23 +135,13 @@ public class Configuration extends AppCompatActivity {
                     A1.setInstrID(Integer.parseInt(iInstID.getText().toString()));  // be sure to update AppState
                     showToast(v);
                 }
-                iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
-                iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
-                iModel.setText(I1.getModel());
 
                 if(S1.loadStrings(Integer.parseInt(sStrID.getText().toString()), context)){
                     I1.setStringsID(Integer.parseInt(sStrID.getText().toString()));  // be sure to update Instrument
                     showToast(v);
                 }
-                sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
-                sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
-                sModel.setText(S1.getModel());
 
-                S1.setStringsID(Integer.parseInt(sStrID.getText().toString()));
-                S1.setBrand(sBrand.getText().toString());
-                S1.setModel(sModel.getText().toString());
-
-
+                updateDisplay();
             }
         });
 
@@ -180,6 +168,50 @@ public class Configuration extends AppCompatActivity {
             }
         });
 
+        ////// BUTTON DELETE INSTR IN  DB //////
+        buttonDel = findViewById(R.id.buttonDel);
+        buttonDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = Configuration.this;
+                System.out.println("*** Config Call DBDelete instrID = "+Integer.parseInt(iInstID.getText().toString())+"  A1.instrCnt="+A1.getInstrumentCnt());
+
+                int nextInstrID = I1.getInstrID();
+                I1.delInstr(context, I1.getInstrID());  // Delete DB entry
+                if(A1.getInstrumentCnt() > 0) {  // decrement total instrument count in AppState
+                    A1.setInstrumentCnt(A1.getInstrumentCnt() - 1);
+                }
+                // Find next ID in DB
+                //
+                //     TODO THIS ALGORITHM NEEDS WORK!
+                //     TODO : Force the user to select another instrument once deleted.
+                //
+               /* if(nextInstrID > 1 ){   // if ID > 1 the first instrument search for next Instr below
+                    while(nextInstrID>1){
+                        --nextInstrID;
+                        if(I1.loadInstr(nextInstrID, context)){
+                            System.out.println("*** Load Success New InstrID="+nextInstrID+" new InstrCnt="+A1.getInstrumentCnt());
+                            break;
+                        }
+                    }
+                } else {    // if ID = 1 search for next Instr above
+                    while(nextInstrID < A1.getInstrumentCnt()){
+                        ++nextInstrID;
+                        if(I1.loadInstr(nextInstrID, context)){
+                            System.out.println("*** Load Success New InstrID="+nextInstrID+" new InstrCnt="+A1.getInstrumentCnt());
+                            break;
+                        }
+                    }
+                } */
+                // finally launch select new instrument
+                launchSelectInstrument(v);
+                // update AppState
+                A1.setInstrID(I1.getInstrID());
+                S1.loadStrings(I1.getStringsID(),context);  // update stringset to match new instrument
+                updateDisplay();
+            }
+        });
+
         // ///// BUTTON GENERATE NEW RANDOM INSTR  /////
         buttonRandInstr = findViewById(R.id.buttonRandInst);
         buttonRandInstr.setOnClickListener(new View.OnClickListener() {
@@ -193,15 +225,7 @@ public class Configuration extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
 
-                iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
-                iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
-                iModel.setText(I1.getModel());
-
-                sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
-                sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
-                sModel.setText(S1.getModel());
-
-
+                updateDisplay();
             }
         });
 
@@ -221,6 +245,38 @@ public class Configuration extends AppCompatActivity {
             }
         });
     } ///////////////// end of OnCreate
+
+    public void launchSelectInstrument(View view) {
+        Log.d(LOG_TAG, "Sel Instrument Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
+
+        Intent intent = new Intent(this, SelectInstrument.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);    // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+
+        // button lockout for first rum
+        if (!A1.firstRun()) {
+            startActivityForResult(intent, TEXT_REQUEST);
+        }
+
+    }
+
+    // Method updates EditTexts for new instrument or strings
+    void updateDisplay(){
+        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
+        iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
+        iModel.setText(I1.getModel());
+
+        sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
+        sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
+        sModel.setText(S1.getModel());
+    }
 
     // A handy toast Saved message you might want to use
     public void showToast(View view) {

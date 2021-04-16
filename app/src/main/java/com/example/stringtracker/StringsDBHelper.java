@@ -41,13 +41,30 @@ public class StringsDBHelper extends SQLiteOpenHelper {
                     + "AvgToneStr text not null,"
                     + "AvgIntonStr text not null);";
 
+    // constructor
     public StringsDBHelper(@Nullable Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
- //   public StringsDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
- //       super(context, name, factory, version);
- //   }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            db.execSQL(CREATE_TABLE_STRINGS);
+        } catch (SQLException e){
+            System.out.println("### ERROR SQL Create Strings Table");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        Log.w(StringTrackerDBHelper.class.getName(),
+                "Upgrading database from version" + oldVersion + "to "
+                        + newVersion + ", which will destroy all old data");
+        db.execSQL("DROP TABLE IF EXISTS STRINGSDB ;");
+        onCreate(db);
+    }
 
     // Method to return a Hashmap (dictionary) list from the DB of all stringsets with
     // data keys StringsID = "stringsID" , Brand = "brand", Model = "model" in each hash item (note all values are String data type) wkd
@@ -90,28 +107,6 @@ public class StringsDBHelper extends SQLiteOpenHelper {
             strList.add(str);
         }
         return  strList;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        try {
-            db.execSQL(CREATE_TABLE_STRINGS);
-        } catch (SQLException e){
-            System.out.println("### ERROR SQL Create Strings Table");
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        Log.w(StringTrackerDBHelper.class.getName(),
-                "Upgrading database from version" + oldVersion + "to "
-                        + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS STRINGSDB ;");
-        onCreate(db);
-
     }
 
 }

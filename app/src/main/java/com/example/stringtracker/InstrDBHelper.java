@@ -39,14 +39,10 @@ public class InstrDBHelper extends SQLiteOpenHelper {
                     + "LastSessionTime integer,"
                     + "SessionInProgress boolean);";
 
+    // constructor
     public InstrDBHelper(@Nullable Context context){
         super(context, DATABASE_NAME1, null, DATABASE_VERSION1);
     }
-
- //   public InstrDBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
- //       super(context, name, factory, version);
- //   }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -57,6 +53,13 @@ public class InstrDBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
+    }
+
+    // Method to delete instrument record from DB
+    public void delete(int instrID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + DATABASE_NAME1+ " WHERE "+KEY_INSTR_ID+"="+instrID+"");
+        db.close();
     }
 
     // Method to return a Hashmap (dictionary) list from the DB of all instruments with
@@ -79,6 +82,7 @@ public class InstrDBHelper extends SQLiteOpenHelper {
 
             instrList.add(instr);
         }
+        db.close();
         return  instrList;
     }
 
@@ -98,6 +102,7 @@ public class InstrDBHelper extends SQLiteOpenHelper {
                     + cursor.getString(cursor.getColumnIndex(KEY_MODEL));
             instrList.add(instr);
         }
+        db.close();
         return  instrList;
     }
 
