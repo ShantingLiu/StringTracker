@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SelectStrings extends AppCompatActivity {
@@ -53,7 +54,11 @@ public class SelectStrings extends AppCompatActivity {
 
         //A1.loadRunState();
         lv_strings  = findViewById(R.id.lv_strings);
-        slist = S1.getStringsStrList(context);
+        try {
+            slist = S1.getStringsStrList(context, I1.getType());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, slist);
         lv_strings.setAdapter(ad);
 

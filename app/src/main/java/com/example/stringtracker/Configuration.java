@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -113,7 +114,11 @@ public class Configuration extends AppCompatActivity {
                 }
 
                 A1.setInstrumentCnt(I1.getInstrStrList(context).size());
-                A1.setStringsCnt(S1.getStringsStrList(context).size());
+                try {
+                    A1.setStringsCnt(S1.getStringsStrList(context, "?").size());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
             }
         });
@@ -182,7 +187,11 @@ public class Configuration extends AppCompatActivity {
             public void onClick(View v) {
                 genStrInst();
                 A1.setInstrumentCnt(I1.getInstrStrList(context).size());
-                A1.setStringsCnt(S1.getStringsStrList(context).size());
+                try {
+                    A1.setStringsCnt(S1.getStringsStrList(context, "?").size());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
 
                 iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
                 iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText

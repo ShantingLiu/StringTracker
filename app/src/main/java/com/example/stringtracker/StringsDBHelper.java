@@ -9,6 +9,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,11 +70,13 @@ public class StringsDBHelper extends SQLiteOpenHelper {
         return  strList;
     }
 
-    // Method combines DB items into single string list for ListView
-    public ArrayList< String> getStringsStrList(){
+    // Method combines DB items into single string list for ListView filters results based on InstrType provided
+    public ArrayList< String> getStringsStrList(String InstrType) throws java.sql.SQLException {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> strList = new ArrayList<>();
-        String query = "SELECT "+KEY_STRINGS_ID+", "+KEY_BRAND+", "+KEY_MODEL+", "+KEY_TENSION+", "+KEY_INSTRTYPE+" FROM "+ DATABASE_NAME;
+        String query = "SELECT "+KEY_STRINGS_ID+", "+KEY_BRAND+", "+KEY_MODEL+", "+KEY_TENSION+", "+KEY_INSTRTYPE+
+                " FROM "+ DATABASE_NAME + " WHERE "+KEY_INSTRTYPE+"="+"'"+InstrType+"'";
+
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             String str = new String();

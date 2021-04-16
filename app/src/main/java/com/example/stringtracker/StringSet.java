@@ -327,9 +327,9 @@ public class StringSet {
     }
 
     // Method returns an ArrayList of single strings for DB entries
-    public ArrayList<String> getStringsStrList(Context context){
+    public ArrayList<String> getStringsStrList(Context context, String InstrType) throws java.sql.SQLException {
         StringsDBHelper dbHelper = new StringsDBHelper(context);
-        ArrayList<String> slist = dbHelper.getStringsStrList();
+        ArrayList<String> slist = dbHelper.getStringsStrList(InstrType);
         dbHelper.close();
         return slist;
     }
