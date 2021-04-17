@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StringTracker">
-        <activity android:name=".EditInstrument"></activity>
+        <activity android:name=".SelNewInstrument"></activity>
+        <activity android:name=".EditInstrument" />
         <activity android:name=".AddNewInstrument" />
         <activity android:name=".Configuration2" />
         <activity android:name=".SelectStrings" />

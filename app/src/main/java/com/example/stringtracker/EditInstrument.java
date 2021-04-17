@@ -29,4 +29,11 @@ public class EditInstrument extends AppCompatActivity {
         setResult(RESULT_OK, replyIntent);
         finish();
     }
+
+    public void deleteInstr(View view){
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(newInstrName, "000000000"); // bad coding practice, TODO fix later
+        setResult(RESULT_OK, replyIntent);
+        finish();
+    }
 }

@@ -20,6 +20,7 @@ import java.util.List;
 public class Configuration2 extends AppCompatActivity {
     public static final int ADD_NEW_INSTR_REQUEST = 1;
     public static final int EDIT_INSTR_REQUEST = 2;
+    public static final int NEW_INSTR_REQUEST = 3;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -134,10 +135,11 @@ public class Configuration2 extends AppCompatActivity {
 
         });
     }
-
+    // TODO: onActivityResult() will be very long; I may refactor into smaller sub-functions
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        // New instrument added
         if (requestCode == ADD_NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String reply =
@@ -148,15 +150,39 @@ public class Configuration2 extends AppCompatActivity {
             }
         }
 
+        // Instrument edited or deleted
         if (requestCode == EDIT_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String replyName =
                         data.getStringExtra(EditInstrument.newInstrName);
-                instrList.set(currInstIndex, replyName);
-                dataAdapter.notifyDataSetChanged();
-                Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
+                if (replyName.equals("000000000")){ // delete instrument command
+                    instrList.remove(currInstIndex);
+                    dataAdapter.notifyDataSetChanged();
+                    Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
+                    // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
+                    promptSelectNewInstr();
+                } else { // update instrument command
+                    instrList.set(currInstIndex, replyName);
+                    dataAdapter.notifyDataSetChanged();
+                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
+                }
             }
         }
+
+        // TODO: New Instrument Selected
+        // some code here (after deletion of an instrument)
+
+        // TODO: New String Selected
+        // some code here (after deletion of a string)
+        // String deletion and manipulation will have to be after code is integrated with Keith's DB
+    }
+
+    // Force user to select a new instrument after deletion of an instrument
+    public void promptSelectNewInstr(){
+        Log.d(LOG_TAG, "Prompting user to select a new instrument");
+        Intent intent = new Intent(this, SelNewInstrument.class);
+        intent.putStringArrayListExtra("instrList", instrList);
+        startActivityForResult(intent, NEW_INSTR_REQUEST);
     }
 
 /*  edit function that gets the name and index of the currently selected spinner item
