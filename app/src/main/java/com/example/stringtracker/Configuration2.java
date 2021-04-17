@@ -125,10 +125,6 @@ public class Configuration2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Add New Instrument Button clicked!");
-                Toast.makeText(Configuration2.this,
-                        "OnClickListener : " +
-                                "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
-                        Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
                 startActivityForResult(i, ADD_NEW_INSTR_REQUEST);
             }
@@ -171,10 +167,12 @@ public class Configuration2 extends AppCompatActivity {
 
         // TODO: New Instrument Selected
         // some code here (after deletion of an instrument)
+        // UPDATE THE ARRAY
 
         // TODO: New String Selected
         // some code here (after deletion of a string)
         // String deletion and manipulation will have to be after code is integrated with Keith's DB
+        // UPDATE THE ARRAY
     }
 
     // Force user to select a new instrument after deletion of an instrument
