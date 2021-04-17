@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         Sent1.setTimeStamp(I1.getCurrSessionStart());
         I1.logSessionSent(Sent1);
 
-        Toast.makeText(MainActivity.this, "Strings Ratings: "
+        Toast.makeText(MainActivity.this, "Ratings:  "
                 + String.format("Proj=%.2f Tone=%.2f Inton=%.2f", ratingProj, ratingTone, ratingInton), Toast.LENGTH_LONG).show();
 
     }
