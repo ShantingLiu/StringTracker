@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Configuration2 extends AppCompatActivity {
+    public static final int TEXT_REQUEST = 1;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -124,21 +125,35 @@ public class Configuration2 extends AppCompatActivity {
                                 "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
                         Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
-                startActivity(i);
+                startActivityForResult(i, TEXT_REQUEST);
 
-                // get info back
-                Intent newEntry = getIntent();
-                Bundle b = newEntry.getExtras();
-                if (b != null){
-                    String newInstrName = (String) b.get("instName");
-                    addInstrToList(newInstrName);
+//                // get info back
+//                Intent newEntry = getIntent();
+//                Bundle b = newEntry.getExtras();
+//
+//                if (b != null){
+//                    String newInstrName = (String) b.get("instName");
+//                    addInstrToList(newInstrName);
 //                    dataAdapter.notifyDataSetChanged();
 //                    spinner1.setAdapter(dataAdapter);
-                    // Using a 2nd adapter maybe?
-                    Toast.makeText(Configuration2.this, "Added new instrument \"" + newInstrName + "\"", Toast.LENGTH_SHORT).show();
-                }
+//                    Toast.makeText(Configuration2.this, "Added new instrument \"" + newInstrName + "\"", Toast.LENGTH_SHORT).show();
+//                }
             }
 
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TEXT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String reply =
+                        data.getStringExtra(AddNewInstrument.instName);
+                addInstrToList(reply);
+                dataAdapter.notifyDataSetChanged();
+                Toast.makeText(Configuration2.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

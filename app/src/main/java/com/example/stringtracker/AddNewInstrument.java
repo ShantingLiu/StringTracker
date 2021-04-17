@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 public class AddNewInstrument extends AppCompatActivity {
+    public static final String instName = "";
     private EditText newInstrNamePrompt;
 
     @Override
@@ -20,9 +21,11 @@ public class AddNewInstrument extends AppCompatActivity {
     // returns new instrument data back to Configuration activity
     public void addNewInstr(View view){
         String instrName = newInstrNamePrompt.getText().toString();
-        Intent entry = new Intent(AddNewInstrument.this, Configuration2.class);
-        entry.putExtra("instName", instrName);
-        startActivity(entry);
+        Intent entry = new Intent();
+        entry.putExtra(instName, instrName);
+        setResult(RESULT_OK, entry);
+        finish();
+
     }
 
 }
