@@ -204,6 +204,22 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         startActivityForResult(intent, TEXT_REQUEST);
     }
 
+    public void launchConfig2(View view) {
+        Log.d(LOG_TAG, "Config2 Button clicked!");
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();
+
+        Intent intent = new Intent(this, Configuration2.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        startActivityForResult(intent, TEXT_REQUEST);
+    }
+
     public void launchAnalytics(View view) {
         Log.d(LOG_TAG, "Analytics Button clicked!");
         A1.setInstState(I1.getInstState());  // update object state strings in AppState

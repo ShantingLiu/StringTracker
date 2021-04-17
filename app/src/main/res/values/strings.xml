@@ -7,4 +7,6 @@
     <string name="rating_inton">Off-Pitch \u003c\u002d <b>Intonation</b> \u002d\u003e On-Pitch</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
