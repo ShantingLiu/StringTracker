@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Configuration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSelInstr2"
+        app:layout_constraintStart_toEndOf="@+id/buttonRet"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -33,7 +33,7 @@
         android:layout_width="179dp"
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textShortMessage"
         android:text="Instrument Brand"
@@ -45,7 +45,7 @@
         android:layout_width="188dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Instrument Model"
@@ -56,19 +56,17 @@
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="Insert"
         app:layout_constraintBottom_toTopOf="@+id/buttonLoad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextModel" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonLoad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="Load"
         app:layout_constraintBottom_toTopOf="@+id/buttonUpd"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +78,7 @@
         android:layout_width="179dp"
         android:layout_height="47dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="InstrumentID"
@@ -91,7 +89,7 @@
         android:id="@+id/buttonUpd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +99,7 @@
         android:id="@+id/editTextStrID"
         android:layout_width="169dp"
         android:layout_height="42dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="StringsID"
@@ -113,7 +111,7 @@
         android:id="@+id/editTextStrBrand"
         android:layout_width="158dp"
         android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="StrBrand"
@@ -125,7 +123,7 @@
         android:id="@+id/editTextStrModel"
         android:layout_width="156dp"
         android:layout_height="41dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="StrModel"
@@ -137,24 +135,21 @@
         android:id="@+id/buttonRandInst"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="RandInstr"
         app:layout_constraintBottom_toTopOf="@+id/buttonLoad"
         app:layout_constraintEnd_toStartOf="@+id/buttonSave"
         app:layout_constraintHorizontal_bias="0.372"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextModel" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonSelStr"
+        android:id="@+id/buttonSelInstr2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Sel Strings"
+        android:text="Sel Instrument"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/configTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -163,10 +158,35 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="DelINST"
         app:layout_constraintBottom_toTopOf="@+id/buttonUpd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonLoad" />
+
+    <ListView
+        android:id="@+id/lv_strings2"
+        android:layout_width="399dp"
+        android:layout_height="293dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="128dp"
+        android:background="#CAD1D7"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selStringsLabel" />
+
+    <TextView
+        android:id="@+id/selStringsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Select Strings for Change"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStrModel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
