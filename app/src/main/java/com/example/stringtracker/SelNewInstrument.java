@@ -18,11 +18,13 @@ public class SelNewInstrument extends AppCompatActivity {
 Deleting a string needs us to select a new instrument (which assumes the last used string).
  */
     public static final int ADD_NEW_INSTR_REQUEST = 1;
+    public static final int EDIT_INSTR_REQUEST = 2;
 
     private ArrayList<String> instrList;
     private Spinner spinner1;
     private ArrayAdapter<String> dataAdapter;
     private Button addNewInstrButton;
+    private ArrayList<String> addedInstruments = new ArrayList<>();
 
     private String currInstName = "";
     private int currInstIndex;
@@ -59,7 +61,6 @@ Deleting a string needs us to select a new instrument (which assumes the last us
             public void onClick(View v) {
                 // Log.d(LOG_TAG, "Add New Instrument Button clicked!"); // LOG_TAG is giving me errors??
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
-                i.putExtra("fromActivity", "fromSelNewInstrument");
                 startActivityForResult(i, ADD_NEW_INSTR_REQUEST);
             }
         });
@@ -74,14 +75,23 @@ Deleting a string needs us to select a new instrument (which assumes the last us
                 String reply =
                         data.getStringExtra(AddNewInstrument.instName);
                 instrList.add(reply);
+                addedInstruments.add(reply);
                 dataAdapter.notifyDataSetChanged();
+                spinner1.setSelection(instrList.indexOf(reply));
                 Toast.makeText(SelNewInstrument.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
             }
         }
-
-        // TODO: Add in instrument edited activityResult
     }
 
-    public void launchEditInstrument(View view) {
+    public void confirmSelNewInstr(View view){
+        currInstIndex = spinner1.getSelectedItemPosition();
+        currInstName = instrList.get(currInstIndex);
+        Intent entry = new Intent(this, Configuration2.class);
+        entry.putStringArrayListExtra("addInstrList", addedInstruments);
+        entry.putExtra("selInstrIndex", currInstIndex);
+        Toast.makeText(SelNewInstrument.this, "currInstIndex = "+currInstIndex, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK, entry);
+        finish();
+
     }
 }

@@ -41,6 +41,7 @@ public class Configuration2 extends AppCompatActivity {
     private Spinner spinner1;
     private Button addNewInstrButton;
     private ArrayList<String> instrList = new ArrayList<>();
+    private ArrayList<String> addedInstruments = new ArrayList<>();
 
     private String currInstName;
     private int currInstIndex;
@@ -71,7 +72,8 @@ public class Configuration2 extends AppCompatActivity {
         sStrID = (EditText) findViewById(R.id.editTextStrID);
 
         //updateDisplay();
-        populateList(); // DEBUG method to populate list with instruments
+        populateList();
+
 
         addItemsOnSpinner1();
         addListenerOnButton();
@@ -90,7 +92,8 @@ public class Configuration2 extends AppCompatActivity {
 //    }
 
     // DEBUG METHOD to populate Instrument List
-    void populateList(){
+    public void populateList(){
+        Toast.makeText(Configuration2.this, "onCreate() populating instrList", Toast.LENGTH_SHORT).show();
         instrList.add("Cello");
         instrList.add("Piano");
         instrList.add("Electric Guitar");
@@ -168,11 +171,26 @@ public class Configuration2 extends AppCompatActivity {
         // TODO: New Instrument Selected
         // some code here (after deletion of an instrument)
         // UPDATE THE ARRAY
+        if (requestCode == NEW_INSTR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                addedInstruments = data.getStringArrayListExtra("addInstrList");
+                int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
+                addInstrs(addedInstruments);
+                dataAdapter.notifyDataSetChanged();
+                spinner1.setSelection(newCurrInstIndex);
+                Toast.makeText(Configuration2.this, "newCurrInstIndex = " + newCurrInstIndex, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Configuration2.this, "New instrument \"" + instrList.get(currInstIndex) + "\" selected", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         // TODO: New String Selected
         // some code here (after deletion of a string)
         // String deletion and manipulation will have to be after code is integrated with Keith's DB
         // UPDATE THE ARRAY
+    }
+
+    public void addInstrs(ArrayList<String> arr){
+        instrList.addAll(arr);
     }
 
     // Force user to select a new instrument after deletion of an instrument
