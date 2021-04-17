@@ -38,4 +38,25 @@
         android:text="Name"
         app:layout_constraintStart_toEndOf="@+id/editInstrNamePrompt"
         app:layout_constraintTop_toBottomOf="@+id/editInstrHeader" />
+
+    <Button
+        android:id="@+id/updateEditInstr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="59dp"
+        android:layout_marginBottom="84dp"
+        android:onClick="updateInstr"
+        android:text="Update"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/deleteEditInstr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="84dp"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

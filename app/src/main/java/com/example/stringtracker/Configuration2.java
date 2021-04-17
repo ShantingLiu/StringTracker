@@ -147,6 +147,16 @@ public class Configuration2 extends AppCompatActivity {
                 Toast.makeText(Configuration2.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
             }
         }
+
+        if (requestCode == EDIT_INSTR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String replyName =
+                        data.getStringExtra(EditInstrument.newInstrName);
+                instrList.set(currInstIndex, replyName);
+                dataAdapter.notifyDataSetChanged();
+                Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 /*  edit function that gets the name and index of the currently selected spinner item

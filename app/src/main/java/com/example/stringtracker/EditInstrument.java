@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class EditInstrument extends AppCompatActivity {
+    public static final String newInstrName = "";
     private EditText instrName;
 
     @Override
@@ -18,5 +20,13 @@ public class EditInstrument extends AppCompatActivity {
         String name = intent.getStringExtra("iName");
         instrName = findViewById(R.id.editTextEditInstrName);
         instrName.setText(name, TextView.BufferType.EDITABLE);
+    }
+
+    public void updateInstr(View view){
+        String newName = instrName.getText().toString();
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(newInstrName, newName);
+        setResult(RESULT_OK, replyIntent);
+        finish();
     }
 }
