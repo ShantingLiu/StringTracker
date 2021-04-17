@@ -40,6 +40,9 @@ public class Configuration2 extends AppCompatActivity {
     private Button addNewInstrButton;
     private ArrayList<String> instrList = new ArrayList<>();
 
+    private String currInstName;
+    private int currInstIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,18 +129,6 @@ public class Configuration2 extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
                 startActivityForResult(i, TEXT_REQUEST);
-
-//                // get info back
-//                Intent newEntry = getIntent();
-//                Bundle b = newEntry.getExtras();
-//
-//                if (b != null){
-//                    String newInstrName = (String) b.get("instName");
-//                    addInstrToList(newInstrName);
-//                    dataAdapter.notifyDataSetChanged();
-//                    spinner1.setAdapter(dataAdapter);
-//                    Toast.makeText(Configuration2.this, "Added new instrument \"" + newInstrName + "\"", Toast.LENGTH_SHORT).show();
-//                }
             }
 
         });
@@ -155,5 +146,17 @@ public class Configuration2 extends AppCompatActivity {
                 Toast.makeText(Configuration2.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+/*  edit function that gets the index of the currently selected spinner item
+    and goees into an edit screen and passes the value of the return back to the index
+*/
+    public void launchEditInstrument(View view){
+        Log.d(LOG_TAG, "Edit Instrument Button clicked!");
+        Intent intent = new Intent(this, EditInstrument.class);
+        currInstIndex = spinner1.getSelectedItemPosition();
+        currInstName = instrList.get(currInstIndex);
+        Toast.makeText(Configuration2.this, "Editing instrument \"" + currInstName + "\" at index " + currInstIndex, Toast.LENGTH_SHORT).show();
+
     }
 }
