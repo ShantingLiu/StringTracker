@@ -1,19 +1,5 @@
 <resources>
     <string name="app_name">String Tracker</string>
-<<<<<<< HEAD
-    <string name="country_prompt">Choose a country</string>
-
-    <string-array name="country_arrays">
-        <item>Malaysia</item>
-        <item>United States</item>
-        <item>Indonesia</item>
-        <item>France</item>
-        <item>Italy</item>
-        <item>Singapore</item>
-        <item>New Zealand</item>
-        <item>India</item>
-    </string-array>
-=======
     <string name="toast_message">Data Saved</string>
     <string name="save_sent">Save Sentiment</string>
     <string name="rating_proj">Quiet \u003c\u002d <b>Projection</b> \u002d\u003e Loud </string>
@@ -21,5 +7,4 @@
     <string name="rating_inton">Off-Pitch \u003c\u002d <b>Intonation</b> \u002d\u003e On-Pitch</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
->>>>>>> 563c77868c9fe2c25c87ba7f95e113c1c7ead812
 </resources>
