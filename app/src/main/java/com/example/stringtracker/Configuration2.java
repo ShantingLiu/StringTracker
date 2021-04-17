@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Configuration2 extends AppCompatActivity {
-    public static final int TEXT_REQUEST = 1;
+    public static final int ADD_NEW_INSTR_REQUEST = 1;
+    public static final int EDIT_INSTR_REQUEST = 2;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -128,7 +129,7 @@ public class Configuration2 extends AppCompatActivity {
                                 "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
                         Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
-                startActivityForResult(i, TEXT_REQUEST);
+                startActivityForResult(i, ADD_NEW_INSTR_REQUEST);
             }
 
         });
@@ -137,7 +138,7 @@ public class Configuration2 extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TEXT_REQUEST) {
+        if (requestCode == ADD_NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String reply =
                         data.getStringExtra(AddNewInstrument.instName);
@@ -148,15 +149,16 @@ public class Configuration2 extends AppCompatActivity {
         }
     }
 
-/*  edit function that gets the index of the currently selected spinner item
+/*  edit function that gets the name and index of the currently selected spinner item
     and goees into an edit screen and passes the value of the return back to the index
 */
     public void launchEditInstrument(View view){
         Log.d(LOG_TAG, "Edit Instrument Button clicked!");
-        Intent intent = new Intent(this, EditInstrument.class);
         currInstIndex = spinner1.getSelectedItemPosition();
         currInstName = instrList.get(currInstIndex);
         Toast.makeText(Configuration2.this, "Editing instrument \"" + currInstName + "\" at index " + currInstIndex, Toast.LENGTH_SHORT).show();
-
+        Intent intent = new Intent(this, EditInstrument.class);
+        intent.putExtra("iName", currInstName);
+        startActivityForResult(intent, EDIT_INSTR_REQUEST);
     }
 }
