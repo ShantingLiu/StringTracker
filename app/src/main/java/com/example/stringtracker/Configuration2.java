@@ -33,8 +33,8 @@ public class Configuration2 extends AppCompatActivity {
     EditText sStrID;
     TextView configTextView;
 
-
     // Spinner variables
+    private ArrayAdapter<String> dataAdapter;
     private Spinner spinner1;
     private Button addNewInstrButton;
     private ArrayList<String> instrList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class Configuration2 extends AppCompatActivity {
         sStrID = (EditText) findViewById(R.id.editTextStrID);
 
         //updateDisplay();
-        addInstrToList(); // DEBUG method to populate list with instruments
+        populateList(); // DEBUG method to populate list with instruments
 
         addItemsOnSpinner1();
         addListenerOnButton();
@@ -84,7 +84,7 @@ public class Configuration2 extends AppCompatActivity {
 //    }
 
     // DEBUG METHOD to populate Instrument List
-    void addInstrToList(){
+    void populateList(){
         instrList.add("Cello");
         instrList.add("Piano");
         instrList.add("Electric Guitar");
@@ -94,10 +94,14 @@ public class Configuration2 extends AppCompatActivity {
         instrList.add("Viola");
     }
 
+    void addInstrToList(String instr){
+        instrList.add(instr);
+    }
+
     // add items to spinner dynamically
     public void addItemsOnSpinner1() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrList);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(dataAdapter);
     }
@@ -121,6 +125,18 @@ public class Configuration2 extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
                 startActivity(i);
+
+                // get info back
+                Intent newEntry = getIntent();
+                Bundle b = newEntry.getExtras();
+                if (b != null){
+                    String newInstrName = (String) b.get("instName");
+                    addInstrToList(newInstrName);
+//                    dataAdapter.notifyDataSetChanged();
+//                    spinner1.setAdapter(dataAdapter);
+                    // Using a 2nd adapter maybe?
+                    Toast.makeText(Configuration2.this, "Added new instrument \"" + newInstrName + "\"", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });

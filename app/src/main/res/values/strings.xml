@@ -5,6 +5,8 @@
     <string name="rating_proj">Quiet \u003c\u002d <b>Projection</b> \u002d\u003e Loud </string>
     <string name="rating_tone">Warm \u003c\u002d <b>Tone</b> \u002d\u003e Bright</string>
     <string name="rating_inton">Off-Pitch \u003c\u002d <b>Intonation</b> \u002d\u003e On-Pitch</string>
+
+    <string name="newInstrName">Name</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
