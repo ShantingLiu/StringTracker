@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StringTracker">
-        <activity android:name=".Sentiments"></activity>
+        <activity android:name=".SelectStrings"></activity>
+        <activity android:name=".SelectInstrument" />
+        <activity android:name=".Sentiments" />
         <activity android:name=".CompareStrings" />
         <activity android:name=".Analytics" />
         <activity android:name=".Configuration" />
