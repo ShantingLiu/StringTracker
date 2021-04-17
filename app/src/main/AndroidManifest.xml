@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.stringtracker" >
+    package="com.example.stringtracker">
 
     <application
         android:allowBackup="true"
@@ -8,16 +8,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StringTracker" >
-        <activity android:name=".Configuration2" >
-        </activity>
+        android:theme="@style/Theme.StringTracker">
+        <activity android:name=".AddNewInstrument"></activity>
+        <activity android:name=".Configuration2"></activity>
         <activity android:name=".SelectStrings" />
         <activity android:name=".SelectInstrument" />
         <activity android:name=".Sentiments" />
         <activity android:name=".CompareStrings" />
         <activity android:name=".Analytics" />
         <activity android:name=".Configuration" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

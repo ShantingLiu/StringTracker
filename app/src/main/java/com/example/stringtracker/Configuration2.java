@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -107,18 +108,19 @@ public class Configuration2 extends AppCompatActivity {
     }
 
     public void addListenerOnButton() {
-
         spinner1 = (Spinner) findViewById(R.id.spinner1);
         addNewInstrButton = (Button) findViewById(R.id.addNewInstrButton);
 
         addNewInstrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d(LOG_TAG, "Add New Instrument Button clicked!");
                 Toast.makeText(Configuration2.this,
                         "OnClickListener : " +
                                 "\nSpinner 1 : " + String.valueOf(spinner1.getSelectedItem()),
                         Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
+                startActivity(i);
             }
 
         });
