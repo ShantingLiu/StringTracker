@@ -168,5 +168,26 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonUpd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonLoad" />
+    />
+<!--<<<<<<< Updated upstream-->
+
+    <Button
+        android:id="@+id/buttonGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Graph"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonUpd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRandInst" />
+<!--&lt;!&ndash;    =======&ndash;&gt;-->
+<!--        android:id="@+id/buttonGraph"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Graph"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/buttonRet"-->
+<!--        tools:layout_editor_absoluteY="618dp" />-->
+<!--&lt;!&ndash;&gt;>>>>>> Stashed changes&ndash;&gt;-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

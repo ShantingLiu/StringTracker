@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GraphingActivity">
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pie Chart"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:id="@+id/pie_btn"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bar Chart"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:id="@+id/bar_btn"
+        android:layout_below="@id/pie_btn"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Line Chart"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:id="@+id/line_btn"
+        android:layout_below="@id/bar_btn"
+        />
+
+
+</RelativeLayout>

@@ -23,6 +23,8 @@ public class Configuration extends AppCompatActivity {
     private static final String LOG_TAG =
             Configuration.class.getSimpleName();
     // main data objects
+
+
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
@@ -39,6 +41,11 @@ public class Configuration extends AppCompatActivity {
     Button buttonSelStr;
     Button buttonDel;
 
+    //Graph
+
+    Button graph;
+
+
     EditText iBrand;
     EditText iModel;
     EditText iInstID;
@@ -48,6 +55,8 @@ public class Configuration extends AppCompatActivity {
 
     TextView configTextView;
     Context context = Configuration.this;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +86,20 @@ public class Configuration extends AppCompatActivity {
 
         updateDisplay();
 
-        ////// BUTTON SELECT STRINGS  //////
+//<<<<<<< Updated upstream
+//        ////// BUTTON SELECT STRINGS  //////
+//=======
+//        //graph
+
+        graph = findViewById(R.id.buttonGraph);
+        graph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Configuration.this,GraphingActivity.class));
+            }
+        });
+
+//>>>>>>> Stashed changes
         buttonSelStr = findViewById(R.id.buttonSelStr);
         buttonSelStr.setOnClickListener(new View.OnClickListener() {
             @Override
