@@ -60,17 +60,12 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // initialize AppState.
-        //String appstate = null;
         selInstTV = (TextView) findViewById(R.id.selInstrTV);
         selStrTV = (TextView) findViewById(R.id.selStringsTV);
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
         if (A1.init()) {      // if .init() returns true it is the first time the app has been run
-            // TODO - direct user to Configuration to add StingSet and Instrument
-            //genStrInst();  // DEBUG test stuff
-            //appstate = A1.getAppState();
-
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
             updateSelDisplay("FirstRun: ");
@@ -110,12 +105,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                          FragmentManager fmanager = getSupportFragmentManager();
                          SentDialog.show(fmanager, "RateStrings");
 
-                         // TODO call user sent dialog
-                         ////////////////////////
-                         //if (A1.getTestMode()) {
-                         //    I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
-                         // }
-                    }
+                   }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
                     String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
@@ -152,8 +142,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                     buttonStartSes.setBackgroundColor(0xff00A020);
 
                     if (A1.getEnableSent()) {
-                        // TODO call user sent dialog
-                        ////////////////////////
                         if (A1.getTestMode()) {
                             I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
                         }
