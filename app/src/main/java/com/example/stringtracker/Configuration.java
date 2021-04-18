@@ -152,7 +152,7 @@ public class Configuration extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Insert new instrument");// TODO axe this print
+                System.out.println("Insert new instrument!!!!!!");// TODO axe this print
                 I1.setInstrID(Integer.parseInt(iInstID.getText().toString()));
                 I1.setBrand(iBrand.getText().toString());
                 I1.setModel(iModel.getText().toString());
