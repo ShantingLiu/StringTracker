@@ -9,20 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StringTracker">
-        <activity android:name=".LineGraphActivity"
-            android:parentActivityName=".GraphingActivity"
-            >
-
-        </activity>
-        <activity android:name=".BarActivity"
-            android:parentActivityName=".GraphingActivity"
-            />
-        <activity android:name=".PieActivity"
-            android:parentActivityName=".GraphingActivity"
-            />
-        <activity android:name=".GraphingActivity"
-            android:parentActivityName=".Configuration"
-            />
+        <activity android:name=".SelNewInstrument"></activity>
+        <activity android:name=".EditInstrument" />
+        <activity android:name=".AddNewInstrument" />
+        <activity android:name=".Configuration2" />
         <activity android:name=".SelectStrings" />
         <activity android:name=".SelectInstrument" />
         <activity android:name=".Sentiments" />

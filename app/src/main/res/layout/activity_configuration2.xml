@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Configuration2">
+
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="String Tracker - Configuration"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.964" />
+
+  <Spinner
+      android:id="@+id/spinner1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="100dp"
+      android:layout_marginTop="23dp"
+      android:layout_marginEnd="100dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/selectedInstr" />
+
+  <Button
+      android:id="@+id/addNewInstrButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="67dp"
+      android:layout_marginTop="15dp"
+      android:text="Add New"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+
+  <Button
+      android:id="@+id/addNewInstrButton2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="64dp"
+      android:layout_marginTop="60dp"
+      android:text="Add New"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/selStrings" />
+
+  <Button
+      android:id="@+id/editInstrButton2"
+      android:layout_width="86dp"
+      android:layout_height="49dp"
+      android:layout_marginStart="49dp"
+      android:layout_marginTop="60dp"
+      android:layout_marginEnd="107dp"
+      android:text="Edit"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toEndOf="@+id/addNewInstrButton2"
+      app:layout_constraintTop_toBottomOf="@+id/selStrings" />
+
+  <Button
+      android:id="@+id/editInstrButton1"
+      android:layout_width="86dp"
+      android:layout_height="49dp"
+      android:layout_marginStart="41dp"
+      android:layout_marginTop="15dp"
+      android:layout_marginEnd="115dp"
+      android:onClick="launchEditInstrument"
+      android:text="Edit"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/addNewInstrButton"
+      app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+
+  <TextView
+      android:id="@+id/selectedInstr"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="22dp"
+      android:layout_marginBottom="22dp"
+      android:text="Selected Instrument:"
+      app:layout_constraintBottom_toTopOf="@+id/spinner1"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/selStrings"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="45dp"
+      android:text="Selected Strings:"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/editInstrButton1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

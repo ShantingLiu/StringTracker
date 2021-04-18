@@ -86,4 +86,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selInstrButton" />
 
+    <Button
+        android:id="@+id/config2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="launchConfig2"
+        android:text="Configuration2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
