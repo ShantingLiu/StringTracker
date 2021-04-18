@@ -35,8 +35,8 @@ public class LineGraphActivity extends AppCompatActivity  {
 //        linechart.setOnChartGestureListener(LineGraphActivity.this);
 //        linechart.setOnChartValueSelectedListener(LineGraphActivity.this);
 
-        linechart.setDragEnabled(true);
-        linechart.setScaleEnabled(false);
+//        linechart.setDragEnabled(true);
+//        linechart.setScaleEnabled(false);
 
 
         ArrayList<Entry> yValues = new ArrayList<>();
