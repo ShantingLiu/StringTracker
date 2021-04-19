@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,10 @@ public class Configuration2 extends AppCompatActivity {
     // Spinner variables
     private ArrayAdapter<String> dataAdapter;
     private Spinner spinner1;
+    private Spinner spinner2;  // *** Spinner for String sets
+    private ArrayList<String> stringsList = new ArrayList<>();  // *** ArrayList for StringSets
+
+    private Button buttonRet;  // *** needed to pass info back to main
     private Button addNewInstrButton;
     private ArrayList<String> instrList = new ArrayList<>();
     private ArrayList<String> addedInstruments = new ArrayList<>();
@@ -72,12 +79,135 @@ public class Configuration2 extends AppCompatActivity {
         sStrID = (EditText) findViewById(R.id.editTextStrID);
 
         //updateDisplay();
-        populateList();
+        try {       // *** with DB access we need to deal with exceptions
+            populateList();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
 
         addItemsOnSpinner1();
-        addListenerOnButton();
         addListenerOnSpinnerItemSelection();
+
+        addItemsOnSpinner2();  //  *** Copies of Spinner1 code
+        addListenerOnSpinner2ItemSelection();
+
+        addListenerOnButton();
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        // TODO  set starting position for spinner not working
+        spinner1.setSelection(findPosition(instrList, I1.getInstrID()));
+        spinner2.setSelection(findPosition(stringsList, I1.getStringsID()));
+        // *** Actions upon selection for spinners
+        // Select Instrument
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String tmp = instrList.get(position);
+                String token = tmp.split(":")[1];
+                int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
+
+                // set new instrumentID load new Instrument and StringSet from DB
+                A1.setInstrID(newinstrid);
+                I1.loadInstr(newinstrid, context);  // get selected instr from DB
+                S1.loadStrings(I1.getStringsID(), context);  // get selected string set from DB
+
+                // Need to update the strings spinner2 to match possibly new type of instrument
+                stringsList.clear();
+                try {
+                    stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                addItemsOnSpinner2();
+
+                saveState();  // be sure run state changes saved
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                // can leave this empty
+            }
+        });
+
+        // spinner2 Select StringSet action with StringSet Change Sequence
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String tmp = stringsList.get(position);
+                String token = tmp.split(":")[1];
+                int newstringsid = Integer.parseInt(token.split(" ")[0].trim());
+
+                // Update Instrument and load new StringSet from DB
+                // NOTE: This is a String Change Event!
+                /// STRINGSET CHANGE EVENT Sequence ////
+                I1.logStringChange();
+                // do not attempt to update AvgSent if there are no sessions
+                if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
+
+                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
+
+                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
+                        try {
+                            I1.clearSentLog();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                System.out.println("*** STRING CHANGE *** new stringsID="+I1.getStringsID());  // DEBUG
+
+                // set new instrumentID load new Instrument and StringSet from DB
+                I1.setStringsID(newstringsid);
+                S1.loadStrings(I1.getStringsID(), context);
+                I1.init();   // clear for new string cycle
+                I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
+                A1.init();  // clear internal time values
+
+               saveState();  // be sure changes are saved
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                // can leave this empty
+            }
+        });
+
+        // Return button - a good idea to keep this with state passing intact
+        buttonRet = findViewById(R.id.buttonReturn);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+    } ///////// OnCreate() /////////////////////////////////
+
+    // *** Quick search for id position in array list
+    private int findPosition(ArrayList <String> x, int id){
+        int pos = 0;
+        String s;
+        for(int i = 0; i < x.size(); ++i){
+            s = x.get(i);
+            String token = s.split(":")[1];
+            int tmpid = Integer.parseInt(token.split(" ")[0].trim());
+            if(id == tmpid){
+                pos = i;
+            }
+        }
+        return pos;
     }
 
     // Method updates EditTexts for new instrument or strings
@@ -91,16 +221,22 @@ public class Configuration2 extends AppCompatActivity {
 //        sModel.setText(S1.getModel());
 //    }
 
-    // DEBUG METHOD to populate Instrument List
-    public void populateList(){
+    // DEBUG METHOD to populates Instrument and StringSet Lists
+    // *** Need to re-populate the lists if a new instrument is selected so may want to split into 2 functions
+    public void populateList() throws SQLException {
         Toast.makeText(Configuration2.this, "onCreate() populating instrList", Toast.LENGTH_SHORT).show();
-        instrList.add("Cello");
+        instrList.clear();
+        stringsList.clear();
+        instrList = I1.getInstrStrList(context);     // *** gets instrument ArrayList for DB
+        stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
+
+        /*instrList.add("Cello");
         instrList.add("Piano");
         instrList.add("Electric Guitar");
         instrList.add("Acoustic Guitar");
         instrList.add("Bass");
         instrList.add("Violin");
-        instrList.add("Viola");
+        instrList.add("Viola"); */
     }
 
     void addInstrToList(String instr){
@@ -115,9 +251,23 @@ public class Configuration2 extends AppCompatActivity {
         spinner1.setAdapter(dataAdapter);
     }
 
+    // add items to spinner dynamically
+    public void addItemsOnSpinner2() {
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(dataAdapter);
+    }
+
     void addListenerOnSpinnerItemSelection() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
         spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+    }
+
+    // *** copy of OnItemSelect function above.. may be able to combine with above
+    void addListenerOnSpinner2ItemSelection() {
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner2.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
     public void addListenerOnButton() {
@@ -178,15 +328,32 @@ public class Configuration2 extends AppCompatActivity {
                 addInstrs(addedInstruments);
                 dataAdapter.notifyDataSetChanged();
                 spinner1.setSelection(newCurrInstIndex);
+
+                // *** ???
+
                 Toast.makeText(Configuration2.this, "newCurrInstIndex = " + newCurrInstIndex, Toast.LENGTH_SHORT).show();
                 Toast.makeText(Configuration2.this, "New instrument \"" + instrList.get(currInstIndex) + "\" selected", Toast.LENGTH_SHORT).show();
             }
         }
+        // TODO - need to update object states
+        String appState = data.getStringExtra("appstate");
+        String instState = data.getStringExtra("inststate");
+        String strState = data.getStringExtra("strstate");
+        A1.setAppState(appState);  // Restore data object states on return
+        I1.setInstState(instState);
+        S1.setStrState(strState);
 
         // TODO: New String Selected
         // some code here (after deletion of a string)
         // String deletion and manipulation will have to be after code is integrated with Keith's DB
         // UPDATE THE ARRAY
+    }
+
+    // *** Helper to store AppState, Instrument, and StringSet states
+    public void saveState(){
+        A1.setInstState(I1.getInstState());  // update object state strings in AppState
+        A1.setStrState(S1.getStrState());
+        A1.saveRunState();  // be sure we have a copy of states stored
     }
 
     public void addInstrs(ArrayList<String> arr){
@@ -205,11 +372,20 @@ public class Configuration2 extends AppCompatActivity {
     and goees into an edit screen and passes the value of the return back to the index
 */
     public void launchEditInstrument(View view){
+        String appState = A1.getAppState(); // ***
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+
         Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         currInstIndex = spinner1.getSelectedItemPosition();
         currInstName = instrList.get(currInstIndex);
         Toast.makeText(Configuration2.this, "Editing instrument \"" + currInstName + "\" at index " + currInstIndex, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, EditInstrument.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+
         intent.putExtra("iName", currInstName);
         startActivityForResult(intent, EDIT_INSTR_REQUEST);
     }
