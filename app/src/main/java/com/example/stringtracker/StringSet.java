@@ -95,8 +95,21 @@ public class StringSet {
     }
 
     // Method to reset flag on string change
-    void init() {
-        FirstSession = true;  // reset flag
+    void init(boolean newStr) {
+        FirstSession = true; // reset flag
+        if (newStr){
+            Cost = 0.0f;
+            AvgLife = 0;
+            ChangeCnt = 0;
+            StringBuilder defSent = new StringBuilder();
+            for(int i = 0; i<INTERVALS-1;++i) {
+                defSent.append("0, ");   // sentiment values w/ comma delimiters
+            }
+            defSent.append("0");  // add the last 0 without comma
+            AvgProjStr = defSent.toString(); // strings hold list of text
+            AvgToneStr = defSent.toString();
+            AvgIntonStr = defSent.toString();
+        }
     }
 
     // Method to reset all values - dangerous
