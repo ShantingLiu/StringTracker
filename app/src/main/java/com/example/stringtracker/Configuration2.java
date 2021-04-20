@@ -84,8 +84,7 @@ public class Configuration2 extends AppCompatActivity {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-
+        
         addItemsOnSpinner1();
         addListenerOnSpinnerItemSelection();
 
