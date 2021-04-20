@@ -29,7 +29,7 @@ public class AddNewInstrument extends AppCompatActivity {
     private String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     private boolean acoustic = false;
     private Spinner spinnerInstrTypes;
-    private Spinner spinnerStrTension;
+    private Spinner spinnerStr;
     CheckBox acousticCheckBox;
     // TODO: Add a data structure to hold the Strings as well, possibly an ArrayList?
 
@@ -51,25 +51,12 @@ public class AddNewInstrument extends AppCompatActivity {
         // initiate instrument type spinner
         addItemsOnInstrTypesSpinner();
         addListenerOnSpinnerItemSelection();
-        // initiate str tension spinner
-        addItemsOnStrTensionSpinner();
-        addListenerOnStrTensionSpinnerItemSelection();
+        // initiate instrument str selection
+        addItemsStrSpinner();
+        addListenerOnStrSpinnerItemSelection();
     }
-
     /////////////////SPINNERS START/////////////////////
     // add items into spinner for string tensions
-    public void addItemsOnStrTensionSpinner(){
-        spinnerStrTension = (Spinner) findViewById(R.id.stringTensionSpinner);
-        ArrayAdapter<String> strDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strTensions);
-        strDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerStrTension.setAdapter(strDataAdapter);
-    }
-
-    // listener for str tension spinner
-    public void addListenerOnStrTensionSpinnerItemSelection(){
-        spinnerStrTension = (Spinner) findViewById(R.id.stringTensionSpinner);
-        spinnerStrTension.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-    }
 
     // add items into spinner for instrument types
     public void addItemsOnInstrTypesSpinner(){
@@ -83,6 +70,20 @@ public class AddNewInstrument extends AppCompatActivity {
     public void addListenerOnSpinnerItemSelection(){
         spinnerInstrTypes = (Spinner) findViewById(R.id.instrTypeSpinner);
         spinnerInstrTypes.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+    }
+
+    // add items into spinner for string selection
+    public void addItemsStrSpinner(){
+        spinnerStr = (Spinner) findViewById(R.id.strSpinner);
+        ArrayAdapter<String> dataAdapterStr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        dataAdapterStr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStr.setAdapter(dataAdapterStr);
+    }
+
+    // listener for instrument string selection
+    public void addListenerOnStrSpinnerItemSelection(){
+        spinnerStr = (Spinner) findViewById(R.id.strSpinner);
+        spinnerStr.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
     /////////////////SPINNERS END/////////////////////
 
@@ -112,7 +113,6 @@ public class AddNewInstrument extends AppCompatActivity {
 
         setResult(RESULT_OK, resultIntent);
         finish();
-
     }
 
 }
