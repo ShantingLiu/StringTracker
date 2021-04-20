@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="66dp"
         android:onClick="addNewInstr"
-        android:text="Add"
+        android:text="Add String"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
@@ -63,11 +63,11 @@
         android:id="@+id/strCostPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="77dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="38dp"
         android:text="Cost:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strModelNamePrompt" />
+        app:layout_constraintTop_toBottomOf="@+id/strInstrTypePrompt" />
 
     <EditText
         android:id="@+id/newStrBrandName"
@@ -94,12 +94,12 @@
         android:id="@+id/newStrCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="27dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Cost"
         app:layout_constraintStart_toEndOf="@+id/strCostPrompt"
-        app:layout_constraintTop_toBottomOf="@+id/newStrModelName" />
+        app:layout_constraintTop_toBottomOf="@+id/strInstrType" />
 
     <Spinner
         android:id="@+id/stringTensionSpinner"
@@ -112,5 +112,25 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/strTension" />
+
+    <TextView
+        android:id="@+id/strInstrTypePrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="55dp"
+        android:text="Instrument Type:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/strModelNamePrompt" />
+
+    <TextView
+        android:id="@+id/strInstrType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="39dp"
+        android:text="TypeHere"
+        app:layout_constraintStart_toEndOf="@+id/strInstrTypePrompt"
+        app:layout_constraintTop_toBottomOf="@+id/newStrModelName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
