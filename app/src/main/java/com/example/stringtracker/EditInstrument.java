@@ -22,6 +22,9 @@ public class EditInstrument extends AppCompatActivity {
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
     Context context = EditInstrument.this;
+    String appState;  // *** update local A1, I1, S1 objects to present state
+    String instState;
+    String strState;
 
 
     @Override
@@ -30,9 +33,6 @@ public class EditInstrument extends AppCompatActivity {
         setContentView(R.layout.activity_edit_instrument);
         Intent intent = getIntent();
 
-        String appState;  // *** update local A1, I1, S1 objects to present state
-        String instState;
-        String strState;
         appState = intent.getStringExtra("appstate");
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
@@ -49,38 +49,30 @@ public class EditInstrument extends AppCompatActivity {
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
 
-
-        // Return button - a good idea to keep this with state passing intact
-        buttonRet = findViewById(R.id.buttonReturn2);
-        buttonRet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent resultIntent = new Intent();
-
-                // TODO - Add signalling parameters to intent for jenny's messaging
-                resultIntent.putExtra("appstate", A1.getAppState());
-                resultIntent.putExtra("inststate", I1.getInstState());
-                resultIntent.putExtra("strstate", S1.getStrState());
-                setResult(RESULT_OK, resultIntent);
-                finish();
-            }
-        });
-
-
     }
 
     public void updateInstr(View view){
+        I1.setBrand(iBrand.getText().toString());
+        I1.setModel(iModel.getText().toString());
+        I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
         String newName = instrName.getText().toString();
-        Intent replyIntent = new Intent();
-        replyIntent.putExtra(newInstrName, newName);
-        setResult(RESULT_OK, replyIntent);
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(newInstrName, "NormalReturn");
+        resultIntent.putExtra("appstate", A1.getAppState());
+        resultIntent.putExtra("inststate", I1.getInstState());
+        resultIntent.putExtra("strstate", S1.getStrState());
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
     public void deleteInstr(View view){
-        Intent replyIntent = new Intent();
-        replyIntent.putExtra(newInstrName, "000000000"); // bad coding practice, TODO fix later
-        setResult(RESULT_OK, replyIntent);
+        Intent resultIntent = new Intent();
+        A1.setInstrumentCnt(A1.getInstrumentCnt()-1);  // need
+        resultIntent.putExtra("appstate", A1.getAppState());
+        resultIntent.putExtra("inststate", I1.getInstState());
+        resultIntent.putExtra("strstate", S1.getStrState());
+        resultIntent.putExtra(newInstrName, "000000000"); // bad coding practice, TODO fix later
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 }

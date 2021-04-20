@@ -29,12 +29,25 @@ Deleting a string needs us to select a new instrument (which assumes the last us
 
     private String currInstName = "";
     private int currInstIndex;
+    AppState A1 = new AppState();
+    StringSet S1 = new StringSet();
+    Instrument I1 = new Instrument();
+    Context context = SelNewInstrument.this;
+    String appState;  // *** update local A1, I1, S1 objects to present state
+    String instState;
+    String strState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sel_new_instrument);
-        instrList = getIntent().getStringArrayListExtra("instrList");
+        Intent intent = getIntent();
+        appState = intent.getStringExtra("appstate");
+        instState = intent.getStringExtra("inststate");
+        strState = intent.getStringExtra("strstate");
+        A1.setAppState(appState);
+        I1.setInstState(instState);
+        S1.setStrState(strState);
 
         addItemsOnSpinner1();
         addListenerOnButton();
@@ -61,8 +74,14 @@ Deleting a string needs us to select a new instrument (which assumes the last us
             @Override
             public void onClick(View v) {
                 // Log.d(LOG_TAG, "Add New Instrument Button clicked!"); // LOG_TAG is giving me errors??
-                Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
-                startActivityForResult(i, ADD_NEW_INSTR_REQUEST);
+                Intent intent = new Intent(getApplicationContext(), AddNewInstrument.class);
+                String appState = A1.getAppState(); // ***
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // *** forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivityForResult(intent, ADD_NEW_INSTR_REQUEST);
             }
         });
     }
@@ -73,13 +92,14 @@ Deleting a string needs us to select a new instrument (which assumes the last us
         // New instrument added
         if (requestCode == ADD_NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String reply =
-                        data.getStringExtra(AddNewInstrument.instName);
-                instrList.add(reply);
-                addedInstruments.add(reply);
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
                 dataAdapter.notifyDataSetChanged();
-                spinner1.setSelection(instrList.indexOf(reply));
-                Toast.makeText(SelNewInstrument.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
+                spinner1.setSelection(0);  // TODO set selection to what was just added
             }
         }
     }
@@ -87,12 +107,12 @@ Deleting a string needs us to select a new instrument (which assumes the last us
     public void confirmSelNewInstr(View view){
         currInstIndex = spinner1.getSelectedItemPosition();
         currInstName = instrList.get(currInstIndex);
-        Intent entry = new Intent(this, Configuration2.class);
-        entry.putStringArrayListExtra("addInstrList", addedInstruments);
-        entry.putExtra("selInstrIndex", currInstIndex);
-        Toast.makeText(SelNewInstrument.this, "currInstIndex = "+currInstIndex, Toast.LENGTH_SHORT).show();
-        setResult(RESULT_OK, entry);
-        finish();
+        Intent resultIntent = new Intent(this, Configuration2.class);
+        resultIntent.putExtra("appstate", A1.getAppState());
+        resultIntent.putExtra("inststate", I1.getInstState());
+        resultIntent.putExtra("strstate", S1.getStrState());
 
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 }

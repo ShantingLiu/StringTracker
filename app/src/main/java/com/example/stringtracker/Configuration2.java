@@ -84,7 +84,7 @@ public class Configuration2 extends AppCompatActivity {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        
+
         addItemsOnSpinner1();
         addListenerOnSpinnerItemSelection();
 
@@ -228,14 +228,6 @@ public class Configuration2 extends AppCompatActivity {
         stringsList.clear();
         instrList = I1.getInstrStrList(context);     // *** gets instrument ArrayList for DB
         stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
-
-        /*instrList.add("Cello");
-        instrList.add("Piano");
-        instrList.add("Electric Guitar");
-        instrList.add("Acoustic Guitar");
-        instrList.add("Bass");
-        instrList.add("Violin");
-        instrList.add("Viola"); */
     }
 
     void addInstrToList(String instr){
@@ -258,6 +250,12 @@ public class Configuration2 extends AppCompatActivity {
         spinner2.setAdapter(dataAdapter);
     }
 
+    void updateSpinners() throws SQLException {
+        populateList();
+        addItemsOnSpinner1();
+        addItemsOnSpinner2();
+    }
+
     void addListenerOnSpinnerItemSelection() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
         spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
@@ -277,8 +275,15 @@ public class Configuration2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(LOG_TAG, "Add New Instrument Button clicked!");
-                Intent i = new Intent(getApplicationContext(), AddNewInstrument.class);
-                startActivityForResult(i, ADD_NEW_INSTR_REQUEST);
+                Intent intent = new Intent(getApplicationContext(), AddNewInstrument.class);
+                String appState = A1.getAppState(); // ***
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // *** forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+
+                startActivityForResult(intent, ADD_NEW_INSTR_REQUEST);
             }
 
         });
@@ -287,33 +292,55 @@ public class Configuration2 extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+
+        String appState, instState, strState;
         // New instrument added
         if (requestCode == ADD_NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                String reply =
-                        data.getStringExtra(AddNewInstrument.instName);
-                addInstrToList(reply);
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 dataAdapter.notifyDataSetChanged();
-                Toast.makeText(Configuration2.this, "Added new instrument \"" + reply + "\"", Toast.LENGTH_SHORT).show();
             }
         }
 
         // Instrument edited or deleted
         if (requestCode == EDIT_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+
                 String replyName =
                         data.getStringExtra(EditInstrument.newInstrName);
                 if (replyName.equals("000000000")){ // delete instrument command
-                    instrList.remove(currInstIndex);
+                    I1.delInstr(context, I1.getInstrID());
                     dataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
-                    promptSelectNewInstr();
+                    promptSelectNewInstr(); //TODO -debug not getting here
                 } else { // update instrument command
-                    instrList.set(currInstIndex, replyName);
+
                     dataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
                 }
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
             }
         }
 
@@ -322,6 +349,13 @@ public class Configuration2 extends AppCompatActivity {
         // UPDATE THE ARRAY
         if (requestCode == NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+
                 addedInstruments = data.getStringArrayListExtra("addInstrList");
                 int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
                 addInstrs(addedInstruments);
@@ -334,13 +368,6 @@ public class Configuration2 extends AppCompatActivity {
                 Toast.makeText(Configuration2.this, "New instrument \"" + instrList.get(currInstIndex) + "\" selected", Toast.LENGTH_SHORT).show();
             }
         }
-        // TODO - need to update object states
-        String appState = data.getStringExtra("appstate");
-        String instState = data.getStringExtra("inststate");
-        String strState = data.getStringExtra("strstate");
-        A1.setAppState(appState);  // Restore data object states on return
-        I1.setInstState(instState);
-        S1.setStrState(strState);
 
         // TODO: New String Selected
         // some code here (after deletion of a string)
@@ -363,7 +390,13 @@ public class Configuration2 extends AppCompatActivity {
     public void promptSelectNewInstr(){
         Log.d(LOG_TAG, "Prompting user to select a new instrument");
         Intent intent = new Intent(this, SelNewInstrument.class);
-        intent.putStringArrayListExtra("instrList", instrList);
+        String appState = A1.getAppState(); // ***
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+
         startActivityForResult(intent, NEW_INSTR_REQUEST);
     }
 
