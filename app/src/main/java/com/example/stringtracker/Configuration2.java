@@ -273,7 +273,7 @@ public class Configuration2 extends AppCompatActivity {
 
         addNewInstrButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // code for add instrument
                 Log.d(LOG_TAG, "Add New Instrument Button clicked!");
                 Intent intent = new Intent(getApplicationContext(), AddNewInstrument.class);
                 String appState = A1.getAppState(); // ***

@@ -18,25 +18,46 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/newInstrNamePrompt"
+        android:id="@+id/brandNamePrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"
         android:layout_marginTop="31dp"
-        android:text="Instrument Name:"
+        android:text="Brand Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addNewInstr" />
 
+    <TextView
+        android:id="@+id/modelNamePrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="63dp"
+        android:text="Model Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brandNamePrompt" />
+
     <EditText
-        android:id="@+id/newInstrName"
+        android:id="@+id/newInstrBrandName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/newInstrName"
-        app:layout_constraintStart_toEndOf="@+id/newInstrNamePrompt"
+        android:text="@string/newBrandName"
+        app:layout_constraintStart_toEndOf="@+id/brandNamePrompt"
         app:layout_constraintTop_toBottomOf="@+id/addNewInstr" />
+
+    <EditText
+        android:id="@+id/newInstrModelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/newModelName"
+        app:layout_constraintStart_toEndOf="@+id/modelNamePrompt"
+        app:layout_constraintTop_toBottomOf="@+id/newInstrBrandName" />
 
     <Button
         android:id="@+id/addNewInstrConfirm"
@@ -48,5 +69,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newInstrName" />
+        app:layout_constraintTop_toBottomOf="@+id/newInstrBrandName" />
+
+    <Spinner
+        android:id="@+id/instrTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instrTypePrompt" />
+
+    <TextView
+        android:id="@+id/instrTypePrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:text="Instrument Type:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newInstrModelName" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
