@@ -37,6 +37,14 @@ public class EditInstrument extends AppCompatActivity {
     CheckBox acousticCheckBox;
     Boolean isAcoustic;
 
+    // *** Stops false select in spinners on initialization
+    private boolean userIsInteracting = false;
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,17 +87,19 @@ public class EditInstrument extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
-                instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-                instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-                I1.setType(instrTypeLowercase);
-                S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
-                slist.clear();
-                try {
-                    slist = S1.getStringsStrList(context, I1.getType());
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                if(userIsInteracting) {
+                    instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
+                    instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+                    I1.setType(instrTypeLowercase);
+                    S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
+                    slist.clear();
+                    try {
+                        slist = S1.getStringsStrList(context, I1.getType());
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    addItemsStrSpinner();
                 }
-                addItemsStrSpinner();
             } // I may have to put something similar to this code on the onActivityResult() from the addString screen
 
             @Override
@@ -104,26 +114,27 @@ public class EditInstrument extends AppCompatActivity {
                 String tmp = slist.get(position);
                 String token = tmp.split(":")[1];
                 int newstringsid = Integer.parseInt(token.split(" ")[0].trim()); // TODO: Check with Keith to see if we need newstringsid here
-
-                I1.logStringChange();
-                if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
-                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
-                        try {
-                            I1.clearSentLog();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                if(userIsInteracting) {
+                    I1.logStringChange();
+                    if (I1.getPlayTime() > 0 && I1.getSessionCnt() > 0) {
+                        S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
+                        if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
+                            try {
+                                I1.clearSentLog();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
-                System.out.println("*** STRING CHANGE *** new stringsID="+I1.getStringsID());  // DEBUG
+                    System.out.println("*** STRING CHANGE *** new stringsID=" + I1.getStringsID());  // DEBUG
 
-                // set new instrumentID load new Instrument and StringSet from DB
-                I1.setStringsID(newstringsid);
-                S1.loadStrings(I1.getStringsID(), context);
-                I1.init();   // clear for new string cycle
-                I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
-                A1.init();  // clear internal time values
+                    // set new instrumentID load new Instrument and StringSet from DB
+                    I1.setStringsID(newstringsid);
+                    S1.loadStrings(I1.getStringsID(), context);
+                    I1.init();   // clear for new string cycle
+                    I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
+                    A1.init();  // clear internal time values
+                }
             }
 
             @Override
@@ -173,8 +184,8 @@ public class EditInstrument extends AppCompatActivity {
     public void updateInstr(View view){
         I1.setBrand(iBrand.getText().toString());
         I1.setModel(iModel.getText().toString());
-        I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
         I1.setAcoustic(acousticCheckBox.isChecked());
+        I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
         Intent resultIntent = new Intent();
         resultIntent.putExtra("replyInstruction", "NormalReturn");
         resultIntent.putExtra("appstate", A1.getAppState());

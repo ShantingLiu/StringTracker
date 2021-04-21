@@ -121,22 +121,23 @@ public class Configuration2 extends AppCompatActivity {
                 String tmp = instrList.get(position);
                 String token = tmp.split(":")[1];
                 int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
+                if(userIsInteracting) {
+                    // set new instrumentID load new Instrument and StringSet from DB
+                    A1.setInstrID(newinstrid);
+                    I1.loadInstr(newinstrid, context);  // get selected instr from DB
+                    S1.loadStrings(I1.getStringsID(), context);  // get selected string set from DB
 
-                // set new instrumentID load new Instrument and StringSet from DB
-                A1.setInstrID(newinstrid);
-                I1.loadInstr(newinstrid, context);  // get selected instr from DB
-                S1.loadStrings(I1.getStringsID(), context);  // get selected string set from DB
+                    // Need to update the strings spinner2 to match possibly new type of instrument
+                    stringsList.clear();
+                    try {
+                        stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    addItemsOnSpinner2();
 
-                // Need to update the strings spinner2 to match possibly new type of instrument
-                stringsList.clear();
-                try {
-                    stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                    saveState();  // be sure run state changes saved
                 }
-                addItemsOnSpinner2();
-
-                saveState();  // be sure run state changes saved
             }
 
             @Override
@@ -309,17 +310,20 @@ public class Configuration2 extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        userIsInteracting = false;  // Added to keep the bleeping spinners from autonomously selecting upon return from edit screens
 
         String appState, instState, strState;
+        appState = data.getStringExtra("appstate");
+        instState = data.getStringExtra("inststate");
+        strState = data.getStringExtra("strstate");
+        A1.setAppState(appState);  // Restore data object states on return
+        I1.setInstState(instState);
+        S1.setStrState(strState);
+        //System.out.println("*** Ret2Config2 Instrument State:"+instState);
+
         // New instrument added
         if (requestCode == ADD_NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                appState = data.getStringExtra("appstate");
-                instState = data.getStringExtra("inststate");
-                strState = data.getStringExtra("strstate");
-                A1.setAppState(appState);  // Restore data object states on return
-                I1.setInstState(instState);
-                S1.setStrState(strState);
                 try {
                     updateSpinners();
                 } catch (SQLException throwables) {
@@ -332,14 +336,6 @@ public class Configuration2 extends AppCompatActivity {
         // Instrument edited or deleted
         if (requestCode == EDIT_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                appState = data.getStringExtra("appstate");
-                instState = data.getStringExtra("inststate");
-                strState = data.getStringExtra("strstate");
-                A1.setAppState(appState);  // Restore data object states on return
-                I1.setInstState(instState);
-                S1.setStrState(strState);
-                System.out.println("Received isAcoustic = " + I1.getAcoustic());
-
                 String replyInstruction =
                         data.getStringExtra("replyInstruction");
                 if (replyInstruction.equals("000000000")){ // delete instrument command
@@ -364,13 +360,6 @@ public class Configuration2 extends AppCompatActivity {
         // When a user deletes an instrument and then selects a string, this code then updates the spinners and states
         if (requestCode == NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                appState = data.getStringExtra("appstate");
-                instState = data.getStringExtra("inststate");
-                strState = data.getStringExtra("strstate");
-                A1.setAppState(appState);  // Restore data object states on return
-                I1.setInstState(instState);
-                S1.setStrState(strState);
-
                 addedInstruments = data.getStringArrayListExtra("addInstrList");
                 int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
                 addInstrs(addedInstruments);
