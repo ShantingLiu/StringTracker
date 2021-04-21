@@ -24,6 +24,7 @@ public class Configuration2 extends AppCompatActivity {
     public static final int ADD_NEW_INSTR_REQUEST = 1;
     public static final int EDIT_INSTR_REQUEST = 2;
     public static final int NEW_INSTR_REQUEST = 3;
+    public static final int ADD_NEW_STR_REQUEST = 4;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -337,19 +338,19 @@ public class Configuration2 extends AppCompatActivity {
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                System.out.println("Received isAcoustic = " + I1.getAcoustic());
 
-                String replyName =
-                        data.getStringExtra(EditInstrument.newInstrName);
-                if (replyName.equals("000000000")){ // delete instrument command
+                String replyInstruction =
+                        data.getStringExtra("replyInstruction");
+                if (replyInstruction.equals("000000000")){ // delete instrument command
                     I1.delInstr(context, I1.getInstrID());
                     dataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
                     promptSelectNewInstr(); //TODO -debug not getting here
                 } else { // update instrument command
-
                     dataAdapter.notifyDataSetChanged();
-                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyInstruction + "\"", Toast.LENGTH_SHORT).show();
                 }
                 try {
                     updateSpinners();
@@ -360,9 +361,7 @@ public class Configuration2 extends AppCompatActivity {
             }
         }
 
-        // TODO: New Instrument Selected
-        // some code here (after deletion of an instrument)
-        // UPDATE THE ARRAY
+        // When a user deletes an instrument and then selects a string, this code then updates the spinners and states
         if (requestCode == NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 appState = data.getStringExtra("appstate");
@@ -379,16 +378,10 @@ public class Configuration2 extends AppCompatActivity {
                 spinner1.setSelection(newCurrInstIndex);
 
                 // *** ???
-
-                Toast.makeText(Configuration2.this, "newCurrInstIndex = " + newCurrInstIndex, Toast.LENGTH_SHORT).show();
-                Toast.makeText(Configuration2.this, "New instrument \"" + instrList.get(currInstIndex) + "\" selected", Toast.LENGTH_SHORT).show();
             }
         }
 
-        // TODO: New String Selected
-        // some code here (after deletion of a string)
-        // String deletion and manipulation will have to be after code is integrated with Keith's DB
-        // UPDATE THE ARRAY
+        // TODO: New String Selected - links the result from launchEditInstrument()'s call to AddNewStringFromConfig.java
     }
 
     // *** Helper to store AppState, Instrument, and StringSet states
@@ -419,22 +412,46 @@ public class Configuration2 extends AppCompatActivity {
     /*  edit function that gets the name and index of the currently selected spinner item
         and goees into an edit screen and passes the value of the return back to the index
     */
+
+    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void launchEditInstrument(View view){
+        Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         String appState = A1.getAppState(); // ***
         String instState = I1.getInstState();
         String strState = S1.getStrState();
-
-        Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         currInstIndex = spinner1.getSelectedItemPosition();
         currInstName = instrList.get(currInstIndex);
-        Toast.makeText(Configuration2.this, "Editing instrument \"" + currInstName + "\" at index " + currInstIndex, Toast.LENGTH_SHORT).show();
+        System.out.println("Sending isAcoustic = " + I1.getAcoustic());
+
         Intent intent = new Intent(this, EditInstrument.class);
 
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
-
         intent.putExtra("iName", currInstName);
         startActivityForResult(intent, EDIT_INSTR_REQUEST);
     }
+
+    // "Add New" button for Strings - launches AddNewStringFromConfig.java
+    // TODO: Write the corresponding onActivityResult() tidbit to grab the return of a new string
+    // TODO: Update the Selected Strings spinner to the newest added string
+    public void launchAddNewStr(View view){
+        Log.d(LOG_TAG, "Add New String (from Config) Button clicked!");
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        currInstIndex = spinner1.getSelectedItemPosition();
+        currInstName = instrList.get(currInstIndex);
+
+        Intent intent = new Intent(this, AddNewStringFromConfig.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        intent.putExtra("iName", currInstName);
+        startActivityForResult(intent, ADD_NEW_STR_REQUEST);
+    }
+
+    //TODO: Create an activity for Editing strings, create the method here, add the tidbit to onActivityResult()
+
 }

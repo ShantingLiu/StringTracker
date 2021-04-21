@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddNewString">
+    tools:context=".AddNewStringFromConfig">
 
     <Button
-        android:id="@+id/addNewStrConfirm"
+        android:id="@+id/addNewStrConfirm2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/addNewInstr"
+        android:id="@+id/addNewInstr2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/strTension"
+        android:id="@+id/strTension2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
@@ -37,10 +37,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newStrCost" />
+        app:layout_constraintTop_toBottomOf="@+id/newStrCost2" />
 
     <TextView
-        android:id="@+id/strBrandNamePrompt"
+        android:id="@+id/strBrandNamePrompt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -50,61 +50,60 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/strModelNamePrompt"
+        android:id="@+id/strModelNamePrompt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="43dp"
         android:text="Model Name:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strBrandNamePrompt" />
+        app:layout_constraintTop_toBottomOf="@+id/strBrandNamePrompt2" />
 
     <TextView
-        android:id="@+id/strCostPrompt"
+        android:id="@+id/strCostPrompt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="129dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="36dp"
         android:text="Cost:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strModelNamePrompt" />
+        app:layout_constraintTop_toBottomOf="@+id/stringInstrTypeSpinner" />
 
     <EditText
-        android:id="@+id/newStrBrandName"
+        android:id="@+id/newStrBrandName2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/newBrandName"
-        app:layout_constraintStart_toEndOf="@+id/strBrandNamePrompt"
-        app:layout_constraintTop_toBottomOf="@+id/addNewInstr" />
+        app:layout_constraintStart_toEndOf="@+id/strBrandNamePrompt2"
+        app:layout_constraintTop_toBottomOf="@+id/addNewInstr2" />
 
     <EditText
-        android:id="@+id/newStrModelName"
+        android:id="@+id/newStrModelName2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/newModelName"
-        app:layout_constraintStart_toEndOf="@+id/strModelNamePrompt"
-        app:layout_constraintTop_toBottomOf="@+id/newStrBrandName" />
+        app:layout_constraintStart_toEndOf="@+id/strModelNamePrompt2"
+        app:layout_constraintTop_toBottomOf="@+id/newStrBrandName2" />
 
     <EditText
-        android:id="@+id/newStrCost"
+        android:id="@+id/newStrCost2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="22dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Cost"
-        app:layout_constraintStart_toEndOf="@+id/strCostPrompt"
-        app:layout_constraintTop_toBottomOf="@+id/strInstrTypePrompt" />
+        app:layout_constraintStart_toEndOf="@+id/strCostPrompt2"
+        app:layout_constraintTop_toBottomOf="@+id/stringInstrTypeSpinner" />
 
     <Spinner
-        android:id="@+id/stringTensionSpinner"
+        android:id="@+id/stringTensionSpinner2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -113,10 +112,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/strTension" />
+        app:layout_constraintTop_toBottomOf="@+id/strTension2" />
+
+    <Spinner
+        android:id="@+id/stringInstrTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/strInstrTypePrompt2" />
 
     <TextView
-        android:id="@+id/strInstrTypePrompt"
+        android:id="@+id/strInstrTypePrompt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -124,6 +133,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newStrModelName" />
+        app:layout_constraintTop_toBottomOf="@+id/newStrModelName2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
