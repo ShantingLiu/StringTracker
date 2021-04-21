@@ -15,6 +15,8 @@ public class CompareStrings extends AppCompatActivity {
     StringSet S2 = new StringSet();   // 2nd stringset for comparison
     Instrument I1 = new Instrument();
     Button buttonRet;
+    //testing
+    Button Comparebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,15 @@ public class CompareStrings extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+
+        //button test
+        Comparebtn = findViewById(R.id.comparebtn);
+        Comparebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CompareStrings.this,CompareStrings2.class));
+            }
+        });
 
         // Without return button the back arrow may go to a blank screen
         buttonRet = findViewById(R.id.buttonRet3);
