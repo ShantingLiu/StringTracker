@@ -33,13 +33,11 @@ public class AddNewInstrument extends AppCompatActivity {
     private String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     private String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     ArrayList<String> slist = new ArrayList<String>();
-    private boolean acoustic = false;
     private Spinner spinnerInstrTypes;
     private Spinner spinnerStr;
     CheckBox acousticCheckBox;
     boolean isAcoustic = false;
     ArrayAdapter<String> dataAdapterStr;
-    // TODO: Add a data structure to hold the Strings as well, possibly an ArrayList?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +53,8 @@ public class AddNewInstrument extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+
+        acousticCheckBox.setChecked(isAcoustic);
 
         // populate list of strings
         try {
@@ -169,17 +169,9 @@ public class AddNewInstrument extends AppCompatActivity {
     /////////////////SPINNERS END/////////////////////
 
     // handles click event for acoustic checkbox
-    public void onCheckBoxClicked(View view){ // TODO: Needs to read boolean isAcoustic, and when the activity loads, if isAcoustic is true, the checkbox should start off checked
+    public void onCheckBoxClicked(View view){
         // Is the view now checked?
-        acoustic = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        if (acoustic){
-            // TODO: set acoustic to true ((Am I doing this right?))
-            isAcoustic = true;
-        } else {
-            isAcoustic = false;
-        }
+        isAcoustic = ((CheckBox) view).isChecked();
     }
 
     @Override
@@ -194,15 +186,16 @@ public class AddNewInstrument extends AppCompatActivity {
                 instState = data.getStringExtra("inststate");
                 strState = data.getStringExtra("strstate");
 
-                data.getStringExtra("instrBrandName");
-                data.getStringExtra("instrModelName");
-                data.getBooleanExtra("isAcoustic", false); // make sure this works
-                data.getStringExtra("instrTypeLowercase");
-                data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added (ie. ID? If so, we need to grab the ID in AddNewString)
+                String instrBrandName = data.getStringExtra("instrBrandName");
+                String instrModelName = data.getStringExtra("instrModelName");
+                isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
+                String instrTypeLowercase = data.getStringExtra("instrTypeLowercase");
+                int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added (ie. ID? If so, we need to grab the ID in AddNewString)
 
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                acousticCheckBox.setChecked(isAcoustic);
                 try {
                     slist.clear();
                     slist = S1.getStringsStrList(context, I1.getType());
@@ -210,6 +203,7 @@ public class AddNewInstrument extends AppCompatActivity {
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
+                // TODO: Set selection of string spinner to the new string we just added here
                 dataAdapterStr.notifyDataSetChanged();
             }
         }
@@ -236,15 +230,12 @@ public class AddNewInstrument extends AppCompatActivity {
         String appState = A1.getAppState();
         String instState = I1.getInstState();
         String strState = S1.getStrState();
-        // TODO: sends the new instr info over to AddNewString.java, which will pass it back on return
-        // TODO: need to get brand/model/etc out of onActivityResult after it's passed back
+        // TODO: sends the new instr info over to AddNewString.java (done), which will pass it back on return (need to do)
         String instrBrandName = newInstrBrandNamePrompt.getText().toString();
         String instrModelName = newInstrModelNamePrompt.getText().toString();
-        // isAcoustic needs to be passed as well
         String instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-        //
-        Intent intent = new Intent(context, AddNewString.class);
 
+        Intent intent = new Intent(context, AddNewString.class);
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);

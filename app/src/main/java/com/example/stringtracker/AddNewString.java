@@ -11,10 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+// This activity is accessed from the AddNewInstrument.java activity
+// We will have a separate activity for the adding new strings from the Configuration activity
 public class AddNewString extends AppCompatActivity {
     private EditText newStrBrandNamePrompt;
     private EditText newStrModelNamePrompt;
