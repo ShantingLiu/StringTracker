@@ -35,9 +35,7 @@ public class EditInstrument extends AppCompatActivity {
     private Spinner spinnerInstrTypes;
     private Spinner spinnerStr;
     CheckBox acousticCheckBox;
-    boolean isAcoustic = false;
-    ArrayAdapter<String> dataAdapterStr;
-    ArrayAdapter<String> dataAdapter;
+    Boolean isAcoustic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class EditInstrument extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
         isAcoustic = I1.getAcoustic();
+        System.out.println("isAcoustic init = " + isAcoustic);
         acousticCheckBox.setChecked(isAcoustic);
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
@@ -169,10 +168,13 @@ public class EditInstrument extends AppCompatActivity {
         I1.setAcoustic(isAcoustic);
     }
 
+    // TODO: DEBUG - Updating InstrType not working
+    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void updateInstr(View view){
         I1.setBrand(iBrand.getText().toString());
         I1.setModel(iModel.getText().toString());
         I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
+        I1.setAcoustic(acousticCheckBox.isChecked());
         Intent resultIntent = new Intent();
         resultIntent.putExtra("replyInstruction", "NormalReturn");
         resultIntent.putExtra("appstate", A1.getAppState());

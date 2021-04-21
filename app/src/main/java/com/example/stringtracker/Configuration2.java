@@ -338,6 +338,7 @@ public class Configuration2 extends AppCompatActivity {
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                System.out.println("Received isAcoustic = " + I1.getAcoustic());
 
                 String replyInstruction =
                         data.getStringExtra("replyInstruction");
@@ -411,6 +412,8 @@ public class Configuration2 extends AppCompatActivity {
     /*  edit function that gets the name and index of the currently selected spinner item
         and goees into an edit screen and passes the value of the return back to the index
     */
+
+    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void launchEditInstrument(View view){
         Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         String appState = A1.getAppState(); // ***
@@ -418,6 +421,7 @@ public class Configuration2 extends AppCompatActivity {
         String strState = S1.getStrState();
         currInstIndex = spinner1.getSelectedItemPosition();
         currInstName = instrList.get(currInstIndex);
+        System.out.println("Sending isAcoustic = " + I1.getAcoustic());
 
         Intent intent = new Intent(this, EditInstrument.class);
 
