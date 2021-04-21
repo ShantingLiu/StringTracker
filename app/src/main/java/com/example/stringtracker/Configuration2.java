@@ -53,6 +53,14 @@ public class Configuration2 extends AppCompatActivity {
     private String currInstName;
     private int currInstIndex;
 
+    // *** Stops false select in spinners on initialization
+    private boolean userIsInteracting = false;
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +86,7 @@ public class Configuration2 extends AppCompatActivity {
         sModel = (EditText) findViewById(R.id.editTextStrModel);
         sStrID = (EditText) findViewById(R.id.editTextStrID);
 
+        int spinnercnt = 0;
         //updateDisplay();
         try {       // *** with DB access we need to deal with exceptions
             populateList();
@@ -95,10 +104,14 @@ public class Configuration2 extends AppCompatActivity {
 
         ////////////////////////////////////////////////////////////////////////////////////
         // TODO  set starting position for spinner not working
+
         spinner1.setSelection(findPosition(instrList, I1.getInstrID()));
         spinner2.setSelection(findPosition(stringsList, I1.getStringsID()));
         // *** Actions upon selection for spinners
         // Select Instrument
+
+        // TODO  *** NOTICED: spinner1 OnItemSelected() is executing once and spinner2 OnItemSelected() is executed twice by simple navingation to Config2 and returning to main
+        // TODO Fix these actions without click event since it is executing a STRING CHANGE EVENT when no strings were selected by user.
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -135,40 +148,43 @@ public class Configuration2 extends AppCompatActivity {
         // spinner2 Select StringSet action with StringSet Change Sequence
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 String tmp = stringsList.get(position);
                 String token = tmp.split(":")[1];
                 int newstringsid = Integer.parseInt(token.split(" ")[0].trim());
+                // *** Stops false select in spinner2
+                if(userIsInteracting) {
+                    // Update Instrument and load new StringSet from DB
+                    // NOTE: This is a String Change Event!
+                    /// STRINGSET CHANGE EVENT Sequence ////
+                    I1.logStringChange();
+                    // do not attempt to update AvgSent if there are no sessions
+                    if (I1.getPlayTime() > 0 && I1.getSessionCnt() > 0) {
 
-                // Update Instrument and load new StringSet from DB
-                // NOTE: This is a String Change Event!
-                /// STRINGSET CHANGE EVENT Sequence ////
-                I1.logStringChange();
-                // do not attempt to update AvgSent if there are no sessions
-                if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
+                        S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
 
-                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-
-                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
-                        try {
-                            I1.clearSentLog();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
+                            try {
+                                I1.clearSentLog();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+                    System.out.println("*** STRING CHANGE *** new stringsID=" + I1.getStringsID());  // DEBUG
+
+                    // set new instrumentID load new Instrument and StringSet from DB
+                    I1.setStringsID(newstringsid);
+                    S1.loadStrings(I1.getStringsID(), context);
+                    I1.init();   // clear for new string cycle
+                    I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
+                    A1.init();  // clear internal time values
+
+                    saveState();  // be sure changes are saved
                 }
-                System.out.println("*** STRING CHANGE *** new stringsID="+I1.getStringsID());  // DEBUG
-
-                // set new instrumentID load new Instrument and StringSet from DB
-                I1.setStringsID(newstringsid);
-                S1.loadStrings(I1.getStringsID(), context);
-                I1.init();   // clear for new string cycle
-                I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
-                A1.init();  // clear internal time values
-
-               saveState();  // be sure changes are saved
             }
 
             @Override
@@ -400,9 +416,9 @@ public class Configuration2 extends AppCompatActivity {
         startActivityForResult(intent, NEW_INSTR_REQUEST);
     }
 
-/*  edit function that gets the name and index of the currently selected spinner item
-    and goees into an edit screen and passes the value of the return back to the index
-*/
+    /*  edit function that gets the name and index of the currently selected spinner item
+        and goees into an edit screen and passes the value of the return back to the index
+    */
     public void launchEditInstrument(View view){
         String appState = A1.getAppState(); // ***
         String instState = I1.getInstState();
