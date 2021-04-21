@@ -76,13 +76,11 @@ public class AddNewInstrument extends AppCompatActivity {
         // set onClicks for spinners
         spinnerInstrTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int position, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
                 instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
                 instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
                 I1.setType(instrTypeLowercase);
-                System.out.println("I1 type = "+ I1.getType());
 
                 S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                 slist.clear();
@@ -90,10 +88,6 @@ public class AddNewInstrument extends AppCompatActivity {
                     slist = S1.getStringsStrList(context, I1.getType());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
-                }
-                System.out.println("slist length = " + slist.size());
-                for (String str : slist){
-                    System.out.println(str);
                 }
                 addItemsStrSpinner();
             } // I may have to put something similar to this code on the onActivityResult() from the addString screen
@@ -113,9 +107,7 @@ public class AddNewInstrument extends AppCompatActivity {
 
                 I1.logStringChange();
                 if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
-
                     S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-
                     if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
                         try {
                             I1.clearSentLog();
@@ -142,8 +134,6 @@ public class AddNewInstrument extends AppCompatActivity {
 
     }
     /////////////////SPINNERS START/////////////////////
-    // add items into spinner for string tensions
-
     // add items into spinner for instrument types
     public void addItemsOnInstrTypesSpinner(){
         spinnerInstrTypes = (Spinner) findViewById(R.id.instrTypeSpinner);
@@ -225,8 +215,8 @@ public class AddNewInstrument extends AppCompatActivity {
         String instrModelName = iModel.getText().toString();
 
         Intent resultIntent = new Intent();
-        // TODO: Add instr info (brandName + modelName + instrType, etc) into an instr object and add into DB (look into config to see how this is done)
         // TODO: Then, I1.setAcoustic() to true or false depending on boolean isAcoustic value
+        // TODO: Add instr info (brandName + modelName + instrType + isAcoustic + attachedString, etc) into an instr object and add into DB (look into config to see how this is done)
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());

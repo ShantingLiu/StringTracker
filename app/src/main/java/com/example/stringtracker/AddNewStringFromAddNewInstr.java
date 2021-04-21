@@ -12,7 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-// This activity is accessed from the AddNewInstrument.java activity
+// This activity is accessed from the AddNewInstrument.java activity OR the EditInstrument.java activity
+// ^ They both disallow changing instrument type of the string we're adding
 // We will have a separate activity for the adding new strings from the Configuration activity
 public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     private EditText newStrBrandNamePrompt;

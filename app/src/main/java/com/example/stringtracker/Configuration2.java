@@ -339,18 +339,17 @@ public class Configuration2 extends AppCompatActivity {
                 I1.setInstState(instState);
                 S1.setStrState(strState);
 
-                String replyName =
-                        data.getStringExtra(EditInstrument.newInstrName);
-                if (replyName.equals("000000000")){ // delete instrument command
+                String replyInstruction =
+                        data.getStringExtra("replyInstruction");
+                if (replyInstruction.equals("000000000")){ // delete instrument command
                     I1.delInstr(context, I1.getInstrID());
                     dataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
                     promptSelectNewInstr(); //TODO -debug not getting here
                 } else { // update instrument command
-
                     dataAdapter.notifyDataSetChanged();
-                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyName + "\"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyInstruction + "\"", Toast.LENGTH_SHORT).show();
                 }
                 try {
                     updateSpinners();
