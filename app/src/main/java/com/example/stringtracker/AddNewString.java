@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -38,9 +40,11 @@ public class AddNewString extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_instrument);
+
         newStrBrandNamePrompt = findViewById(R.id.newStrBrandName);
         newStrModelNamePrompt = findViewById(R.id.newStrModelName);
         newStrCostPrompt = findViewById(R.id.newStrCost);
+        TextView instrTypePrompt = (TextView) findViewById(R.id.strInstrType);
 
         // get corresponding instrument info from intent
         Intent intent = getIntent();
@@ -51,7 +55,10 @@ public class AddNewString extends AppCompatActivity {
         instrModelName = intent.getStringExtra("instrModelName");
         isAcoustic = intent.getBooleanExtra("isAcoustic", false);
         instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
+        String instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
 
+        // set the fields with info we just grabbed from intent
+        instrTypePrompt.setText(instrTypePropercase);
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
@@ -78,13 +85,22 @@ public class AddNewString extends AppCompatActivity {
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
         float strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
+
         Intent resultIntent = new Intent();
-        // TODO: Add instr info (brandName + modelName + instrType, etc) into an instr object and add into DB (look into config to see how this is done)
+        // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
+        resultIntent.putExtra("appstate", appState);   // *** forward object states
+        resultIntent.putExtra("inststate", instState);
+        resultIntent.putExtra("strstate", strState);
+        // I pass the below info back and forth in case the user is still in the middle of filling out the form, I don't want their changes to be lost in the AddNewInstrument screen when they enter the AddNewString activity
+        resultIntent.putExtra("instrBrandName", instrBrandName);
+        resultIntent.putExtra("instrModelName", instrModelName);
+        resultIntent.putExtra("isAcoustic", isAcoustic);
+        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
 
-        setResult(RESULT_OK, resultIntent); // TODO: write onActivityResult() method in AddNewInstrument.java, where this activity was called from... will have to do it in config2 too
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 

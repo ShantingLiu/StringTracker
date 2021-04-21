@@ -30,6 +30,8 @@ public class AddNewInstrument extends AppCompatActivity {
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
     String strState;
+    String instrTypePropercase;
+    String instrTypeLowercase;
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     ArrayList<String> slist = new ArrayList<String>();
@@ -38,6 +40,7 @@ public class AddNewInstrument extends AppCompatActivity {
     CheckBox acousticCheckBox;
     boolean isAcoustic = false;
     ArrayAdapter<String> dataAdapterStr;
+    ArrayAdapter<String> dataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,9 @@ public class AddNewInstrument extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int position, long arg3) {
                 // create a new adapter with the corresponding values
-                I1.setType(spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase());
+                instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
+                instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+                I1.setType(instrTypeLowercase);
                 System.out.println("I1 type = "+ I1.getType());
 
                 S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
@@ -142,7 +147,7 @@ public class AddNewInstrument extends AppCompatActivity {
     // add items into spinner for instrument types
     public void addItemsOnInstrTypesSpinner(){
         spinnerInstrTypes = (Spinner) findViewById(R.id.instrTypeSpinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInstrTypes.setAdapter(dataAdapter);
     }
@@ -170,7 +175,6 @@ public class AddNewInstrument extends AppCompatActivity {
 
     // handles click event for acoustic checkbox
     public void onCheckBoxClicked(View view){
-        // Is the view now checked?
         isAcoustic = ((CheckBox) view).isChecked();
     }
 
@@ -190,7 +194,7 @@ public class AddNewInstrument extends AppCompatActivity {
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
                 String instrTypeLowercase = data.getStringExtra("instrTypeLowercase");
-                int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added (ie. ID? If so, we need to grab the ID in AddNewString)
+                int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
 
                 // set variables with what we just grabbed
                 iBrand.setText(instrBrandName);
@@ -204,12 +208,13 @@ public class AddNewInstrument extends AppCompatActivity {
                     slist.clear();
                     slist = S1.getStringsStrList(context, I1.getType());
                     addItemsStrSpinner();
-                } catch (SQLException throwables) {
+                } catch (SQLException throwables) { // TODO: Check if throwables should be spelled throwable?
                     throwables.printStackTrace();
                 }
+
+                spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrTypePropercase));
+                dataAdapterStr.notifyDataSetChanged(); // TODO: Check to see if this goes after setting the str selection or before it
                 // TODO: Set selection of string spinner to the new string we just added here
-                // TODO: Set selection of instr type spinner to the instrTypeLowercase variable we just got from inbox here
-                dataAdapterStr.notifyDataSetChanged();
             }
         }
     }
