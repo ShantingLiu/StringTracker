@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 // This activity is accessed from the AddNewInstrument.java activity
 // We will have a separate activity for the adding new strings from the Configuration activity
@@ -41,7 +42,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         newStrModelNamePrompt = (EditText) findViewById(R.id.newStrModelName);
         newStrCostPrompt = (EditText) findViewById(R.id.newStrCost);
 
-        //TextView instrTypePrompt = (TextView) findViewById(R.id.strInstrType);
+        TextView instrTypePrompt = (TextView) findViewById(R.id.strInstrType);
 
         // get corresponding instrument info from intent
         Intent intent = getIntent();
@@ -55,9 +56,8 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
         instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
 
-
         // set the fields with info we just grabbed from intent
-        //instrTypePrompt.setText(instrTypePropercase);
+        instrTypePrompt.setText(instrTypePropercase);
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);

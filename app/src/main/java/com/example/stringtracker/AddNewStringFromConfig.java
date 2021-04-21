@@ -10,6 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+//TODO: Touch base with Keith to decide if this menu should (1) Assume we're attaching the new added string to the currently selected instrument in config, from which this menu came
+// TODO: ^ or (2) Have a spinner for users to select an instrument to attach this string to
+// TODO: My vote is for #2
+
 public class AddNewStringFromConfig extends AppCompatActivity {
     private EditText newStrBrandNamePrompt;
     private EditText newStrModelNamePrompt;
@@ -45,11 +49,11 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
 
-        instrBrandName = intent.getStringExtra("instrBrandName");
-        instrModelName = intent.getStringExtra("instrModelName");
-        isAcoustic = intent.getBooleanExtra("isAcoustic", false);
-        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
-        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+//        instrBrandName = intent.getStringExtra("instrBrandName");
+//        instrModelName = intent.getStringExtra("instrModelName");
+//        isAcoustic = intent.getBooleanExtra("isAcoustic", false);
+//        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
+//        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
 
         A1.setAppState(appState);
         I1.setInstState(instState);
@@ -102,10 +106,10 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         resultIntent.putExtra("inststate", instState);
         resultIntent.putExtra("strstate", strState);
         // I pass the below info back and forth in case the user is still in the middle of filling out the form, I don't want their changes to be lost in the AddNewInstrument screen when they enter the AddNewString activity
-        resultIntent.putExtra("instrBrandName", instrBrandName);
-        resultIntent.putExtra("instrModelName", instrModelName);
-        resultIntent.putExtra("isAcoustic", isAcoustic);
-        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
+//        resultIntent.putExtra("instrBrandName", instrBrandName);
+//        resultIntent.putExtra("instrModelName", instrModelName);
+//        resultIntent.putExtra("isAcoustic", isAcoustic);
+//        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
 
         setResult(RESULT_OK, resultIntent);
         finish();
