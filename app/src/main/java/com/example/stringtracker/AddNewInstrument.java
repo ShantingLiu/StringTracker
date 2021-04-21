@@ -245,7 +245,7 @@ public class AddNewInstrument extends AppCompatActivity {
         String instrModelName = iModel.getText().toString();
         String instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
 
-        Intent intent = new Intent(context, AddNewString.class);
+        Intent intent = new Intent(context, AddNewStringFromAddNewInstr.class);
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
