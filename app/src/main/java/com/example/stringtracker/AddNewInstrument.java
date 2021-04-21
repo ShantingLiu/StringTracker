@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class AddNewInstrument extends AppCompatActivity {
     final int ADD_NEW_STRING_REQUEST = 0;
-    private EditText newInstrBrandNamePrompt;
-    private EditText newInstrModelNamePrompt;
+    EditText iBrand;
+    EditText iModel;
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
@@ -30,8 +30,8 @@ public class AddNewInstrument extends AppCompatActivity {
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
     String strState;
-    private String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
-    private String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
+    private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
+    private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     ArrayList<String> slist = new ArrayList<String>();
     private Spinner spinnerInstrTypes;
     private Spinner spinnerStr;
@@ -43,8 +43,8 @@ public class AddNewInstrument extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_instrument);
-        newInstrBrandNamePrompt = findViewById(R.id.newInstrBrandName);
-        newInstrModelNamePrompt = findViewById(R.id.newInstrModelName);
+        iBrand = (EditText) findViewById(R.id.newInstrBrandName);
+        iModel = (EditText) findViewById(R.id.newInstrModelName);
         acousticCheckBox = findViewById(R.id.acousticCheckBox);
         Intent intent = getIntent();        //replyTo = intent.getStringExtra("fromActivity");
         appState = intent.getStringExtra("appstate");
@@ -99,12 +99,12 @@ public class AddNewInstrument extends AppCompatActivity {
             }
         });
 
-        spinnerStr.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { // TODO: Keith may want to double check this code block
+        spinnerStr.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tmp = slist.get(position);
                 String token = tmp.split(":")[1];
-                int newstringsid = Integer.parseInt(token.split(" ")[0].trim());
+                int newstringsid = Integer.parseInt(token.split(" ")[0].trim()); // TODO: Check with Keith to see if we need newstringsid here
 
                 I1.logStringChange();
                 if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
@@ -182,20 +182,24 @@ public class AddNewInstrument extends AppCompatActivity {
         // this code should be ok, I have to write the code in AddNewString.java to return this properly
         if (requestCode == ADD_NEW_STRING_REQUEST){
             if (resultCode == RESULT_OK){
+                // grab info from inbox
                 appState = data.getStringExtra("appstate");
                 instState = data.getStringExtra("inststate");
                 strState = data.getStringExtra("strstate");
-
                 String instrBrandName = data.getStringExtra("instrBrandName");
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
                 String instrTypeLowercase = data.getStringExtra("instrTypeLowercase");
                 int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added (ie. ID? If so, we need to grab the ID in AddNewString)
 
+                // set variables with what we just grabbed
+                iBrand.setText(instrBrandName);
+                iModel.setText(instrModelName);
+                acousticCheckBox.setChecked(isAcoustic);
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
-                acousticCheckBox.setChecked(isAcoustic);
+                // update string list spinner accordingly
                 try {
                     slist.clear();
                     slist = S1.getStringsStrList(context, I1.getType());
@@ -204,6 +208,7 @@ public class AddNewInstrument extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
                 // TODO: Set selection of string spinner to the new string we just added here
+                // TODO: Set selection of instr type spinner to the instrTypeLowercase variable we just got from inbox here
                 dataAdapterStr.notifyDataSetChanged();
             }
         }
@@ -211,8 +216,8 @@ public class AddNewInstrument extends AppCompatActivity {
 
     // returns new instrument data back to activity it came from
     public void addNewInstr(View view){
-        String instrBrandName = newInstrBrandNamePrompt.getText().toString();
-        String instrModelName = newInstrModelNamePrompt.getText().toString();
+        String instrBrandName = iBrand.getText().toString();
+        String instrModelName = iModel.getText().toString();
 
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType, etc) into an instr object and add into DB (look into config to see how this is done)
@@ -231,8 +236,8 @@ public class AddNewInstrument extends AppCompatActivity {
         String instState = I1.getInstState();
         String strState = S1.getStrState();
         // TODO: sends the new instr info over to AddNewString.java (done), which will pass it back on return (need to do)
-        String instrBrandName = newInstrBrandNamePrompt.getText().toString();
-        String instrModelName = newInstrModelNamePrompt.getText().toString();
+        String instrBrandName = iBrand.getText().toString();
+        String instrModelName = iModel.getText().toString();
         String instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
 
         Intent intent = new Intent(context, AddNewString.class);

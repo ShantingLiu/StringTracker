@@ -28,10 +28,11 @@ public class AddNewString extends AppCompatActivity {
     String instState;
     String strState;
     private String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
-    private boolean acoustic = false;
-    private Spinner spinnerInstrTypes;
     private Spinner spinnerStrTension;
-    CheckBox acousticCheckBox;
+    String instrBrandName;
+    String instrModelName;
+    boolean isAcoustic;
+    String instrTypeLowercase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +41,17 @@ public class AddNewString extends AppCompatActivity {
         newStrBrandNamePrompt = findViewById(R.id.newStrBrandName);
         newStrModelNamePrompt = findViewById(R.id.newStrModelName);
         newStrCostPrompt = findViewById(R.id.newStrCost);
-        acousticCheckBox = findViewById(R.id.acousticCheckBox);
-        Intent intent = getIntent();        //replyTo = intent.getStringExtra("fromActivity");
+
+        // get corresponding instrument info from intent
+        Intent intent = getIntent();
         appState = intent.getStringExtra("appstate");
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
+        instrBrandName = intent.getStringExtra("instrBrandName");
+        instrModelName = intent.getStringExtra("instrModelName");
+        isAcoustic = intent.getBooleanExtra("isAcoustic", false);
+        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
+
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);

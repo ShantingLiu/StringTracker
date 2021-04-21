@@ -10,12 +10,11 @@
         android:id="@+id/addNewStrConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="66dp"
-        android:onClick="addNewInstr"
+        android:layout_marginBottom="60dp"
+        android:onClick="addNewStr"
         android:text="Add String"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -45,9 +44,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
+        android:layout_marginTop="129dp"
         android:text="Brand Name:"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="129dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/strModelNamePrompt"
@@ -73,11 +73,12 @@
         android:id="@+id/newStrBrandName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/newBrandName"
         app:layout_constraintStart_toEndOf="@+id/strBrandNamePrompt"
-        tools:layout_editor_absoluteY="119dp" />
+        app:layout_constraintTop_toBottomOf="@+id/addNewInstr" />
 
     <EditText
         android:id="@+id/newStrModelName"
