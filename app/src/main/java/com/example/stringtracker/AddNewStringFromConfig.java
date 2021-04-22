@@ -29,11 +29,8 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     private Spinner spinnerStrTension;
     private Spinner spinnerStrInstrType;
-    String instrBrandName;
-    String instrModelName;
-    boolean isAcoustic;
-    String instrTypeLowercase;
-    String instrTypePropercase;
+    String instrType;
+    String strTension;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +46,9 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
 
-//        instrBrandName = intent.getStringExtra("instrBrandName");
-//        instrModelName = intent.getStringExtra("instrModelName");
-//        isAcoustic = intent.getBooleanExtra("isAcoustic", false);
-//        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
-//        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
-
 
         addItemsOnStrTensionSpinner();
         addListenerOnStrTensionSpinnerItemSelection();
@@ -81,9 +71,9 @@ public class AddNewStringFromConfig extends AppCompatActivity {
 
     public void addItemsOnStrInstrTypeSpinner(){
         spinnerStrInstrType = (Spinner) findViewById(R.id.stringInstrTypeSpinner);
-        ArrayAdapter<String> strDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
-        strDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerStrInstrType.setAdapter(strDataAdapter);
+        ArrayAdapter<String> DataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        DataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStrInstrType.setAdapter(DataAdapter);
     }
 
     // listener for str tension spinner
@@ -95,7 +85,16 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     public void addNewStr2(View view){
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
-        float strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
+        instrType = spinnerStrInstrType.getSelectedItem().toString(); // TODO: Check if this works'
+        strTension = spinnerStrTension.getSelectedItem().toString();
+
+        float strCost;
+
+        try {
+            strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
+        } catch (NumberFormatException e) {
+            strCost = Float.parseFloat("0");
+        }
 
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
@@ -105,11 +104,6 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         resultIntent.putExtra("appstate", appState);   // *** forward object states
         resultIntent.putExtra("inststate", instState);
         resultIntent.putExtra("strstate", strState);
-        // I pass the below info back and forth in case the user is still in the middle of filling out the form, I don't want their changes to be lost in the AddNewInstrument screen when they enter the AddNewString activity
-//        resultIntent.putExtra("instrBrandName", instrBrandName);
-//        resultIntent.putExtra("instrModelName", instrModelName);
-//        resultIntent.putExtra("isAcoustic", isAcoustic);
-//        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
 
         setResult(RESULT_OK, resultIntent);
         finish();

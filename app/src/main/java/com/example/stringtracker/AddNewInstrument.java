@@ -30,8 +30,7 @@ public class AddNewInstrument extends AppCompatActivity {
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
     String strState;
-    String instrTypePropercase;
-    String instrTypeLowercase;
+    String instrType;
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     ArrayList<String> slist = new ArrayList<String>();
@@ -78,9 +77,8 @@ public class AddNewInstrument extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
-                instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-                instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-                I1.setType(instrTypeLowercase);
+                instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
+                I1.setType(instrType);
 
                 S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                 slist.clear();
@@ -182,7 +180,7 @@ public class AddNewInstrument extends AppCompatActivity {
                 String instrBrandName = data.getStringExtra("instrBrandName");
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
-                String instrTypeLowercase = data.getStringExtra("instrTypeLowercase");
+                String instrType = data.getStringExtra("instrType");
                 int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
 
                 // set variables with what we just grabbed
@@ -201,7 +199,7 @@ public class AddNewInstrument extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
 
-                spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrTypePropercase));
+                spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
                 dataAdapterStr.notifyDataSetChanged(); // TODO: Check to see if this goes after setting the str selection or before it
                 // TODO: Set selection of string spinner to the new string we just added here
             }
@@ -224,7 +222,7 @@ public class AddNewInstrument extends AppCompatActivity {
         finish();
     }
 
-    // takes user to AddNewString.java
+    // takes user to AddNewStringFromAddNewInstr.java
     public void addNewStr(View view){
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -241,7 +239,8 @@ public class AddNewInstrument extends AppCompatActivity {
         intent.putExtra("instrBrandName", instrBrandName);
         intent.putExtra("instrModelName", instrModelName);
         intent.putExtra("isAcoustic", isAcoustic);
-        intent.putExtra("instrTypeLowercase", instrTypeLowercase);
+        intent.putExtra("instrType", instrType);
+        intent.putExtra("iName", "null");
         startActivityForResult(intent, ADD_NEW_STRING_REQUEST);
     }
 

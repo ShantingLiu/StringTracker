@@ -39,6 +39,7 @@ Deleting a string needs us to select a new instrument (which assumes the last us
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("promptSelectNewInstr() proc'd successfully");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sel_new_instrument);
         Intent intent = getIntent();
@@ -56,6 +57,7 @@ Deleting a string needs us to select a new instrument (which assumes the last us
 
     public void addItemsOnSpinner1() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
+        instrList = I1.getInstrStrList(context);
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(dataAdapter);

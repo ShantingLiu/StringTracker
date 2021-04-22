@@ -25,6 +25,7 @@ public class Configuration2 extends AppCompatActivity {
     public static final int EDIT_INSTR_REQUEST = 2;
     public static final int NEW_INSTR_REQUEST = 3;
     public static final int ADD_NEW_STR_REQUEST = 4;
+    public static final int EDIT_STR_REQUEST = 5;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -42,6 +43,7 @@ public class Configuration2 extends AppCompatActivity {
 
     // Spinner variables
     private ArrayAdapter<String> dataAdapter;
+    private ArrayAdapter<String> strDataAdapter;
     private Spinner spinner1;
     private Spinner spinner2;  // *** Spinner for String sets
     private ArrayList<String> stringsList = new ArrayList<>();  // *** ArrayList for StringSets
@@ -222,6 +224,9 @@ public class Configuration2 extends AppCompatActivity {
 
     // *** Quick search for id position in array list
     private int findPosition(ArrayList <String> x, int id){
+        if (x == null){
+            return 0;
+        }
         int pos = 0;
         String s;
         for(int i = 0; i < x.size(); ++i){
@@ -296,10 +301,6 @@ public class Configuration2 extends AppCompatActivity {
         stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
     }
 
-    void addInstrToList(String instr){
-        instrList.add(instr);
-    }
-
     // add items to spinner dynamically
     public void addItemsOnSpinner1() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
@@ -311,9 +312,9 @@ public class Configuration2 extends AppCompatActivity {
     // add items to spinner dynamically
     public void addItemsOnSpinner2() {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(dataAdapter);
+        strDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsList);
+        strDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(strDataAdapter);
     }
 
     void updateSpinners() throws SQLException {
@@ -345,6 +346,9 @@ public class Configuration2 extends AppCompatActivity {
                 String appState = A1.getAppState(); // ***
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();
+                currInstIndex = spinner1.getSelectedItemPosition();
+                currInstName = instrList.get(currInstIndex);
+                intent.putExtra("iName", currInstName);
                 intent.putExtra("appstate", appState);   // *** forward object states
                 intent.putExtra("inststate", instState);
                 intent.putExtra("strstate", strState);
@@ -378,6 +382,7 @@ public class Configuration2 extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
             }
         }
 
@@ -387,20 +392,36 @@ public class Configuration2 extends AppCompatActivity {
                 String replyInstruction =
                         data.getStringExtra("replyInstruction");
                 if (replyInstruction.equals("000000000")){ // delete instrument command
+                    System.out.println("Delete Instrument command received");
                     I1.delInstr(context, I1.getInstrID());
-                    dataAdapter.notifyDataSetChanged();
+                    try {
+                        updateSpinners();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
+                    strDataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
-                    promptSelectNewInstr(); //TODO -debug not getting here
+
+                    promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
-                    dataAdapter.notifyDataSetChanged();
-                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyInstruction + "\"", Toast.LENGTH_SHORT).show();
+                    try {
+                        updateSpinners();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
+                    strDataAdapter.notifyDataSetChanged();
+                    // TODO: Update instrument Spinner to show current instrument (what command for DB to get instr name?)
+                    String iName = data.getStringExtra("iName");
+                    String sName = data.getStringExtra("sName");
+                    spinner1.setSelection(dataAdapter.getPosition(iName));
+                    spinner2.setSelection(strDataAdapter.getPosition(sName));
+
+                    Toast.makeText(Configuration2.this, "Updated Instrument \"" + iName + "\" and string "+ sName, Toast.LENGTH_SHORT).show();
                 }
-                try {
-                    updateSpinners();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+
 
             }
         }
@@ -410,15 +431,45 @@ public class Configuration2 extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 addedInstruments = data.getStringArrayListExtra("addInstrList");
                 int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
-                addInstrs(addedInstruments);
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
                 spinner1.setSelection(newCurrInstIndex);
-
-                // *** ???
             }
         }
 
-        // TODO: New String Selected - links the result from launchEditInstrument()'s call to AddNewStringFromConfig.java
+        // TODO: New String Added - links the result from launchAddNewStr()'s call to AddNewStringFromConfig.java
+        if (requestCode == ADD_NEW_STR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // TODO: Finish up code here
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
+                // TODO: Change selection of str spinner to new string
+            }
+        }
+
+        // When a user returns from EditString called from Config
+        // TODO: Check if this works
+        if (requestCode == EDIT_STR_REQUEST){
+            if (resultCode == RESULT_OK) {
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     // *** Helper to store AppState, Instrument, and StringSet states
@@ -428,12 +479,13 @@ public class Configuration2 extends AppCompatActivity {
         A1.saveRunState();  // be sure we have a copy of states stored
     }
 
-    public void addInstrs(ArrayList<String> arr){
+    public void addInstrs(ArrayList<String> arr){ // delete this?
         instrList.addAll(arr);
     }
 
     // Force user to select a new instrument after deletion of an instrument
     public void promptSelectNewInstr(){
+        System.out.println("promptSelectNewInstr() requesting proc");
         Log.d(LOG_TAG, "Prompting user to select a new instrument");
         Intent intent = new Intent(this, SelNewInstrument.class);
         String appState = A1.getAppState(); // ***
@@ -450,14 +502,13 @@ public class Configuration2 extends AppCompatActivity {
         and goees into an edit screen and passes the value of the return back to the index
     */
 
-    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void launchEditInstrument(View view){
         Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         String appState = A1.getAppState(); // ***
         String instState = I1.getInstState();
         String strState = S1.getStrState();
-        currInstIndex = spinner1.getSelectedItemPosition();
-        currInstName = instrList.get(currInstIndex);
+//        currInstIndex = spinner1.getSelectedItemPosition();
+//        currInstName = instrList.get(currInstIndex);
         System.out.println("Sending isAcoustic = " + I1.getAcoustic());
 
         Intent intent = new Intent(this, EditInstrument.class);
@@ -465,7 +516,6 @@ public class Configuration2 extends AppCompatActivity {
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
-        intent.putExtra("iName", currInstName);
         startActivityForResult(intent, EDIT_INSTR_REQUEST);
     }
 
@@ -485,10 +535,32 @@ public class Configuration2 extends AppCompatActivity {
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
+        // While these below variables are not necessary to pass in this context, AddNewStringFromAddNewInstr expects it
+        intent.putExtra("instrBrandName", I1.getBrand());
+        intent.putExtra("instrModelName", I1.getModel());
+        intent.putExtra("isAcoustic", I1.getAcoustic());
+        intent.putExtra("instrType", I1.getType());
+        //
         intent.putExtra("iName", currInstName);
         startActivityForResult(intent, ADD_NEW_STR_REQUEST);
     }
 
     //TODO: Create an activity for Editing strings, create the method here, add the tidbit to onActivityResult()
+    public void launchEditStr(View view){
+        Log.d(LOG_TAG, "Edit String (from Config) Button clicked!");
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        currInstIndex = spinner1.getSelectedItemPosition();
+        currInstName = instrList.get(currInstIndex);
+
+        Intent intent = new Intent(this, EditString.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        intent.putExtra("iName", currInstName);
+        startActivityForResult(intent, EDIT_STR_REQUEST);
+    }
 
 }

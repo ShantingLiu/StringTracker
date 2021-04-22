@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EditInstrument extends AppCompatActivity {
+    public static final int ADD_NEW_STR_REQUEST = 1;
     EditText iBrand;
     EditText iModel;
     AppState A1 = new AppState();
@@ -28,14 +30,17 @@ public class EditInstrument extends AppCompatActivity {
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
     String strState;
-    String instrTypePropercase;
-    String instrTypeLowercase;
+    String instrType;
+    String iName;
+    String sName;
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     ArrayList<String> slist = new ArrayList<String>();
     private Spinner spinnerInstrTypes;
     private Spinner spinnerStr;
     CheckBox acousticCheckBox;
     Boolean isAcoustic;
+    ArrayAdapter<String> dataAdapter;
+    ArrayAdapter<String> dataAdapterStr;
 
     // *** Stops false select in spinners on initialization
     private boolean userIsInteracting = false;
@@ -64,8 +69,8 @@ public class EditInstrument extends AppCompatActivity {
         acousticCheckBox.setChecked(isAcoustic);
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
-        instrTypeLowercase = I1.getType();
-        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+        instrType = I1.getType();
+
 
         // populate list of strings
         try {
@@ -77,20 +82,22 @@ public class EditInstrument extends AppCompatActivity {
         // initiate instrument type spinner
         addItemsOnInstrTypesSpinner();
         addListenerOnSpinnerItemSelection();
+        spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
         // initiate instrument str selection
         addItemsStrSpinner();
         addListenerOnStrSpinnerItemSelection();
+        // TODO: Found out what the proper parameter to pass for the below getPosition(); (Ask Keith)
+        // spinnerStr.setSelection(dataAdapterStr.getPosition(S1.getString)); // set string spinner to currently attached instrument string
+
 
         // set onClicks for spinners
-        // TODO: Don't allow this to run on default selection
         spinnerInstrTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
                 if(userIsInteracting) {
-                    instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-                    instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-                    I1.setType(instrTypeLowercase);
+                    instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString();
+                    I1.setType(instrType);
                     S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                     slist.clear();
                     try {
@@ -148,7 +155,7 @@ public class EditInstrument extends AppCompatActivity {
     // add items into spinner for instrument types
     public void addItemsOnInstrTypesSpinner(){
         spinnerInstrTypes = (Spinner) findViewById(R.id.editInstrTypeSpinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInstrTypes.setAdapter(dataAdapter);
     }
@@ -162,7 +169,7 @@ public class EditInstrument extends AppCompatActivity {
     // add items into spinner for string selection
     public void addItemsStrSpinner(){
         spinnerStr = (Spinner) findViewById(R.id.editInstrStrSpinner);
-        ArrayAdapter<String> dataAdapterStr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, slist);
+        dataAdapterStr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, slist);
         dataAdapterStr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerStr.setAdapter(dataAdapterStr);
     }
@@ -179,18 +186,20 @@ public class EditInstrument extends AppCompatActivity {
         I1.setAcoustic(isAcoustic);
     }
 
-    // TODO: DEBUG - Updating InstrType not working
-    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
+    // TODO: DEBUG - Updating InstrType most likely working - default spinner needs to happen
     public void updateInstr(View view){
         I1.setBrand(iBrand.getText().toString());
         I1.setModel(iModel.getText().toString());
         I1.setAcoustic(acousticCheckBox.isChecked());
         I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
+        // TODO: Get and set updated iName and sName to pass back
         Intent resultIntent = new Intent();
         resultIntent.putExtra("replyInstruction", "NormalReturn");
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
+        resultIntent.putExtra("iName", iName);
+        resultIntent.putExtra("sName", sName);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
@@ -204,5 +213,28 @@ public class EditInstrument extends AppCompatActivity {
         resultIntent.putExtra("replyInstruction", "000000000"); // bad coding practice, TODO fix later
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    // launches the addNewStringFromAddNewInstr.class
+    public void launchAddNewStr(View view){
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        String sName = spinnerStr.getSelectedItem().toString();
+
+        Intent intent = new Intent(this, AddNewStringFromAddNewInstr.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        // While these below variables are not necessary to pass in this context, AddNewStringFromAddNewInstr expects it
+        intent.putExtra("instrBrandName", I1.getBrand());
+        intent.putExtra("instrModelName", I1.getModel());
+        intent.putExtra("isAcoustic", I1.getAcoustic());
+        intent.putExtra("instrType", I1.getType());
+        intent.putExtra("iName", iName);
+        intent.putExtra("sName", sName);
+        //
+        startActivityForResult(intent, ADD_NEW_STR_REQUEST);
     }
 }
