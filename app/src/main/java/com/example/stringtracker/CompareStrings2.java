@@ -88,10 +88,11 @@ public class CompareStrings2 extends AppCompatActivity {
 
         Linegraph.setData(chartData);
         Linegraph.invalidate();
+        //set1.setFillAlpha(110);
 
         //could would messup two lines
       /*  set1.setFillAlpha(110);
-        set2.setFillAlpha(110);
+
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -124,17 +125,26 @@ public class CompareStrings2 extends AppCompatActivity {
         });
 
       //testing spinnner method
-        addItemsOnSpinner1();
-        addListenerOnButton();
+        //addItemsOnSpinner1();
+        //addListenerOnButton();
+        spinner1 = (Spinner) findViewById(R.id.spinner1);
+        List<String> list = new ArrayList<String>();
+        list.add("string 1");
+        list.add("string 2");
+        list.add("string 3");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner1.setAdapter(dataAdapter);
     }//oncreate
 
     //adding itm dynmically
-    public void addItemsOnSpinner1() {
+    /*public void addItemsOnSpinner1() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
         List<String> list = new ArrayList<String>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");
+        list.add("string 1");
+        list.add("string 2");
+        list.add("string 3");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -148,6 +158,8 @@ public class CompareStrings2 extends AppCompatActivity {
         //spinner2 = (Spinner) findViewById(R.id.spinner2);
 
     }
+
+     */
 
 
 
