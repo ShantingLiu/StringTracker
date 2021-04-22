@@ -67,9 +67,9 @@ public class Analytics extends AppCompatActivity {
         float costPerHrExp = 0.0f;
         if(I1.getSessionCnt()>0){
             pctLife = 100 - (int)(100.0*(float)I1.getPlayTime()/(float)S1.getAvgLife());
-            costPerHr = (S1.getCost()/(float)(I1.getPlayTime()/60));
+            costPerHr = (S1.getCost()/(float)((float)I1.getPlayTime()/60.0f));
             if(S1.getAvgLife()>0){
-                costPerHrExp = (S1.getCost()/(float)(S1.getAvgLife()/60));
+                costPerHrExp = (S1.getCost()/(float)((float)S1.getAvgLife()/60.0f));
             }
         }
         String selInstr =  "Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel()+" ("+I1.getType()+")";
