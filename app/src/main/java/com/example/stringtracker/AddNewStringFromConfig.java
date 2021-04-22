@@ -20,6 +20,7 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     private EditText newStrCostPrompt;
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
+    StringSet S2 = new StringSet();
     Instrument I1 = new Instrument();
     Context context = AddNewStringFromConfig.this;
     String appState;  // *** update local A1, I1, S1 objects to present state
@@ -95,16 +96,18 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         } catch (NumberFormatException e) {
             strCost = Float.parseFloat("0");
         }
+        S2.setBrand(strBrandName);   // using a new StringSet obj S2 to not interfere with present strings selected
+        S2.setModel(strModelName);
+        S2.setType(instrType);
+        S2.setTension(strTension);
+        S2.setCost(strCost);
+        S2.insertStrings(context);  // insert to DB
 
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
-        resultIntent.putExtra("appstate", appState);   // *** forward object states
-        resultIntent.putExtra("inststate", instState);
-        resultIntent.putExtra("strstate", strState);
-
         setResult(RESULT_OK, resultIntent);
         finish();
     }
