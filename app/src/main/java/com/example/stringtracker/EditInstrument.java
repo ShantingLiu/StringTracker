@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EditInstrument extends AppCompatActivity {
+    public static final int ADD_NEW_STR_REQUEST = 1;
     EditText iBrand;
     EditText iModel;
     AppState A1 = new AppState();
@@ -206,5 +208,26 @@ public class EditInstrument extends AppCompatActivity {
         resultIntent.putExtra("replyInstruction", "000000000"); // bad coding practice, TODO fix later
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    // launches the addNewStringFromAddNewInstr.class
+    public void launchAddNewStr(View view){
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+
+        Intent intent = new Intent(this, AddNewStringFromAddNewInstr.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        // While these below variables are not necessary to pass in this context, AddNewStringFromAddNewInstr expects it
+        intent.putExtra("instrBrandName", I1.getBrand());
+        intent.putExtra("instrModelName", I1.getModel());
+        intent.putExtra("isAcoustic", I1.getAcoustic());
+        intent.putExtra("instrType", I1.getType());
+        intent.putExtra("iName", "null");
+        //
+        startActivityForResult(intent, ADD_NEW_STR_REQUEST);
     }
 }

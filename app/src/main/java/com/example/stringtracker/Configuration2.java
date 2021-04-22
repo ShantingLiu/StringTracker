@@ -341,6 +341,9 @@ public class Configuration2 extends AppCompatActivity {
                 String appState = A1.getAppState(); // ***
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();
+                currInstIndex = spinner1.getSelectedItemPosition();
+                currInstName = instrList.get(currInstIndex);
+                intent.putExtra("iName", currInstName);
                 intent.putExtra("appstate", appState);   // *** forward object states
                 intent.putExtra("inststate", instState);
                 intent.putExtra("strstate", strState);
@@ -413,7 +416,7 @@ public class Configuration2 extends AppCompatActivity {
             }
         }
 
-        // TODO: New String Selected - links the result from launchEditInstrument()'s call to AddNewStringFromConfig.java
+        // TODO: New String Added - links the result from launchAddNewStr()'s call to AddNewStringFromConfig.java
         if (requestCode == ADD_NEW_STR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 // TODO: Finish up code here
@@ -491,10 +494,32 @@ public class Configuration2 extends AppCompatActivity {
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
+        // While these below variables are not necessary to pass in this context, AddNewStringFromAddNewInstr expects it
+        intent.putExtra("instrBrandName", I1.getBrand());
+        intent.putExtra("instrModelName", I1.getModel());
+        intent.putExtra("isAcoustic", I1.getAcoustic());
+        intent.putExtra("instrType", I1.getType());
+        //
         intent.putExtra("iName", currInstName);
         startActivityForResult(intent, ADD_NEW_STR_REQUEST);
     }
 
     //TODO: Create an activity for Editing strings, create the method here, add the tidbit to onActivityResult()
+    public void launchEditStr(View view){
+        Log.d(LOG_TAG, "Edit String (from Config) Button clicked!");
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        currInstIndex = spinner1.getSelectedItemPosition();
+        currInstName = instrList.get(currInstIndex);
+
+        Intent intent = new Intent(this, EditString.class);
+
+        intent.putExtra("appstate", appState);   // *** forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        intent.putExtra("iName", currInstName);
+        startActivityForResult(intent, EDIT_INSTR_REQUEST);
+    }
 
 }

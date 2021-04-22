@@ -32,8 +32,8 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     String instrBrandName;
     String instrModelName;
     boolean isAcoustic;
-    String instrTypeLowercase;
-    String instrTypePropercase;
+    String instrType;
+    String iName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,8 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
 
-//        instrBrandName = intent.getStringExtra("instrBrandName");
-//        instrModelName = intent.getStringExtra("instrModelName");
-//        isAcoustic = intent.getBooleanExtra("isAcoustic", false);
-//        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
-//        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+//        instrType = intent.getStringExtra("instrTypeLowercase");
+
 
         A1.setAppState(appState);
         I1.setInstState(instState);
@@ -105,11 +102,6 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         resultIntent.putExtra("appstate", appState);   // *** forward object states
         resultIntent.putExtra("inststate", instState);
         resultIntent.putExtra("strstate", strState);
-        // I pass the below info back and forth in case the user is still in the middle of filling out the form, I don't want their changes to be lost in the AddNewInstrument screen when they enter the AddNewString activity
-//        resultIntent.putExtra("instrBrandName", instrBrandName);
-//        resultIntent.putExtra("instrModelName", instrModelName);
-//        resultIntent.putExtra("isAcoustic", isAcoustic);
-//        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
 
         setResult(RESULT_OK, resultIntent);
         finish();

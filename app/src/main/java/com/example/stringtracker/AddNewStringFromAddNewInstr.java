@@ -31,8 +31,8 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     String instrBrandName;
     String instrModelName;
     boolean isAcoustic;
-    String instrTypeLowercase;
-    String instrTypePropercase;
+    String instrType;
+    String iName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +54,11 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         instrBrandName = intent.getStringExtra("instrBrandName");
         instrModelName = intent.getStringExtra("instrModelName");
         isAcoustic = intent.getBooleanExtra("isAcoustic", false);
-        instrTypeLowercase = intent.getStringExtra("instrTypeLowercase");
-        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+        instrType = intent.getStringExtra("instrType");
+        iName = intent.getStringExtra("iName");
 
         // set the fields with info we just grabbed from intent
-        instrTypePrompt.setText(instrTypePropercase);
+        instrTypePrompt.setText(instrType);
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
@@ -98,8 +98,8 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         resultIntent.putExtra("instrBrandName", instrBrandName);
         resultIntent.putExtra("instrModelName", instrModelName);
         resultIntent.putExtra("isAcoustic", isAcoustic);
-        resultIntent.putExtra("instrTypeLowercase", instrTypeLowercase);
-
+        resultIntent.putExtra("instrType", instrType);
+        resultIntent.putExtra("iName", iName);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
