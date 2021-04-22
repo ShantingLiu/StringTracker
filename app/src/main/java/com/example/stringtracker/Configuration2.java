@@ -224,6 +224,9 @@ public class Configuration2 extends AppCompatActivity {
 
     // *** Quick search for id position in array list
     private int findPosition(ArrayList <String> x, int id){
+        if (x == null){
+            return 0;
+        }
         int pos = 0;
         String s;
         for(int i = 0; i < x.size(); ++i){
@@ -389,6 +392,7 @@ public class Configuration2 extends AppCompatActivity {
                 String replyInstruction =
                         data.getStringExtra("replyInstruction");
                 if (replyInstruction.equals("000000000")){ // delete instrument command
+                    System.out.println("Delete Instrument command received");
                     I1.delInstr(context, I1.getInstrID());
                     try {
                         updateSpinners();
@@ -427,7 +431,11 @@ public class Configuration2 extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 addedInstruments = data.getStringArrayListExtra("addInstrList");
                 int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
-                addInstrs(addedInstruments);
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
                 spinner1.setSelection(newCurrInstIndex);
@@ -471,12 +479,13 @@ public class Configuration2 extends AppCompatActivity {
         A1.saveRunState();  // be sure we have a copy of states stored
     }
 
-    public void addInstrs(ArrayList<String> arr){
+    public void addInstrs(ArrayList<String> arr){ // delete this?
         instrList.addAll(arr);
     }
 
     // Force user to select a new instrument after deletion of an instrument
     public void promptSelectNewInstr(){
+        System.out.println("promptSelectNewInstr() requesting proc");
         Log.d(LOG_TAG, "Prompting user to select a new instrument");
         Intent intent = new Intent(this, SelNewInstrument.class);
         String appState = A1.getAppState(); // ***
