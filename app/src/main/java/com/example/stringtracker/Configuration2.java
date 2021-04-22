@@ -245,15 +245,15 @@ public class Configuration2 extends AppCompatActivity {
 
 
     // Method updates EditTexts for new instrument or strings
-//    void updateDisplay(){
-//        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
-//        iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
-//        iModel.setText(I1.getModel());
-//
-//        sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
-//        sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
-//        sModel.setText(S1.getModel());
-//    }
+    void updateDisplay(){
+        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
+        iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
+        iModel.setText(I1.getModel());
+
+        sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
+        sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
+        sModel.setText(S1.getModel());
+    }
 
     // DEBUG METHOD to populates Instrument and StringSet Lists
     // *** Need to re-populate the lists if a new instrument is selected so may want to split into 2 functions

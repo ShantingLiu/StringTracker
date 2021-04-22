@@ -117,13 +117,11 @@ public class EditString extends AppCompatActivity {
         S1.setType(instrType);
         S1.setCost(strCost);
         S1.setTension(strTension);
+        S1.updateStrings(S1.getStringsID(), context);  // update strings DB
 
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
-        resultIntent.putExtra("appstate", appState);   // *** forward object states
-        resultIntent.putExtra("inststate", instState);
-        resultIntent.putExtra("strstate", strState);
 
         setResult(RESULT_OK, resultIntent);
         finish();
