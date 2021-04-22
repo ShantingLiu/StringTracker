@@ -36,6 +36,7 @@ public class Analytics extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
 
+        System.out.println(S1.getStringsID()+"=-=-= AvgLife = "+S1.getAvgLife()+"\n"+strState+"\n"+instState);
         analyticsTV = (TextView) findViewById(R.id.analyticsTV);
         instrLabelTV = (TextView) findViewById(R.id.instrLabelTV);
         stringsLabelTV = (TextView) findViewById(R.id.stringsLabelTV);

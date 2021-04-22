@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         A1.setTestMode(true);
         A1.setEnableSent(true);
         A1.setMaxSessionTime(200);
-        S1.setAvgLife(800);
+        //S1.setAvgLife(800);
 
         // Start/Stop Session Button
         buttonStartSes = findViewById(R.id.startButton);
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                    }
                     updateSelDisplay(null);
                     timeDebugTV.setBackgroundResource(R.color.background1);
-                    String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                            + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+                    String timeText = "SessionCnt = "+I1.getSessionCnt() + "  LastSessTime = "
+                            + I1.getLastSessionTime() + "min \nTotalPlayT = " + I1.getPlayTime()+"min";
                     timeDebugTV.setText(timeText);
                     timeDebugTV.setVisibility(View.VISIBLE);
 
@@ -366,8 +366,11 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         selStrTV.setText(selStrText);
         selStrTV.setVisibility(View.VISIBLE);
         timeDebugTV.setBackgroundResource(R.color.background1);
-        String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+        String timeText = "SessionCnt = "+I1.getSessionCnt() + "  LastSessTime = "
+                + I1.getLastSessionTime() + "min \nTotalPlayT = " + I1.getPlayTime()+"min";
+
+        //String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+        //        + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
         timeDebugTV.setText(timeText);
         timeDebugTV.setVisibility(View.VISIBLE);
 
