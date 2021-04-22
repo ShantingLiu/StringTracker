@@ -413,8 +413,6 @@ public class Configuration2 extends AppCompatActivity {
                 addInstrs(addedInstruments);
                 dataAdapter.notifyDataSetChanged();
                 spinner1.setSelection(newCurrInstIndex);
-
-                // *** ???
             }
         }
 
@@ -450,7 +448,6 @@ public class Configuration2 extends AppCompatActivity {
         and goees into an edit screen and passes the value of the return back to the index
     */
 
-    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void launchEditInstrument(View view){
         Log.d(LOG_TAG, "Edit Instrument Button clicked!");
         String appState = A1.getAppState(); // ***

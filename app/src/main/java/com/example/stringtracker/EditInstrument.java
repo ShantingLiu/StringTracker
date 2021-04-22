@@ -82,7 +82,6 @@ public class EditInstrument extends AppCompatActivity {
         addListenerOnStrSpinnerItemSelection();
 
         // set onClicks for spinners
-        // TODO: Don't allow this to run on default selection
         spinnerInstrTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
