@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     private TextView selInstTV;
     private TextView selStrTV;
     private TextView timeDebugTV;
+    private TextView stringsLifeTV;
     Context context = MainActivity.this;  // activity context needed for DB calls
 
     @Override
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         // initialize AppState.
         selInstTV = (TextView) findViewById(R.id.selInstrTV);
         selStrTV = (TextView) findViewById(R.id.selStringsTV);
+        stringsLifeTV = (TextView) findViewById(R.id.stringsLifeTV);
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                     buttonStartSes.setText("Stop");
                     buttonStartSes.setBackgroundColor(0xffb02020);
 
-
                     timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
                 }
@@ -136,20 +137,30 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         buttonSelInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (A1.sessionStarted()) {  // Stop session if running
+                // if a session is in progress go through the stop session sequence
+                if(A1.sessionStarted()) {  // Stop session
                     A1.stopSession();
                     I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
                     I1.setLastSessionTime(A1.getLastSessionTime());
                     I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
                     buttonStartSes.setText("Start");
                     buttonStartSes.setBackgroundColor(0xff00A020);
+                    // update DB items
+                    I1.updateInstr(I1.getInstrID(), context);
+                    S1.updateStrings(S1.getStringsID(), context);
 
                     if (A1.getEnableSent()) {
-                        if (A1.getTestMode()) {
-                            I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
-                        }
+                        SessionSentiment SentDialog = new SessionSentiment();
+                        FragmentManager fmanager = getSupportFragmentManager();
+                        SentDialog.show(fmanager, "RateStrings");
+
                     }
+                    updateSelDisplay(null);
+                    timeDebugTV.setBackgroundResource(R.color.background1);
+                    String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+                            + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+                    timeDebugTV.setText(timeText);
+                    timeDebugTV.setVisibility(View.VISIBLE);
                 }
                 // update DB items and save app run state
                 I1.updateInstr(I1.getInstrID(), context);
@@ -164,6 +175,31 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         });
 
     }  // end OnCreate
+
+    void stopSession(){
+        A1.stopSession();
+        I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
+        I1.setLastSessionTime(A1.getLastSessionTime());
+        I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
+        buttonStartSes.setText("Start");
+        buttonStartSes.setBackgroundColor(0xff00A020);
+        // update DB items
+        I1.updateInstr(I1.getInstrID(), context);
+        S1.updateStrings(S1.getStringsID(), context);
+
+        if (A1.getEnableSent()) {
+            SessionSentiment SentDialog = new SessionSentiment();
+            FragmentManager fmanager = getSupportFragmentManager();
+            SentDialog.show(fmanager, "RateStrings");
+
+        }
+        updateSelDisplay(null);
+        timeDebugTV.setBackgroundResource(R.color.background1);
+        String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+        timeDebugTV.setText(timeText);
+        timeDebugTV.setVisibility(View.VISIBLE);
+    }
 
     // helper to restore app and data object states
     public void loadAppState() {
@@ -314,17 +350,19 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         if(S1.getAvgLife()>0) {
             int pctlife = (int) (((float) I1.getPlayTime() / (float) S1.getAvgLife()) * 100.0f);
             if (pctlife < A1.getLifeThresholds()[1]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor1);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor1);
             } else if (pctlife < A1.getLifeThresholds()[2]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor2);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor2);
             } else if (pctlife < A1.getLifeThresholds()[3]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor3);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor3);
             } else {
-                selStrTV.setBackgroundResource(R.color.lifecolor4);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor4);
             }
+            stringsLifeTV.setText("     Remaining Life: "+Integer.toString(100-pctlife)+"%     ");
         } else{
-            selStrTV.setBackgroundResource(R.color.lifecolor0);   // color for 1st stringset
+            stringsLifeTV.setBackgroundResource(R.color.lifecolor0);   // color for 1st stringset
         }
+        stringsLifeTV.setVisibility(View.VISIBLE);
         selStrTV.setText(selStrText);
         selStrTV.setVisibility(View.VISIBLE);
         timeDebugTV.setBackgroundResource(R.color.background1);
@@ -336,58 +374,4 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     }
 
 /////////////////////////////////////////////////////////////////////////
-
-    // DEBUG test code randomly generates instrument and stringset values for A1 and S1
-    public void genStrInst() {
-        Random rand = new Random();
-        rand.setSeed(System.currentTimeMillis());
-        String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
-        String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
-        String sTension[] = {"XL", "Light", "Medium", "Heavy"};
-        String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
-
-        String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
-        String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};
-
-        int rand_sBr = rand.nextInt(5);
-        int rand_sMo = rand.nextInt(5);
-        int rand_sTe = rand.nextInt(4);
-        int rand_sTy = rand.nextInt(5);
-        int rand_sID = rand.nextInt(4)+1;
-
-        int rand_iBr = rand.nextInt(5);
-        int rand_iMo = rand.nextInt(5);
-        int rand_iID = rand.nextInt(4)+1;
-
-        S1.setStringsID(rand_sID);
-        S1.setBrand(sBrand[rand_sBr]);
-
-        S1.setModel(sModel[rand_sMo]);
-        S1.setTension(sTension[rand_sTe]);
-        S1.setType(sType[rand_sTy]);
-        S1.setAvgLife(800);  // set this value for DEBUG test purposes
-
-        I1.setInstrID(rand_iID);
-        I1.setBrand(iBrand[rand_iBr]);
-        I1.setModel(iModel[rand_iMo]);
-        I1.setType(sType[rand_sTy]);
-        I1.setStringsID(rand_sID);  // match up strings with instrument
-
-    }
-
-    public SessionSent genRandSent() {
-        SessionSent S = new SessionSent();
-        Random rand = new Random();
-        int rand_sent = rand.nextInt(10);
-        S.setProj((float) rand_sent * 0.5f);
-        rand_sent = rand.nextInt(10);
-        S.setTone((float) rand_sent * 0.5f);
-        rand_sent = rand.nextInt(10);
-        S.setInton((float) rand_sent * 0.5f);
-        S.setSessTime((int) A1.getLastSessionTime());
-        S.setTimeStamp(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
-
-        return S;
-    }
-
 }
