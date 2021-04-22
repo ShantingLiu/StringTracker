@@ -33,8 +33,8 @@
       android:id="@+id/addNewInstrButton"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="88dp"
-      android:layout_marginTop="15dp"
+      android:layout_marginStart="91dp"
+      android:layout_marginTop="5dp"
       android:text="Add New"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/spinner1" />
@@ -43,32 +43,32 @@
       android:id="@+id/addNewInstrButton2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="88dp"
-      android:layout_marginTop="60dp"
+      android:layout_marginStart="93dp"
+      android:layout_marginTop="5dp"
       android:onClick="launchAddNewStr"
       android:text="Add New"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/selStrings" />
+      app:layout_constraintTop_toBottomOf="@+id/spinner2" />
 
   <Button
       android:id="@+id/editInstrButton2"
       android:layout_width="86dp"
       android:layout_height="49dp"
-      android:layout_marginStart="40dp"
-      android:layout_marginTop="60dp"
+      android:layout_marginStart="50dp"
+      android:layout_marginTop="8dp"
       android:layout_marginEnd="107dp"
       android:text="Edit"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintHorizontal_bias="0.103"
       app:layout_constraintStart_toEndOf="@+id/addNewInstrButton2"
-      app:layout_constraintTop_toBottomOf="@+id/selStrings" />
+      app:layout_constraintTop_toBottomOf="@+id/spinner2" />
 
   <Button
       android:id="@+id/editInstrButton1"
       android:layout_width="86dp"
       android:layout_height="49dp"
       android:layout_marginStart="60dp"
-      android:layout_marginTop="15dp"
+      android:layout_marginTop="5dp"
       android:layout_marginEnd="115dp"
       android:onClick="launchEditInstrument"
       android:text="Edit"
