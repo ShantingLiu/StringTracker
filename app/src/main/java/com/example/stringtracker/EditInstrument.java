@@ -179,7 +179,7 @@ public class EditInstrument extends AppCompatActivity {
         I1.setAcoustic(isAcoustic);
     }
 
-    // TODO: DEBUG - Updating InstrType not working
+    // TODO: DEBUG - Updating InstrType most likely working - default spinner needs to happen
     public void updateInstr(View view){
         I1.setBrand(iBrand.getText().toString());
         I1.setModel(iModel.getText().toString());
