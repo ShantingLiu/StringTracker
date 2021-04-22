@@ -33,12 +33,6 @@ public class Configuration2 extends AppCompatActivity {
     Instrument I1 = new Instrument();
     Context context = Configuration2.this;
 
-    EditText iBrand;
-    EditText iModel;
-    EditText iInstID;
-    EditText sBrand;
-    EditText sModel;
-    EditText sStrID;
     TextView configTextView;
 
     // Spinner variables
@@ -83,12 +77,6 @@ public class Configuration2 extends AppCompatActivity {
         S1.setStrState(strState);
 
         configTextView = (TextView) findViewById(R.id.configTextView);
-        iBrand = (EditText) findViewById(R.id.editTextBrand);
-        iModel = (EditText) findViewById(R.id.editTextModel);
-        iInstID = (EditText) findViewById(R.id.editTextInstrID);
-        sBrand = (EditText) findViewById(R.id.editTextStrBrand);
-        sModel = (EditText) findViewById(R.id.editTextStrModel);
-        sStrID = (EditText) findViewById(R.id.editTextStrID);
 
         int spinnercnt = 0;
         //updateDisplay();
@@ -241,18 +229,6 @@ public class Configuration2 extends AppCompatActivity {
 
         saveState();  // be sure changes are saved
 
-    }
-
-
-    // Method updates EditTexts for new instrument or strings
-    void updateDisplay(){
-        iInstID.setText(String.valueOf(I1.getInstrID()));  // EXAMPLE loading data object values in editText
-        iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
-        iModel.setText(I1.getModel());
-
-        sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
-        sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
-        sModel.setText(S1.getModel());
     }
 
     // DEBUG METHOD to populates Instrument and StringSet Lists
