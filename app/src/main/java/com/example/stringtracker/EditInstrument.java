@@ -90,7 +90,7 @@ public class EditInstrument extends AppCompatActivity {
                 if(userIsInteracting) {
                     instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
                     instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-                    I1.setType(instrTypeLowercase);
+                    I1.setType(instrTypePropercase);
                     S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                     slist.clear();
                     try {
@@ -180,7 +180,6 @@ public class EditInstrument extends AppCompatActivity {
     }
 
     // TODO: DEBUG - Updating InstrType not working
-    // TODO: DEBUG - Updating isAcoustic not working  - Issue might be in Config
     public void updateInstr(View view){
         I1.setBrand(iBrand.getText().toString());
         I1.setModel(iModel.getText().toString());
