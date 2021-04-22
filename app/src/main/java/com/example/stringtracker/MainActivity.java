@@ -123,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                     timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
                 }
+                //System.out.println("AvgProj:"+S1.getAvgProjStr());
+                //System.out.println("AvgTone:"+S1.getAvgToneStr());
+                //System.out.println("AvgInton:"+S1.getAvgIntonStr());
+                System.out.println("IState:"+I1.getInstState());
                 saveAppState();
             }
         });

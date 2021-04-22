@@ -9,14 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StringTracker">
-<<<<<<< HEAD
         <activity android:name=".CompareStrings2"></activity>
-        <activity android:name=".AddNewString" />
-=======
         <activity android:name=".EditString"></activity>
         <activity android:name=".AddNewStringFromAddNewInstr" />
         <activity android:name=".AddNewStringFromConfig" />
->>>>>>> 7d6a2beccb25382f54cad2a577697422565214aa
         <activity android:name=".SelNewInstrument" />
         <activity android:name=".EditInstrument" />
         <activity android:name=".AddNewInstrument" />

@@ -72,6 +72,14 @@ public class SelectInstrument extends AppCompatActivity {
                 String selInstText = "Selected Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel();
                 insSelTV.setText(selInstText);
                 insSelTV.setVisibility(View.VISIBLE);
+                // Now returns to main screen upon selection
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+
             }
          });
 

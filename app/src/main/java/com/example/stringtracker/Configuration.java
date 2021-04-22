@@ -395,8 +395,8 @@ public class Configuration extends AppCompatActivity {
         rand.setSeed(System.currentTimeMillis());
         String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
         String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
-        String sTension[] = {"XL", "Light", "Medium", "Heavy"};
-        String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
+        String sTension[] = {"X-Light", "Light", "Medium", "Heavy"};
+        String sType[] = {"Guitar", "Banjo", "Mandolin", "Violin", "Cello"};
 
         String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
         String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};

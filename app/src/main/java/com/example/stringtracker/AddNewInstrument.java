@@ -108,12 +108,11 @@ public class AddNewInstrument extends AppCompatActivity {
                 I1.logStringChange();
                 if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
                     S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
-                        try {
-                            I1.clearSentLog();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    //removed testmode save of sent logs
+                    try {
+                        I1.clearSentLog();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
                 System.out.println("*** STRING CHANGE *** new stringsID="+I1.getStringsID());  // DEBUG
