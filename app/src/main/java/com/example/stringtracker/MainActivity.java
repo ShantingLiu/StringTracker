@@ -67,7 +67,9 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
-        if (A1.init()) {      // if .init() returns true it is the first time the app has been run
+       // Check for first run of program and init to defaults otherwise load previous state
+        if (A1.firstRun()) {      // if .firstRun() returns true it is the first time the app has been run
+            A1.init();
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
             updateSelDisplay("FirstRun: ");
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             I1.loadInstr(A1.getInstrID(), context);
             S1.loadStrings(I1.getStringsID(), context);
         }
+
         // DEBUG forced settings for preferences
         A1.setTestMode(true);
         A1.setEnableSent(true);
@@ -88,34 +91,22 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
         // Start/Stop Session Button
         buttonStartSes = findViewById(R.id.startButton);
+        // Set startup button color based on run state
+        if(!A1.sessionStarted()) {
+            buttonStartSes.setText("Start");
+            buttonStartSes.setBackgroundColor(0xff00A020);
+        } else {
+            buttonStartSes.setText("Stop");
+            buttonStartSes.setBackgroundColor(0xffb02020);
+        }
+
+
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(A1.sessionStarted()) {  // Stop session
-                    A1.stopSession();
-                    I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
-                    I1.setLastSessionTime(A1.getLastSessionTime());
-                    I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
-                    buttonStartSes.setText("Start");
-                    buttonStartSes.setBackgroundColor( 0xff00A020);
-                    // update DB items
-                    I1.updateInstr(I1.getInstrID(), context);
-                    S1.updateStrings(S1.getStringsID(), context);
-
-                     if (A1.getEnableSent()) {
-                         SessionSentiment SentDialog = new SessionSentiment();
-                         FragmentManager fmanager = getSupportFragmentManager();
-                         SentDialog.show(fmanager, "RateStrings");
-
-                   }
-                    updateSelDisplay(null);
-                    timeDebugTV.setBackgroundResource(R.color.background1);
-                    String timeText = "SessionCnt = "+I1.getSessionCnt() + "  LastSessTime = "
-                            + I1.getLastSessionTime() + "min \nTotalPlayT = " + I1.getPlayTime()+"min";
-                    timeDebugTV.setText(timeText);
-                    timeDebugTV.setVisibility(View.VISIBLE);
-
-                } else {                // Start session
+                    stopSession();
+                 } else {                // Start session
                     A1.startSession();
                     I1.setCurrSessionStart(A1.getCurrSessionStart());
                     buttonStartSes.setText("Stop");
@@ -139,43 +130,23 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             public void onClick(View v) {
                 // if a session is in progress go through the stop session sequence
                 if(A1.sessionStarted()) {  // Stop session
-                    A1.stopSession();
-                    I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
-                    I1.setLastSessionTime(A1.getLastSessionTime());
-                    I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
-                    buttonStartSes.setText("Start");
-                    buttonStartSes.setBackgroundColor(0xff00A020);
-                    // update DB items
+                    stopSession();
+                    // update DB items and save app run state
                     I1.updateInstr(I1.getInstrID(), context);
                     S1.updateStrings(S1.getStringsID(), context);
-
-                    if (A1.getEnableSent()) {
-                        SessionSentiment SentDialog = new SessionSentiment();
-                        FragmentManager fmanager = getSupportFragmentManager();
-                        SentDialog.show(fmanager, "RateStrings");
-
+                } else {
+                    // lock button if first run of the program => no data in DB yet
+                    if (!A1.firstRun()) {
+                        launchSelectInstrument(v);
                     }
-                    updateSelDisplay(null);
-                    timeDebugTV.setBackgroundResource(R.color.background1);
-                    String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                            + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
-                    timeDebugTV.setText(timeText);
-                    timeDebugTV.setVisibility(View.VISIBLE);
+                    saveAppState();
                 }
-                // update DB items and save app run state
-                I1.updateInstr(I1.getInstrID(), context);
-                S1.updateStrings(S1.getStringsID(), context);
-
-                // lock button if first run of the program => no data in DB yet
-                if(!A1.firstRun()) {
-                    launchSelectInstrument(v);
-                }
-                saveAppState();
             }
         });
 
-    }  // end OnCreate
+    }  // end OnCreate //////////////
 
+    // Method that goes through the StopSession sequences prompting th euser for Sentiment Feedback if enabled
     void stopSession(){
         A1.stopSession();
         I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
@@ -218,10 +189,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     // Methods to launch activities
     public void launchConfig(View view) {
         Log.d(LOG_TAG, "Config Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, Configuration.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -234,10 +202,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     public void launchConfig2(View view) {
         Log.d(LOG_TAG, "Config2 Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, Configuration2.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -250,10 +215,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     public void launchAnalytics(View view) {
         Log.d(LOG_TAG, "Analytics Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, Analytics.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -271,10 +233,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     public void launchSelectInstrument(View view) {
         Log.d(LOG_TAG, "Sel Instrument Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, SelectInstrument.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();

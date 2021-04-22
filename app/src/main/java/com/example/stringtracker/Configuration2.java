@@ -159,44 +159,7 @@ public class Configuration2 extends AppCompatActivity {
             {
                  String tmp = stringsList.get(position);
                 String token = tmp.split(":")[1];
-                // int newstringsid = Integer.parseInt(token.split(" ")[0].trim());
                 newStringsID = Integer.parseInt(token.split(" ")[0].trim());
-
-             /*   // *** Stops false select in spinner2
-                System.out.println("### userIsInteracting:"+userIsInteracting);
-                if(userIsInteracting) {
-                    // Update Instrument and load new StringSet from DB
-                    // NOTE: This is a String Change Event!
-                    /// STRINGSET CHANGE EVENT Sequence ////
-                    I1.logStringChange();
-                    // do not attempt to update AvgSent if there are no sessions
-                    if (I1.getPlayTime() > 0 && I1.getSessionCnt() > 0) {
-
-                        S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-                        System.out.println("AvgProj:"+S1.getAvgProjStr());  // DEBUG show updated avgs
-                        System.out.println("AvgTone:"+S1.getAvgToneStr());
-                        System.out.println("AvgInton:"+S1.getAvgIntonStr());
-
-                        // removed testmode save of sent logs
-                        try {
-                            I1.clearSentLog();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                     }
-                    S1.updateStrings(S1.getStringsID(), context);  // update DB!
-
-                    System.out.println("*** STRING CHANGE *** new stringsID=" + I1.getStringsID());  // DEBUG
-
-                    // set new instrumentID load new Instrument and StringSet from DB
-                    I1.setStringsID(newstringsid);
-                    S1.loadStrings(I1.getStringsID(), context);
-                    I1.init();   // clear for new string cycle
-                    I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
-                    A1.init();  // clear internal time values
-
-                    saveState();  // be sure changes are saved
-                } */
             }
 
             @Override
@@ -240,7 +203,8 @@ public class Configuration2 extends AppCompatActivity {
         return pos;
     }
 
-    // New method set to the OnClick for buttonChangeStr in xml
+    //// New method set to the OnClick for buttonChangeStr in xml ///
+    // No longer takes this important action on a glitchy spinner OnItemSelect
     public void changeStrings(View view){
         // Update Instrument and load new StringSet from DB
         // NOTE: This is a String Change Event!

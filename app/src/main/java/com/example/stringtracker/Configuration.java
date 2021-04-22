@@ -417,7 +417,7 @@ public class Configuration extends AppCompatActivity {
         S1.setModel(sModel[rand_sMo]);
         S1.setTension(sTension[rand_sTe]);
         S1.setType(sType[rand_sTy]);
-        S1.setAvgLife(800);  // set this value for DEBUG test purposes
+        S1.setAvgLife(0);  // set this value for DEBUG test purposes
         S1.setChangeCnt(0);
         S1.setCost(10.0f);
 
