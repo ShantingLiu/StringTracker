@@ -387,9 +387,10 @@ public class Configuration2 extends AppCompatActivity {
                     dataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
-                    promptSelectNewInstr(); //TODO -debug not getting here
+                    promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
                     dataAdapter.notifyDataSetChanged();
+                    // TODO: Update instrument Spinner to show current instrument (what command for DB to get instr name?)
                     Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyInstruction + "\"", Toast.LENGTH_SHORT).show();
                 }
                 try {
