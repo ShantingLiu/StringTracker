@@ -28,14 +28,15 @@ public class EditInstrument extends AppCompatActivity {
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
     String strState;
-    String instrTypePropercase;
-    String instrTypeLowercase;
+    String instrType;
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     ArrayList<String> slist = new ArrayList<String>();
     private Spinner spinnerInstrTypes;
     private Spinner spinnerStr;
     CheckBox acousticCheckBox;
     Boolean isAcoustic;
+    ArrayAdapter<String> dataAdapter;
+    ArrayAdapter<String> dataAdapterStr;
 
     // *** Stops false select in spinners on initialization
     private boolean userIsInteracting = false;
@@ -64,8 +65,8 @@ public class EditInstrument extends AppCompatActivity {
         acousticCheckBox.setChecked(isAcoustic);
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
-        instrTypeLowercase = I1.getType();
-        instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
+        instrType = I1.getType();
+
 
         // populate list of strings
         try {
@@ -77,9 +78,13 @@ public class EditInstrument extends AppCompatActivity {
         // initiate instrument type spinner
         addItemsOnInstrTypesSpinner();
         addListenerOnSpinnerItemSelection();
+        spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
         // initiate instrument str selection
         addItemsStrSpinner();
         addListenerOnStrSpinnerItemSelection();
+        // TODO: Found out what the proper parameter to pass for the below getPosition(); (Ask Keith)
+        // spinnerStr.setSelection(dataAdapterStr.getPosition(S1.getString)); // set string spinner to currently attached instrument string
+
 
         // set onClicks for spinners
         spinnerInstrTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -87,9 +92,8 @@ public class EditInstrument extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
                 if(userIsInteracting) {
-                    instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-                    instrTypePropercase = instrTypeLowercase.substring(0, 1).toUpperCase() + instrTypeLowercase.substring(1);
-                    I1.setType(instrTypePropercase);
+                    instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString();
+                    I1.setType(instrType);
                     S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                     slist.clear();
                     try {
@@ -147,7 +151,7 @@ public class EditInstrument extends AppCompatActivity {
     // add items into spinner for instrument types
     public void addItemsOnInstrTypesSpinner(){
         spinnerInstrTypes = (Spinner) findViewById(R.id.editInstrTypeSpinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerInstrTypes.setAdapter(dataAdapter);
     }
@@ -161,7 +165,7 @@ public class EditInstrument extends AppCompatActivity {
     // add items into spinner for string selection
     public void addItemsStrSpinner(){
         spinnerStr = (Spinner) findViewById(R.id.editInstrStrSpinner);
-        ArrayAdapter<String> dataAdapterStr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, slist);
+        dataAdapterStr = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, slist);
         dataAdapterStr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerStr.setAdapter(dataAdapterStr);
     }

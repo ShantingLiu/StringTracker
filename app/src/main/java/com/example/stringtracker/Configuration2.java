@@ -296,10 +296,6 @@ public class Configuration2 extends AppCompatActivity {
         stringsList = S1.getStringsStrList(context, I1.getType());  // *** gets Strings ArrayList for DB based on the Type of instrument selected in I1
     }
 
-    void addInstrToList(String instr){
-        instrList.add(instr);
-    }
-
     // add items to spinner dynamically
     public void addItemsOnSpinner1() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
