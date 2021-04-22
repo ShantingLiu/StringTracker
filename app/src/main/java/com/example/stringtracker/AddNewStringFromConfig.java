@@ -29,11 +29,8 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     private Spinner spinnerStrTension;
     private Spinner spinnerStrInstrType;
-    String instrBrandName;
-    String instrModelName;
-    boolean isAcoustic;
     String instrType;
-    String iName;
+    String strTension;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +46,9 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         instState = intent.getStringExtra("inststate");
         strState = intent.getStringExtra("strstate");
 
-//        instrType = intent.getStringExtra("instrTypeLowercase");
-
-
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
-
 
         addItemsOnStrTensionSpinner();
         addListenerOnStrTensionSpinnerItemSelection();
@@ -78,9 +71,9 @@ public class AddNewStringFromConfig extends AppCompatActivity {
 
     public void addItemsOnStrInstrTypeSpinner(){
         spinnerStrInstrType = (Spinner) findViewById(R.id.stringInstrTypeSpinner);
-        ArrayAdapter<String> strDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
-        strDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerStrInstrType.setAdapter(strDataAdapter);
+        ArrayAdapter<String> DataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, instrTypes);
+        DataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStrInstrType.setAdapter(DataAdapter);
     }
 
     // listener for str tension spinner
@@ -92,6 +85,9 @@ public class AddNewStringFromConfig extends AppCompatActivity {
     public void addNewStr2(View view){
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
+        instrType = spinnerStrInstrType.getSelectedItem().toString(); // TODO: Check if this works'
+        strTension = spinnerStrTension.getSelectedItem().toString();
+
         float strCost;
 
         try {

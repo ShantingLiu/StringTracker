@@ -25,6 +25,7 @@ public class Configuration2 extends AppCompatActivity {
     public static final int EDIT_INSTR_REQUEST = 2;
     public static final int NEW_INSTR_REQUEST = 3;
     public static final int ADD_NEW_STR_REQUEST = 4;
+    public static final int EDIT_STR_REQUEST = 5;
     // Main variables
     private static final String LOG_TAG = Configuration2.class.getSimpleName();
     AppState A1 = new AppState();
@@ -429,6 +430,19 @@ public class Configuration2 extends AppCompatActivity {
                 // TODO: Change selection of str spinner to new string
             }
         }
+
+        // When a user returns from EditString called from Config
+        // TODO: Check if this works
+        if (requestCode == EDIT_STR_REQUEST){
+            if (resultCode == RESULT_OK) {
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                dataAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     // *** Helper to store AppState, Instrument, and StringSet states
@@ -519,7 +533,7 @@ public class Configuration2 extends AppCompatActivity {
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
         intent.putExtra("iName", currInstName);
-        startActivityForResult(intent, EDIT_INSTR_REQUEST);
+        startActivityForResult(intent, EDIT_STR_REQUEST);
     }
 
 }

@@ -84,7 +84,13 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     public void addNewStr(View view){
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
-        float strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
+        float strCost;
+        try {
+            strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
+        } catch (NumberFormatException e) {
+            strCost = Float.parseFloat("0");
+        }
+
 
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
