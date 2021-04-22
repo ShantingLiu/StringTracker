@@ -43,6 +43,7 @@ public class Configuration2 extends AppCompatActivity {
 
     // Spinner variables
     private ArrayAdapter<String> dataAdapter;
+    private ArrayAdapter<String> strDataAdapter;
     private Spinner spinner1;
     private Spinner spinner2;  // *** Spinner for String sets
     private ArrayList<String> stringsList = new ArrayList<>();  // *** ArrayList for StringSets
@@ -308,9 +309,9 @@ public class Configuration2 extends AppCompatActivity {
     // add items to spinner dynamically
     public void addItemsOnSpinner2() {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(dataAdapter);
+        strDataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsList);
+        strDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(strDataAdapter);
     }
 
     void updateSpinners() throws SQLException {
@@ -378,6 +379,7 @@ public class Configuration2 extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
             }
         }
 
@@ -388,20 +390,34 @@ public class Configuration2 extends AppCompatActivity {
                         data.getStringExtra("replyInstruction");
                 if (replyInstruction.equals("000000000")){ // delete instrument command
                     I1.delInstr(context, I1.getInstrID());
-                    dataAdapter.notifyDataSetChanged();
+                    try {
+                        updateSpinners();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
+                    strDataAdapter.notifyDataSetChanged();
                     Toast.makeText(Configuration2.this, "Deleted instrument \"" + currInstName + "\"", Toast.LENGTH_SHORT).show();
                     // TODO: Make user select a new Instrument w/ button to add a new Instrument+String
+
                     promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
-                    dataAdapter.notifyDataSetChanged();
+                    try {
+                        updateSpinners();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
+                    strDataAdapter.notifyDataSetChanged();
                     // TODO: Update instrument Spinner to show current instrument (what command for DB to get instr name?)
-                    Toast.makeText(Configuration2.this, "Updated previous instrument \"" + currInstName + "\" to \"" + replyInstruction + "\"", Toast.LENGTH_SHORT).show();
+                    String iName = data.getStringExtra("iName");
+                    String sName = data.getStringExtra("sName");
+                    spinner1.setSelection(dataAdapter.getPosition(iName));
+                    spinner2.setSelection(strDataAdapter.getPosition(sName));
+
+                    Toast.makeText(Configuration2.this, "Updated Instrument \"" + iName + "\" and string "+ sName, Toast.LENGTH_SHORT).show();
                 }
-                try {
-                    updateSpinners();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
+
 
             }
         }
@@ -413,6 +429,7 @@ public class Configuration2 extends AppCompatActivity {
                 int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
                 addInstrs(addedInstruments);
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
                 spinner1.setSelection(newCurrInstIndex);
             }
         }
@@ -427,6 +444,7 @@ public class Configuration2 extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
                 // TODO: Change selection of str spinner to new string
             }
         }
@@ -441,6 +459,7 @@ public class Configuration2 extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
                 dataAdapter.notifyDataSetChanged();
+                strDataAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -479,8 +498,8 @@ public class Configuration2 extends AppCompatActivity {
         String appState = A1.getAppState(); // ***
         String instState = I1.getInstState();
         String strState = S1.getStrState();
-        currInstIndex = spinner1.getSelectedItemPosition();
-        currInstName = instrList.get(currInstIndex);
+//        currInstIndex = spinner1.getSelectedItemPosition();
+//        currInstName = instrList.get(currInstIndex);
         System.out.println("Sending isAcoustic = " + I1.getAcoustic());
 
         Intent intent = new Intent(this, EditInstrument.class);
@@ -488,7 +507,6 @@ public class Configuration2 extends AppCompatActivity {
         intent.putExtra("appstate", appState);   // *** forward object states
         intent.putExtra("inststate", instState);
         intent.putExtra("strstate", strState);
-        intent.putExtra("iName", currInstName);
         startActivityForResult(intent, EDIT_INSTR_REQUEST);
     }
 

@@ -31,6 +31,8 @@ public class EditInstrument extends AppCompatActivity {
     String instState;
     String strState;
     String instrType;
+    String iName;
+    String sName;
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     ArrayList<String> slist = new ArrayList<String>();
     private Spinner spinnerInstrTypes;
@@ -190,11 +192,14 @@ public class EditInstrument extends AppCompatActivity {
         I1.setModel(iModel.getText().toString());
         I1.setAcoustic(acousticCheckBox.isChecked());
         I1.updateInstr(I1.getInstrID(), context);  // Updates DB settings
+        // TODO: Get and set updated iName and sName to pass back
         Intent resultIntent = new Intent();
         resultIntent.putExtra("replyInstruction", "NormalReturn");
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
+        resultIntent.putExtra("iName", iName);
+        resultIntent.putExtra("sName", sName);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
@@ -215,6 +220,7 @@ public class EditInstrument extends AppCompatActivity {
         String appState = A1.getAppState();
         String instState = I1.getInstState();
         String strState = S1.getStrState();
+        String sName = spinnerStr.getSelectedItem().toString();
 
         Intent intent = new Intent(this, AddNewStringFromAddNewInstr.class);
 
@@ -226,7 +232,8 @@ public class EditInstrument extends AppCompatActivity {
         intent.putExtra("instrModelName", I1.getModel());
         intent.putExtra("isAcoustic", I1.getAcoustic());
         intent.putExtra("instrType", I1.getType());
-        intent.putExtra("iName", "null");
+        intent.putExtra("iName", iName);
+        intent.putExtra("sName", sName);
         //
         startActivityForResult(intent, ADD_NEW_STR_REQUEST);
     }
