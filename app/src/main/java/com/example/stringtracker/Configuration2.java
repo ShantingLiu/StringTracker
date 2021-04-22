@@ -413,6 +413,18 @@ public class Configuration2 extends AppCompatActivity {
         }
 
         // TODO: New String Selected - links the result from launchEditInstrument()'s call to AddNewStringFromConfig.java
+        if (requestCode == ADD_NEW_STR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // TODO: Finish up code here
+                try {
+                    updateSpinners();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+                dataAdapter.notifyDataSetChanged();
+                // TODO: Change selection of str spinner to new string
+            }
+        }
     }
 
     // *** Helper to store AppState, Instrument, and StringSet states
