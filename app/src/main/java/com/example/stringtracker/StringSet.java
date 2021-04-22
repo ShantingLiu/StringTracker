@@ -293,6 +293,7 @@ public class StringSet {
                 SessTone[i] /= (float)sessCntT[i];
                 SessInton[i] /= (float)sessCntT[i];
             }
+            //
             //System.out.println("sessCntT="+sessCntT[i]+" sent vals: p="+SessProj[i]+" t="+SessTone[i]);
         }
 
@@ -308,8 +309,8 @@ public class StringSet {
                 AvgTone[j] = ((float)ChangeCnt*AvgTone[j] + SessTone[j])/(float)(ChangeCnt+1);
                 AvgInton[j] = ((float)ChangeCnt*AvgInton[j] + SessInton[j])/(float)(ChangeCnt+1);
             }
-
-        }//System.out.println(interval+" i = "+i+" binCnt = "+binindex+" SessProj[]="+SessProj[binindex]+"  sessCnt[]="+sessCntT[binindex]);
+            //System.out.println("AvgProj:"+j+"="+AvgProj[j]);
+        }
 
         updateAvgLife(totaltime); // update avg life
         ++ChangeCnt;   //increment upon update = strings change event

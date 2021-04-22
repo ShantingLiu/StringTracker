@@ -7,21 +7,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class CompareStrings extends AppCompatActivity {
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.util.ArrayList;
+import java.util.List;
+
+public class CompareStrings2 extends AppCompatActivity {
     // local copies of the main stringset, instrument, and appstate objects
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     StringSet S2 = new StringSet();   // 2nd stringset for comparison
     Instrument I1 = new Instrument();
+
+    LineChart Linegraph;
     Button buttonRet;
-    //testing
-    Button Comparebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compare_strings);
+        setContentView(R.layout.activity_compare_strings2);
+
+        //dbstuff i believe
         String appState;
         String instState;
         String strState;
@@ -33,17 +43,34 @@ public class CompareStrings extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
 
-        //button test
-        Comparebtn = findViewById(R.id.comparebtn);
-        Comparebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CompareStrings.this,CompareStrings2.class));
-            }
-        });
+   // in this example, a LineChart is initialized from xml
+        Linegraph = (LineChart) findViewById(R.id.linegraph);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Linegraph.setDragEnabled(true);
+        Linegraph.setScaleEnabled(false);
 
-        // Without return button the back arrow may go to a blank screen
-        buttonRet = findViewById(R.id.buttonRet3);
+        ArrayList<Entry> yValues = new ArrayList<>();
+        yValues.add(new Entry(0, 60f));
+        yValues.add(new Entry(1, 50f));
+        yValues.add(new Entry(6, 80f));
+        yValues.add(new Entry(9, 90f));
+        yValues.add(new Entry(3, 40f));
+        yValues.add(new Entry(2, 55f));
+
+        LineDataSet set1 = new LineDataSet(yValues, "Tonality");
+
+        set1.setFillAlpha(110);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+
+        LineData data = new LineData(dataSets);
+
+        Linegraph.setData(data);
+
+
+        // took return button method to go back to screen with out it can leave page
+        buttonRet = findViewById(R.id.returnline);
         buttonRet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,9 +86,5 @@ public class CompareStrings extends AppCompatActivity {
         });
 
 
-
-    } // OnCreate
-
-
-
+    }//oncreate
 }
