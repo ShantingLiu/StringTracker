@@ -187,9 +187,6 @@ public class AddNewInstrument extends AppCompatActivity {
                     throwables.printStackTrace();
                 }
 
-                System.out.println("slist size = " + slist.size());
-
-
                 spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
                 dataAdapterStr.notifyDataSetChanged();
                 int newStrSpinnerPosition = findPosition(slist, newStrId);
@@ -231,8 +228,6 @@ public class AddNewInstrument extends AppCompatActivity {
         System.out.println("Str"+S1.getStrState());
 
         Intent resultIntent = new Intent();
-        // TODO: Then, I1.setAcoustic() to true or false depending on boolean isAcoustic value
-        // TODO: Add instr info (brandName + modelName + instrType + isAcoustic + attachedString, etc) into an instr object and add into DB (look into config to see how this is done)
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
