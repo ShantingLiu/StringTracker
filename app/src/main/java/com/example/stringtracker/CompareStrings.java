@@ -33,14 +33,6 @@ public class CompareStrings extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
 
-        //button test
-        Comparebtn = findViewById(R.id.comparebtn);
-        Comparebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CompareStrings.this,CompareStrings2.class));
-            }
-        });
 
         // Without return button the back arrow may go to a blank screen
         buttonRet = findViewById(R.id.buttonRet3);

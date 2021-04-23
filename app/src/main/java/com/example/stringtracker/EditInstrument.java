@@ -70,7 +70,7 @@ public class EditInstrument extends AppCompatActivity {
         iBrand.setText(I1.getBrand());  // EXAMPLE loading data object values in editText
         iModel.setText(I1.getModel());
         instrType = I1.getType();
-
+        System.out.println("Acoustic STATE:"+I1.getAcoustic());
 
         // populate list of strings
         try {
