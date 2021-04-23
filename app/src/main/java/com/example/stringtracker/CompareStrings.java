@@ -15,6 +15,8 @@ public class CompareStrings extends AppCompatActivity {
     StringSet S2 = new StringSet();   // 2nd stringset for comparison
     Instrument I1 = new Instrument();
     Button buttonRet;
+    //testing
+    Button Comparebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class CompareStrings extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+
 
         // Without return button the back arrow may go to a blank screen
         buttonRet = findViewById(R.id.buttonRet3);

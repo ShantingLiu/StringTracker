@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     Button buttonSelInst;
     private String selInstrText;
     private String selStrText;
+    private final boolean TESTMODE = false;  /// set false for production
+    private final boolean ENABLE_SENT = true;  /// set default for production
+    private final int MAX_SESS_TIME = 200;  /// set default for production
 
     // main data objects
     AppState A1 = new AppState();
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     private TextView selInstTV;
     private TextView selStrTV;
     private TextView timeDebugTV;
+    private TextView stringsLifeTV;
     Context context = MainActivity.this;  // activity context needed for DB calls
 
     @Override
@@ -60,17 +64,15 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // initialize AppState.
-        //String appstate = null;
         selInstTV = (TextView) findViewById(R.id.selInstrTV);
         selStrTV = (TextView) findViewById(R.id.selStringsTV);
+        stringsLifeTV = (TextView) findViewById(R.id.stringsLifeTV);
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
-        if (A1.init()) {      // if .init() returns true it is the first time the app has been run
-            // TODO - direct user to Configuration to add StingSet and Instrument
-            //genStrInst();  // DEBUG test stuff
-            //appstate = A1.getAppState();
-
+       // Check for first run of program and init to defaults otherwise load previous state
+        if (A1.firstRun()) {      // if .firstRun() returns true it is the first time the app has been run
+            A1.init();
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
             updateSelDisplay("FirstRun: ");
@@ -83,56 +85,43 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             I1.loadInstr(A1.getInstrID(), context);
             S1.loadStrings(I1.getStringsID(), context);
         }
+
         // DEBUG forced settings for preferences
-        A1.setTestMode(true);
-        A1.setEnableSent(true);
-        A1.setMaxSessionTime(200);
-        S1.setAvgLife(800);
+        A1.setTestMode(TESTMODE);
+        A1.setEnableSent(ENABLE_SENT);
+        A1.setMaxSessionTime(MAX_SESS_TIME);
+        //S1.setAvgLife(800);
 
         // Start/Stop Session Button
         buttonStartSes = findViewById(R.id.startButton);
+        // Set startup button color based on run state
+        if(!A1.sessionStarted()) {
+            buttonStartSes.setText("Start");
+            buttonStartSes.setBackgroundColor(0xff00A020);
+        } else {
+            buttonStartSes.setText("Stop");
+            buttonStartSes.setBackgroundColor(0xffb02020);
+        }
+
+
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(A1.sessionStarted()) {  // Stop session
-                    A1.stopSession();
-                    I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
-                    I1.setLastSessionTime(A1.getLastSessionTime());
-                    I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
-                    buttonStartSes.setText("Start");
-                    buttonStartSes.setBackgroundColor( 0xff00A020);
-                    // update DB items
-                    I1.updateInstr(I1.getInstrID(), context);
-                    S1.updateStrings(S1.getStringsID(), context);
-
-                     if (A1.getEnableSent()) {
-                         SessionSentiment SentDialog = new SessionSentiment();
-                         FragmentManager fmanager = getSupportFragmentManager();
-                         SentDialog.show(fmanager, "RateStrings");
-
-                         // TODO call user sent dialog
-                         ////////////////////////
-                         //if (A1.getTestMode()) {
-                         //    I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
-                         // }
-                    }
-                    updateSelDisplay(null);
-                    timeDebugTV.setBackgroundResource(R.color.background1);
-                    String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                            + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
-                    timeDebugTV.setText(timeText);
-                    timeDebugTV.setVisibility(View.VISIBLE);
-
-                } else {                // Start session
+                    stopSession();
+                 } else {                // Start session
                     A1.startSession();
                     I1.setCurrSessionStart(A1.getCurrSessionStart());
                     buttonStartSes.setText("Stop");
                     buttonStartSes.setBackgroundColor(0xffb02020);
 
-
                     timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
                 }
+                //System.out.println("AvgProj:"+S1.getAvgProjStr());
+                //System.out.println("AvgTone:"+S1.getAvgToneStr());
+                //System.out.println("AvgInton:"+S1.getAvgIntonStr());
+                System.out.println("IState:"+I1.getInstState());
                 saveAppState();
             }
         });
@@ -142,36 +131,53 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         buttonSelInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (A1.sessionStarted()) {  // Stop session if running
-                    A1.stopSession();
-                    I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
-                    I1.setLastSessionTime(A1.getLastSessionTime());
-                    I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
-                    buttonStartSes.setText("Start");
-                    buttonStartSes.setBackgroundColor(0xff00A020);
-
-                    if (A1.getEnableSent()) {
-                        // TODO call user sent dialog
-                        ////////////////////////
-                        if (A1.getTestMode()) {
-                            I1.logSessionSent(genRandSent());  // DEBUG store random sent to log file normally from sent dialog
-                        }
+                // if a session is in progress go through the stop session sequence
+                if(A1.sessionStarted()) {  // Stop session
+                    stopSession();
+                    // update DB items and save app run state
+                    I1.updateInstr(I1.getInstrID(), context);
+                    S1.updateStrings(S1.getStringsID(), context);
+                } else {
+                    // lock button if first run of the program => no data in DB yet
+                    if (!A1.firstRun()) {
+                        launchSelectInstrument(v);
                     }
+                    saveAppState();
                 }
-                // update DB items and save app run state
-                I1.updateInstr(I1.getInstrID(), context);
-                S1.updateStrings(S1.getStringsID(), context);
-
-                // lock button if first run of the program => no data in DB yet
-                if(!A1.firstRun()) {
-                    launchSelectInstrument(v);
-                }
-                saveAppState();
             }
         });
 
-    }  // end OnCreate
+    }  // end OnCreate //////////////
+
+    // Method that goes through the StopSession sequences prompting th euser for Sentiment Feedback if enabled
+    void stopSession(){
+        A1.stopSession();
+        I1.setSessionCnt(I1.getSessionCnt() + 1); // inc session cnt
+        I1.setLastSessionTime(A1.getLastSessionTime());
+        I1.setPlayTime(I1.getPlayTime() + I1.getLastSessionTime());
+        buttonStartSes.setText("Start");
+        buttonStartSes.setBackgroundColor(0xff00A020);
+        // update DB items
+        I1.updateInstr(I1.getInstrID(), context);
+        S1.updateStrings(S1.getStringsID(), context);
+
+        if (A1.getEnableSent()) {
+            SessionSentiment SentDialog = new SessionSentiment();
+            FragmentManager fmanager = getSupportFragmentManager();
+            SentDialog.show(fmanager, "RateStrings");
+
+        }
+        updateSelDisplay(null);
+        System.out.println("App:"+A1.getAppState());
+        System.out.println("Ins:"+I1.getInstState());
+        System.out.println("Str"+S1.getStrState());
+
+        /*timeDebugTV.setBackgroundResource(R.color.background1);
+        String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+        timeDebugTV.setText(timeText);
+        timeDebugTV.setVisibility(View.VISIBLE);*/
+    }
 
     // helper to restore app and data object states
     public void loadAppState() {
@@ -190,11 +196,21 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     // Methods to launch activities
     public void launchConfig(View view) {
         Log.d(LOG_TAG, "Config Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, Configuration.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        startActivityForResult(intent, TEXT_REQUEST);
+    }
+
+    public void launchConfig2(View view) {
+        Log.d(LOG_TAG, "Config2 Button clicked!");
+        saveAppState();
+        Intent intent = new Intent(this, Configuration2.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
         String strState = S1.getStrState();
@@ -206,10 +222,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     public void launchAnalytics(View view) {
         Log.d(LOG_TAG, "Analytics Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, Analytics.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -227,10 +240,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     public void launchSelectInstrument(View view) {
         Log.d(LOG_TAG, "Sel Instrument Button clicked!");
-        A1.setInstState(I1.getInstState());  // update object state strings in AppState
-        A1.setStrState(S1.getStrState());
-        A1.saveRunState();
-
+        saveAppState();
         Intent intent = new Intent(this, SelectInstrument.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
@@ -262,6 +272,11 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                // DEBUG
+                A1.setTestMode(TESTMODE);  // set to default state
+                A1.setEnableSent(ENABLE_SENT);
+                A1.setMaxSessionTime(MAX_SESS_TIME);
+
                 System.out.println("*** RETURN to MAIN InstrID = "+I1.getInstrID());
                 updateSelDisplay(null);
                 saveAppState();
@@ -285,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         Sent1.setTimeStamp(I1.getCurrSessionStart());
         I1.logSessionSent(Sent1);
 
-        Toast.makeText(MainActivity.this, "Strings Ratings: "
+        Toast.makeText(MainActivity.this, "Ratings:  "
                 + String.format("Proj=%.2f Tone=%.2f Inton=%.2f", ratingProj, ratingTone, ratingInton), Toast.LENGTH_LONG).show();
 
     }
@@ -306,80 +321,31 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         if(S1.getAvgLife()>0) {
             int pctlife = (int) (((float) I1.getPlayTime() / (float) S1.getAvgLife()) * 100.0f);
             if (pctlife < A1.getLifeThresholds()[1]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor1);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor1);
             } else if (pctlife < A1.getLifeThresholds()[2]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor2);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor2);
             } else if (pctlife < A1.getLifeThresholds()[3]) {
-                selStrTV.setBackgroundResource(R.color.lifecolor3);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor3);
             } else {
-                selStrTV.setBackgroundResource(R.color.lifecolor4);
+                stringsLifeTV.setBackgroundResource(R.color.lifecolor4);
             }
+            stringsLifeTV.setText("     Remaining Life: "+Integer.toString(100-pctlife)+"%     ");
         } else{
-            selStrTV.setBackgroundResource(R.color.lifecolor0);   // color for 1st stringset
+            stringsLifeTV.setBackgroundResource(R.color.lifecolor0);   // color for 1st stringset
         }
+        stringsLifeTV.setVisibility(View.VISIBLE);
         selStrTV.setText(selStrText);
         selStrTV.setVisibility(View.VISIBLE);
         timeDebugTV.setBackgroundResource(R.color.background1);
-        String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
+        String timeText = "SessionCnt = "+I1.getSessionCnt() + "  LastSessTime = "
+                + I1.getLastSessionTime() + "min \nTotalPlayT = " + I1.getPlayTime()+"min";
+
+        //String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
+        //        + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
         timeDebugTV.setText(timeText);
         timeDebugTV.setVisibility(View.VISIBLE);
 
     }
 
 /////////////////////////////////////////////////////////////////////////
-
-    // DEBUG test code randomly generates instrument and stringset values for A1 and S1
-    public void genStrInst() {
-        Random rand = new Random();
-        rand.setSeed(System.currentTimeMillis());
-        String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
-        String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
-        String sTension[] = {"XL", "Light", "Medium", "Heavy"};
-        String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
-
-        String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
-        String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};
-
-        int rand_sBr = rand.nextInt(5);
-        int rand_sMo = rand.nextInt(5);
-        int rand_sTe = rand.nextInt(4);
-        int rand_sTy = rand.nextInt(5);
-        int rand_sID = rand.nextInt(4)+1;
-
-        int rand_iBr = rand.nextInt(5);
-        int rand_iMo = rand.nextInt(5);
-        int rand_iID = rand.nextInt(4)+1;
-
-        S1.setStringsID(rand_sID);
-        S1.setBrand(sBrand[rand_sBr]);
-
-        S1.setModel(sModel[rand_sMo]);
-        S1.setTension(sTension[rand_sTe]);
-        S1.setType(sType[rand_sTy]);
-        S1.setAvgLife(800);  // set this value for DEBUG test purposes
-
-        I1.setInstrID(rand_iID);
-        I1.setBrand(iBrand[rand_iBr]);
-        I1.setModel(iModel[rand_iMo]);
-        I1.setType(sType[rand_sTy]);
-        I1.setStringsID(rand_sID);  // match up strings with instrument
-
-    }
-
-    public SessionSent genRandSent() {
-        SessionSent S = new SessionSent();
-        Random rand = new Random();
-        int rand_sent = rand.nextInt(10);
-        S.setProj((float) rand_sent * 0.5f);
-        rand_sent = rand.nextInt(10);
-        S.setTone((float) rand_sent * 0.5f);
-        rand_sent = rand.nextInt(10);
-        S.setInton((float) rand_sent * 0.5f);
-        S.setSessTime((int) A1.getLastSessionTime());
-        S.setTimeStamp(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
-
-        return S;
-    }
-
 }

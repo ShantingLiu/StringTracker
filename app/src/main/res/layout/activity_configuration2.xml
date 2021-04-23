@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Configuration2">
+
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="24dp"
+      android:text="String Tracker - Configuration"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/buttonReturn" />
+
+  <Spinner
+      android:id="@+id/spinner1"
+      android:layout_width="271dp"
+      android:layout_height="42dp"
+      android:layout_marginStart="50dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginEnd="50dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.55"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/selectedInstr" />
+
+  <Button
+      android:id="@+id/addNewInstrButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="91dp"
+      android:layout_marginTop="5dp"
+      android:text="Add New"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+
+  <Button
+      android:id="@+id/addNewInstrButton2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="93dp"
+      android:layout_marginTop="5dp"
+      android:onClick="launchAddNewStr"
+      android:text="Add New"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+
+  <Button
+      android:id="@+id/editInstrButton2"
+      android:layout_width="86dp"
+      android:layout_height="49dp"
+      android:layout_marginStart="50dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginEnd="107dp"
+      android:onClick="launchEditStr"
+      android:text="Edit"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.103"
+      app:layout_constraintStart_toEndOf="@+id/addNewInstrButton2"
+      app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+
+  <Button
+      android:id="@+id/editInstrButton1"
+      android:layout_width="86dp"
+      android:layout_height="49dp"
+      android:layout_marginStart="60dp"
+      android:layout_marginTop="5dp"
+      android:layout_marginEnd="115dp"
+      android:onClick="launchEditInstrument"
+      android:text="Edit"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/addNewInstrButton"
+      app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+
+  <TextView
+      android:id="@+id/selectedInstr"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="30dp"
+      android:layout_marginBottom="22dp"
+      android:text="Selected Instrument:"
+      app:layout_constraintBottom_toTopOf="@+id/spinner1"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.503"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/selStrings"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="45dp"
+      android:text="Selected Strings:"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/editInstrButton1" />
+
+  <Spinner
+      android:id="@+id/spinner2"
+      android:layout_width="271dp"
+      android:layout_height="42dp"
+      android:layout_marginStart="50dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginEnd="50dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/selStrings" />
+
+  <Button
+      android:id="@+id/buttonReturn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginBottom="8dp"
+      android:backgroundTint="#A80A0A"
+      android:backgroundTintMode="add"
+      android:text="Return"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  <Button
+      android:id="@+id/buttonChangeStr"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:backgroundTint="#A80A0A"
+      android:backgroundTintMode="add"
+      android:onClick="changeStrings"
+      android:text="Change Strings"
+      android:textSize="18sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/addNewInstrButton2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,8 +95,21 @@ public class StringSet {
     }
 
     // Method to reset flag on string change
-    void init() {
-        FirstSession = true;  // reset flag
+    void init(boolean newStr) {
+        FirstSession = true; // reset flag
+        if (newStr){
+            Cost = 0.0f;
+            AvgLife = 0;
+            ChangeCnt = 0;
+            StringBuilder defSent = new StringBuilder();
+            for(int i = 0; i<INTERVALS-1;++i) {
+                defSent.append("0, ");   // sentiment values w/ comma delimiters
+            }
+            defSent.append("0");  // add the last 0 without comma
+            AvgProjStr = defSent.toString(); // strings hold list of text
+            AvgToneStr = defSent.toString();
+            AvgIntonStr = defSent.toString();
+        }
     }
 
     // Method to reset all values - dangerous
@@ -280,6 +293,7 @@ public class StringSet {
                 SessTone[i] /= (float)sessCntT[i];
                 SessInton[i] /= (float)sessCntT[i];
             }
+            //
             //System.out.println("sessCntT="+sessCntT[i]+" sent vals: p="+SessProj[i]+" t="+SessTone[i]);
         }
 
@@ -295,8 +309,8 @@ public class StringSet {
                 AvgTone[j] = ((float)ChangeCnt*AvgTone[j] + SessTone[j])/(float)(ChangeCnt+1);
                 AvgInton[j] = ((float)ChangeCnt*AvgInton[j] + SessInton[j])/(float)(ChangeCnt+1);
             }
-
-        }//System.out.println(interval+" i = "+i+" binCnt = "+binindex+" SessProj[]="+SessProj[binindex]+"  sessCnt[]="+sessCntT[binindex]);
+            //System.out.println("AvgProj:"+j+"="+AvgProj[j]);
+        }
 
         updateAvgLife(totaltime); // update avg life
         ++ChangeCnt;   //increment upon update = strings change event

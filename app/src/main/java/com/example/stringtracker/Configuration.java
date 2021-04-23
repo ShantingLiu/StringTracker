@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import static com.example.stringtracker.MainActivity.TEXT_REQUEST;
@@ -23,8 +26,6 @@ public class Configuration extends AppCompatActivity {
     private static final String LOG_TAG =
             Configuration.class.getSimpleName();
     // main data objects
-
-
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
@@ -38,13 +39,8 @@ public class Configuration extends AppCompatActivity {
     Button buttonLoad;
     Button buttonUpd;
     Button buttonRandInstr;
-    Button buttonSelStr;
+    Button buttonSelInstr;
     Button buttonDel;
-
-    //Graph
-
-    Button graph;
-
 
     EditText iBrand;
     EditText iModel;
@@ -56,7 +52,10 @@ public class Configuration extends AppCompatActivity {
     TextView configTextView;
     Context context = Configuration.this;
 
-
+    ///// For New Strings ListView on screen  ////
+    ListView lv_strings2;
+    ArrayAdapter ad;
+    ArrayList<String> slist = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +74,59 @@ public class Configuration extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
 
+//--------------- Code to implement Strings ListView in Config screen
+        lv_strings2  = findViewById(R.id.lv_strings2);
+        try {
+            slist = S1.getStringsStrList(context, I1.getType());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, slist);
+        lv_strings2.setAdapter(ad);
+
+        // String Selection From ListView - NOTE: THIS IS A STRING CHANGE EVENT!
+        lv_strings2.setOnItemClickListener(new AdapterView.OnItemClickListener()  {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(Configuration.this, "pos="+position+" name="+ilist.get(position), Toast.LENGTH_SHORT).show();
+                String tmp = slist.get(position);
+                String token = tmp.split(":")[1];
+                int newStringsID = Integer.parseInt(token.split(" ")[0].trim());
+
+                /// String Change Event Sequence ////
+                I1.logStringChange();
+                // do not attempt to update if there are no sessions
+                if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
+                    // Update avg sentiment values for the old strings
+                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
+
+                    if (!A1.getTestMode()) {  // if in normal operating mode clear sent log
+                        try {
+                            I1.clearSentLog();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                // Set to New StringsID load new StringSet from DB
+                I1.setStringsID(newStringsID);
+                S1.loadStrings(newStringsID, context);
+                // reset the counters
+                A1.init();
+                I1.init();
+                // save changes in AppState file
+                A1.setStrState(S1.getStrState());
+                A1.setInstState(I1.getInstState());
+                A1.saveRunState();  // be sure run state changes saved to file
+
+                // update display
+                updateDisplay();  // updates EditTexts
+                String selInstText = "String Change - New Strings ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel();
+                Toast.makeText(Configuration.this, selInstText, Toast.LENGTH_SHORT).show();
+            }
+        });
+//----------------------------------------------------
+
         ////////// EXAMPLE DEBUG CODE WITH DB ACCESS - EditText and save button //////////
         configTextView = (TextView) findViewById(R.id.configTextView);
         iBrand = (EditText) findViewById(R.id.editTextBrand);
@@ -86,25 +138,12 @@ public class Configuration extends AppCompatActivity {
 
         updateDisplay();
 
-//<<<<<<< Updated upstream
-//        ////// BUTTON SELECT STRINGS  //////
-//=======
-//        //graph
-
-        graph = findViewById(R.id.buttonGraph);
-        graph.setOnClickListener(new View.OnClickListener() {
+        ////// BUTTON SELECT INSTRUMENT  //////
+        buttonSelInstr = findViewById(R.id.buttonSelInstr2);
+        buttonSelInstr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Configuration.this,GraphingActivity.class));
-            }
-        });
-
-//>>>>>>> Stashed changes
-        buttonSelStr = findViewById(R.id.buttonSelStr);
-        buttonSelStr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchSelectStrings(v);
+                launchSelectInstrument(v);
             }
         });
 
@@ -113,6 +152,7 @@ public class Configuration extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("Insert new instrument!!!!!!");// TODO axe this print
                 I1.setInstrID(Integer.parseInt(iInstID.getText().toString()));
                 I1.setBrand(iBrand.getText().toString());
                 I1.setModel(iModel.getText().toString());
@@ -143,7 +183,7 @@ public class Configuration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Context context = Configuration.this;
-               System.out.println("*** Config Call DBLoad instrID = "+Integer.parseInt(iInstID.getText().toString()));
+                System.out.println("*** Config Call DBLoad instrID = "+Integer.parseInt(iInstID.getText().toString()));
 
                 if(I1.loadInstr(Integer.parseInt(iInstID.getText().toString()), context)){
                     A1.setInstrID(Integer.parseInt(iInstID.getText().toString()));  // be sure to update AppState
@@ -175,7 +215,7 @@ public class Configuration extends AppCompatActivity {
                 S1.setModel(sModel.getText().toString());
 
                 if(I1.updateInstr(Integer.parseInt(iInstID.getText().toString()), context) && S1.updateStrings(Integer.parseInt(sStrID.getText().toString()), context)){
-                     showToast(v);  // the toast indicates that it worked
+                    showToast(v);  // the toast indicates that it worked
                 }
                 System.out.println("** UPDATED InstrID = "+I1.getInstrID()+" Brand = "+I1.getBrand()+" Model = "+I1.getModel());
                 System.out.println("** UPDATED StringsID = "+S1.getStringsID()+" Brand = "+S1.getBrand()+" Model = "+S1.getModel());
@@ -210,7 +250,9 @@ public class Configuration extends AppCompatActivity {
         buttonRandInstr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                genStrInst();
+                if(A1.getTestMode()) {
+                    genStrInst();  // allow random instrument & string generation if in TestMode
+                }
                 A1.setInstrumentCnt(I1.getInstrStrList(context).size());
                 try {
                     A1.setStringsCnt(S1.getStringsStrList(context, "?").size());
@@ -290,6 +332,16 @@ public class Configuration extends AppCompatActivity {
         sStrID.setText(String.valueOf(S1.getStringsID()));  // EXAMPLE loading data object values in editText
         sBrand.setText(S1.getBrand());  // EXAMPLE loading data object values in editText
         sModel.setText(S1.getModel());
+        
+        // repopulate Strings ListView
+        try {
+            slist = S1.getStringsStrList(context, I1.getType());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, slist);
+        lv_strings2.setAdapter(ad);
+
     }
 
     // A handy toast Saved message you might want to use
@@ -331,6 +383,8 @@ public class Configuration extends AppCompatActivity {
                 configTextView.setText("CANCELED!");
                 configTextView.setVisibility(View.VISIBLE);
             }
+
+            updateDisplay();
         }
     }
 
@@ -341,8 +395,8 @@ public class Configuration extends AppCompatActivity {
         rand.setSeed(System.currentTimeMillis());
         String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Ernie Bal"};
         String sModel[] = {"A-180", "G-42", "Bronze", "Stainless FW", "Slinky"};
-        String sTension[] = {"XL", "Light", "Medium", "Heavy"};
-        String sType[] = {"guitar", "banjo", "mandolin", "violin", "cello"};
+        String sTension[] = {"X-Light", "Light", "Medium", "Heavy"};
+        String sType[] = {"Guitar", "Banjo", "Mandolin", "Violin", "Cello"};
 
         String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "PRS"};
         String iModel[] = {"L5", "D28", "Artist", "F-5", "Yellowstone"};
@@ -363,7 +417,7 @@ public class Configuration extends AppCompatActivity {
         S1.setModel(sModel[rand_sMo]);
         S1.setTension(sTension[rand_sTe]);
         S1.setType(sType[rand_sTy]);
-        S1.setAvgLife(800);  // set this value for DEBUG test purposes
+        S1.setAvgLife(0);  // set this value for DEBUG test purposes
         S1.setChangeCnt(0);
         S1.setCost(10.0f);
 
