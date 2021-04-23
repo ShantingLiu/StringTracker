@@ -184,7 +184,6 @@ public class AddNewInstrument extends AppCompatActivity {
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
                 String instrType = data.getStringExtra("instrType");
-                // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
                 int newStrId = data.getIntExtra("newStrId",0);
 
                 // set variables with what we just grabbed
@@ -206,9 +205,20 @@ public class AddNewInstrument extends AppCompatActivity {
                 int newStrSpinnerPosition = findPosition(slist, newStrId);
 
                 spinnerStr.setSelection(newStrSpinnerPosition);
+            }
+            // Returned from Add new string without adding any new string
+            if (resultCode == 10){
+                String instrBrandName = data.getStringExtra("instrBrandName");
+                String instrModelName = data.getStringExtra("instrModelName");
+                isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
+                String instrType = data.getStringExtra("instrType");
 
-                // TODO: Check to see if this goes after setting the str selection or before it
-                // TODO: Set selection of string spinner to the new string we just added here
+                iBrand.setText(instrBrandName);
+                iModel.setText(instrModelName);
+                acousticCheckBox.setChecked(isAcoustic);
+                spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
+                dataAdapterStr.notifyDataSetChanged();
+
             }
         }
     }
