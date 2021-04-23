@@ -170,23 +170,33 @@ public class AddNewInstrument extends AppCompatActivity {
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
                 String instrType = data.getStringExtra("instrType");
-                int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
+                // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
+                int newStrId = data.getIntExtra("newStrId",0);
 
                 // set variables with what we just grabbed
                 iBrand.setText(instrBrandName);
                 iModel.setText(instrModelName);
                 acousticCheckBox.setChecked(isAcoustic);
                // update string list spinner accordingly
+
                 try {
                     slist.clear();
-                    slist = S1.getStringsStrList(context, I1.getType());
+                    slist = S1.getStringsStrList(context, instrType);
                     addItemsStrSpinner();
                 } catch (SQLException throwables) { // TODO: Check if throwables should be spelled throwable?
                     throwables.printStackTrace();
                 }
 
+                System.out.println("slist size = " + slist.size());
+
+
                 spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
-                dataAdapterStr.notifyDataSetChanged(); // TODO: Check to see if this goes after setting the str selection or before it
+                dataAdapterStr.notifyDataSetChanged();
+                int newStrSpinnerPosition = findPosition(slist, newStrId);
+
+                spinnerStr.setSelection(newStrSpinnerPosition);
+
+                // TODO: Check to see if this goes after setting the str selection or before it
                 // TODO: Set selection of string spinner to the new string we just added here
             }
         }
@@ -229,6 +239,23 @@ public class AddNewInstrument extends AppCompatActivity {
 
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private int findPosition(ArrayList <String> x, int id){
+        if (x == null){
+            return 0;
+        }
+        int pos = 0;
+        String s;
+        for(int i = 0; i < x.size(); ++i){
+            s = x.get(i);
+            String token = s.split(":")[1];
+            int tmpid = Integer.parseInt(token.split(" ")[0].trim());
+            if(id == tmpid){
+                pos = i;
+            }
+        }
+        return pos;
     }
 
     // takes user to AddNewStringFromAddNewInstr.java

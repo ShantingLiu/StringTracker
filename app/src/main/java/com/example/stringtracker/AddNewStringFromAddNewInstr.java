@@ -128,6 +128,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         resultIntent.putExtra("isAcoustic", isAcoustic);
         resultIntent.putExtra("instrType", instrType);
         resultIntent.putExtra("iName", iName);
+        resultIntent.putExtra("newStrId", newstrid);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
