@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             buttonStartSes.setBackgroundColor(0xffb02020);
         }
 
-
         buttonStartSes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
