@@ -28,6 +28,8 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     String strState;
     private final String[] strTensions = new String[]{"X-Light", "Light", "Medium", "Heavy"};
     private Spinner spinnerStrTension;
+    private Spinner spinnerStrInstrType;
+
     String instrBrandName;
     String instrModelName;
     boolean isAcoustic;
@@ -84,12 +86,21 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     public void addNewStr(View view){
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
+        instrType = spinnerStrInstrType.getSelectedItem().toString();
+        String strTension = spinnerStrTension.getSelectedItem().toString();
         float strCost;
         try {
             strCost = Float.parseFloat(newStrCostPrompt.getText().toString());
         } catch (NumberFormatException e) {
             strCost = Float.parseFloat("0");
         }
+        S1.init(true);
+        S1.setBrand(strBrandName);   // using a new StringSet obj S2 to not interfere with present strings selected
+        S1.setModel(strModelName);
+        S1.setType(instrType);
+        S1.setTension(strTension);
+        S1.setCost(strCost);
+        S1.insertStrings(context);  // insert to DB
 
 
         Intent resultIntent = new Intent();
@@ -97,9 +108,6 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
-        resultIntent.putExtra("appstate", appState);   // *** forward object states
-        resultIntent.putExtra("inststate", instState);
-        resultIntent.putExtra("strstate", strState);
         // I pass the below info back and forth in case the user is still in the middle of filling out the form, I don't want their changes to be lost in the AddNewInstrument screen when they enter the AddNewString activity
         resultIntent.putExtra("instrBrandName", instrBrandName);
         resultIntent.putExtra("instrModelName", instrModelName);

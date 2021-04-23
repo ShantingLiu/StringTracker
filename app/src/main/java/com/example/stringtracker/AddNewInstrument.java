@@ -26,6 +26,7 @@ public class AddNewInstrument extends AppCompatActivity {
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
+    Instrument I2 = new Instrument();
     Context context = AddNewInstrument.this;
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
@@ -55,6 +56,7 @@ public class AddNewInstrument extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+        I2.init();
 
         acousticCheckBox.setChecked(isAcoustic);
 
@@ -77,13 +79,13 @@ public class AddNewInstrument extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
-                instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
-                I1.setType(instrType);
+                instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString(); //.toLowerCase();
+                I2.setType(instrType);
 
-                S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
+                //S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                 slist.clear();
                 try {
-                    slist = S1.getStringsStrList(context, I1.getType());
+                    slist = S1.getStringsStrList(context, I2.getType());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -102,25 +104,8 @@ public class AddNewInstrument extends AppCompatActivity {
                 String tmp = slist.get(position);
                 String token = tmp.split(":")[1];
                 int newstringsid = Integer.parseInt(token.split(" ")[0].trim()); // TODO: Check with Keith to see if we need newstringsid here
+                I2.setStringsID(newstringsid);
 
-                I1.logStringChange();
-                if (I1.getPlayTime() > 0  && I1.getSessionCnt() > 0) {
-                    S1.updateAvgSent(I1.getSentLog(), I1.getPlayTime());
-                    //removed testmode save of sent logs
-                    try {
-                        I1.clearSentLog();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                System.out.println("*** STRING CHANGE *** new stringsID="+I1.getStringsID());  // DEBUG
-
-                // set new instrumentID load new Instrument and StringSet from DB
-                I1.setStringsID(newstringsid);
-                S1.loadStrings(I1.getStringsID(), context);
-                I1.init();   // clear for new string cycle
-                I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
-                A1.init();  // clear internal time values
             }
 
             @Override
@@ -177,6 +162,10 @@ public class AddNewInstrument extends AppCompatActivity {
                 appState = data.getStringExtra("appstate");
                 instState = data.getStringExtra("inststate");
                 strState = data.getStringExtra("strstate");
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState); // moved to correct location^
+                S1.setStrState(strState);
+
                 String instrBrandName = data.getStringExtra("instrBrandName");
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
@@ -187,10 +176,7 @@ public class AddNewInstrument extends AppCompatActivity {
                 iBrand.setText(instrBrandName);
                 iModel.setText(instrModelName);
                 acousticCheckBox.setChecked(isAcoustic);
-                A1.setAppState(appState);  // Restore data object states on return
-                I1.setInstState(instState);
-                S1.setStrState(strState);
-                // update string list spinner accordingly
+               // update string list spinner accordingly
                 try {
                     slist.clear();
                     slist = S1.getStringsStrList(context, I1.getType());
@@ -210,6 +196,13 @@ public class AddNewInstrument extends AppCompatActivity {
     public void addNewInstr(View view){
         String instrBrandName = iBrand.getText().toString();
         String instrModelName = iModel.getText().toString();
+        boolean acoustic = acousticCheckBox.isChecked();
+        instrType = spinnerInstrTypes.getSelectedItem().toString();
+        I2.setBrand(instrBrandName);
+        I2.setModel(instrModelName);
+        I2.setAcoustic(acoustic);
+        I2.setType(instrType);
+        I2.insertInstr(context);  // adds to DB
 
         Intent resultIntent = new Intent();
         // TODO: Then, I1.setAcoustic() to true or false depending on boolean isAcoustic value
@@ -233,9 +226,6 @@ public class AddNewInstrument extends AppCompatActivity {
         String instrTypeLowercase = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString().toLowerCase();
 
         Intent intent = new Intent(context, AddNewStringFromAddNewInstr.class);
-        intent.putExtra("appstate", appState);   // *** forward object states
-        intent.putExtra("inststate", instState);
-        intent.putExtra("strstate", strState);
         intent.putExtra("instrBrandName", instrBrandName);
         intent.putExtra("instrModelName", instrModelName);
         intent.putExtra("isAcoustic", isAcoustic);
