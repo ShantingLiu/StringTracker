@@ -362,6 +362,7 @@ public class Configuration2 extends AppCompatActivity {
 
                     promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
+
                     try {
                         updateSpinners();
                     } catch (SQLException throwables) {

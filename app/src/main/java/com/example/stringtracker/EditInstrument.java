@@ -152,6 +152,23 @@ public class EditInstrument extends AppCompatActivity {
                 // can leave this empty
             }
         });
+
+        Button buttonRet = findViewById(R.id.buttonReturnEditInstr);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                resultIntent.putExtra("replyInstruction", "NormalReturn");
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 
     /////////////////SPINNERS START/////////////////////
