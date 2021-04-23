@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,6 +72,22 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         // initiate str tension spinner
         addItemsOnStrTensionSpinner();
         addListenerOnStrTensionSpinnerItemSelection();
+
+        Button buttonRet = findViewById(R.id.buttonReturnAddNewStr1);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("instrBrandName", instrBrandName);
+                resultIntent.putExtra("instrModelName", instrModelName);
+                resultIntent.putExtra("isAcoustic", isAcoustic);
+                resultIntent.putExtra("instrType", instrType);
+
+                // setting a diff result code
+                setResult(10, resultIntent);
+                finish();
+            }
+        });
     }
 
     public void addItemsOnStrTensionSpinner(){
@@ -128,6 +145,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         resultIntent.putExtra("isAcoustic", isAcoustic);
         resultIntent.putExtra("instrType", instrType);
         resultIntent.putExtra("iName", iName);
+        resultIntent.putExtra("newStrId", newstrid);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

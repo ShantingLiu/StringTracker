@@ -89,6 +89,9 @@ public class EditInstrument extends AppCompatActivity {
         // TODO: Found out what the proper parameter to pass for the below getPosition(); (Ask Keith)
         // spinnerStr.setSelection(dataAdapterStr.getPosition(S1.getString)); // set string spinner to currently attached instrument string
 
+        int strId = S1.getStringsID();
+        spinnerStr.setSelection(findPosition(slist, strId));
+
 
         // set onClicks for spinners
         spinnerInstrTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -149,6 +152,23 @@ public class EditInstrument extends AppCompatActivity {
                 // can leave this empty
             }
         });
+
+        Button buttonRet = findViewById(R.id.buttonReturnEditInstr);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                resultIntent.putExtra("replyInstruction", "NormalReturn");
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 
     /////////////////SPINNERS START/////////////////////
@@ -180,6 +200,56 @@ public class EditInstrument extends AppCompatActivity {
         spinnerStr.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
     /////////////////SPINNERS END/////////////////////
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        userIsInteracting = false;
+
+        String appState, instState, strState;
+        appState = data.getStringExtra("appstate");
+        instState = data.getStringExtra("inststate");
+        strState = data.getStringExtra("strstate");
+        A1.setAppState(appState);  // Restore data object states on return
+        I1.setInstState(instState);
+        S1.setStrState(strState);
+
+        // new String added
+        if (requestCode == ADD_NEW_STR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    slist.clear();
+                    slist = S1.getStringsStrList(context, instrType);
+                    addItemsStrSpinner();
+                } catch (SQLException throwables) { // TODO: Check if throwables should be spelled throwable?
+                    throwables.printStackTrace();
+                }
+
+                int newStrId = data.getIntExtra("newStrId", 0);
+                spinnerStr.setSelection(findPosition(slist, newStrId));
+
+            }
+        }
+    }
+
+    // *** Quick search for id position in array list
+    private int findPosition(ArrayList <String> x, int id){
+        if (x == null){
+            return 0;
+        }
+        int pos = 0;
+        String s;
+        for(int i = 0; i < x.size(); ++i){
+            s = x.get(i);
+            String token = s.split(":")[1];
+            int tmpid = Integer.parseInt(token.split(" ")[0].trim());
+            if(id == tmpid){
+                pos = i;
+            }
+        }
+        return pos;
+    }
+
 
     public void onCheckBoxClicked(View view) {
         isAcoustic = ((CheckBox) view).isChecked();

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -114,6 +115,19 @@ public class AddNewInstrument extends AppCompatActivity {
             }
         });
 
+        Button buttonRet = findViewById(R.id.buttonReturnAddNewInstr);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
     }
     /////////////////SPINNERS START/////////////////////
     // add items into spinner for instrument types
@@ -170,24 +184,41 @@ public class AddNewInstrument extends AppCompatActivity {
                 String instrModelName = data.getStringExtra("instrModelName");
                 isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
                 String instrType = data.getStringExtra("instrType");
-                int strID = data.getIntExtra("strID", 0); // TODO: Figure out how to identify which string we just added, to update str spinner selection (ie. ID? If so, we need to grab the ID in AddNewString)
+                int newStrId = data.getIntExtra("newStrId",0);
 
                 // set variables with what we just grabbed
                 iBrand.setText(instrBrandName);
                 iModel.setText(instrModelName);
                 acousticCheckBox.setChecked(isAcoustic);
                // update string list spinner accordingly
+
                 try {
                     slist.clear();
-                    slist = S1.getStringsStrList(context, I1.getType());
+                    slist = S1.getStringsStrList(context, instrType);
                     addItemsStrSpinner();
                 } catch (SQLException throwables) { // TODO: Check if throwables should be spelled throwable?
                     throwables.printStackTrace();
                 }
 
                 spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
-                dataAdapterStr.notifyDataSetChanged(); // TODO: Check to see if this goes after setting the str selection or before it
-                // TODO: Set selection of string spinner to the new string we just added here
+                dataAdapterStr.notifyDataSetChanged();
+                int newStrSpinnerPosition = findPosition(slist, newStrId);
+
+                spinnerStr.setSelection(newStrSpinnerPosition);
+            }
+            // Returned from Add new string without adding any new string
+            if (resultCode == 10){
+                String instrBrandName = data.getStringExtra("instrBrandName");
+                String instrModelName = data.getStringExtra("instrModelName");
+                isAcoustic = data.getBooleanExtra("isAcoustic", false); // make sure this works
+                String instrType = data.getStringExtra("instrType");
+
+                iBrand.setText(instrBrandName);
+                iModel.setText(instrModelName);
+                acousticCheckBox.setChecked(isAcoustic);
+                spinnerInstrTypes.setSelection(dataAdapter.getPosition(instrType));
+                dataAdapterStr.notifyDataSetChanged();
+
             }
         }
     }
@@ -221,14 +252,29 @@ public class AddNewInstrument extends AppCompatActivity {
         System.out.println("Str"+S1.getStrState());
 
         Intent resultIntent = new Intent();
-        // TODO: Then, I1.setAcoustic() to true or false depending on boolean isAcoustic value
-        // TODO: Add instr info (brandName + modelName + instrType + isAcoustic + attachedString, etc) into an instr object and add into DB (look into config to see how this is done)
         resultIntent.putExtra("appstate", A1.getAppState());
         resultIntent.putExtra("inststate", I1.getInstState());
         resultIntent.putExtra("strstate", S1.getStrState());
 
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private int findPosition(ArrayList <String> x, int id){
+        if (x == null){
+            return 0;
+        }
+        int pos = 0;
+        String s;
+        for(int i = 0; i < x.size(); ++i){
+            s = x.get(i);
+            String token = s.split(":")[1];
+            int tmpid = Integer.parseInt(token.split(" ")[0].trim());
+            if(id == tmpid){
+                pos = i;
+            }
+        }
+        return pos;
     }
 
     // takes user to AddNewStringFromAddNewInstr.java
@@ -249,5 +295,7 @@ public class AddNewInstrument extends AppCompatActivity {
         intent.putExtra("iName", "null");
         startActivityForResult(intent, ADD_NEW_STRING_REQUEST);
     }
+
+
 
 }

@@ -333,6 +333,12 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
+
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -356,6 +362,7 @@ public class Configuration2 extends AppCompatActivity {
 
                     promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
+
                     try {
                         updateSpinners();
                     } catch (SQLException throwables) {
@@ -363,13 +370,13 @@ public class Configuration2 extends AppCompatActivity {
                     }
                     dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
                     strDataAdapter.notifyDataSetChanged();
-                    // TODO: Update instrument Spinner to show current instrument (what command for DB to get instr name?)
-                    String iName = data.getStringExtra("iName");
-                    String sName = data.getStringExtra("sName");
-                    spinner1.setSelection(dataAdapter.getPosition(iName));
-                    spinner2.setSelection(strDataAdapter.getPosition(sName));
 
-                    Toast.makeText(Configuration2.this, "Updated Instrument \"" + iName + "\" and string "+ sName, Toast.LENGTH_SHORT).show();
+                    int newInstrId = I1.getInstrID();
+                    int newStrId = S1.getStringsID();
+
+                    spinner1.setSelection(findPosition(instrList, newInstrId));
+                    spinner2.setSelection(findPosition(stringsList, newStrId));
+
                 }
 
 
@@ -379,8 +386,6 @@ public class Configuration2 extends AppCompatActivity {
         // When a user deletes an instrument and then selects a string, this code then updates the spinners and states
         if (requestCode == NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                addedInstruments = data.getStringArrayListExtra("addInstrList");
-                int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
                 try {
                     updateSpinners();
                 } catch (SQLException throwables) {
@@ -388,7 +393,12 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
-                spinner1.setSelection(newCurrInstIndex);
+
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -403,7 +413,11 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
-                // TODO: Change selection of str spinner to new string
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -418,6 +432,11 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
     }
