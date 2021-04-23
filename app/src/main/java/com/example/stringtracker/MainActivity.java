@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     Button buttonSelInst;
     private String selInstrText;
     private String selStrText;
-    private final boolean TESTMODE = false;  /// set false for production
+    private final boolean TESTMODE = true;  /// set false for production
     private final boolean ENABLE_SENT = true;  /// set default for production
     private final int MAX_SESS_TIME = 200;  /// set default for production
 
