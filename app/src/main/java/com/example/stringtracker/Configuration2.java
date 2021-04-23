@@ -287,7 +287,11 @@ public class Configuration2 extends AppCompatActivity {
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();
                 currInstIndex = spinner1.getSelectedItemPosition();
-                currInstName = instrList.get(currInstIndex);
+                if(instrList.size()>0){
+                    currInstName = instrList.get(currInstIndex);
+                } else {
+                    currInstName = "none";
+                }
                 intent.putExtra("iName", currInstName);
                 intent.putExtra("appstate", appState);   // *** forward object states
                 intent.putExtra("inststate", instState);
@@ -419,9 +423,9 @@ public class Configuration2 extends AppCompatActivity {
         A1.saveRunState();  // be sure we have a copy of states stored
     }
 
-    public void addInstrs(ArrayList<String> arr){ // delete this?
-        instrList.addAll(arr);
-    }
+    //public void addInstrs(ArrayList<String> arr){ // delete this?
+    //    instrList.addAll(arr);
+    //}
 
     // Force user to select a new instrument after deletion of an instrument
     public void promptSelectNewInstr(){
@@ -468,7 +472,11 @@ public class Configuration2 extends AppCompatActivity {
         String instState = I1.getInstState();
         String strState = S1.getStrState();
         currInstIndex = spinner1.getSelectedItemPosition();
-        currInstName = instrList.get(currInstIndex);
+        if(instrList.size()>0){
+            currInstName = instrList.get(currInstIndex);
+        } else {
+            currInstName = "none";
+        }
 
         Intent intent = new Intent(this, AddNewStringFromConfig.class);
 

@@ -86,7 +86,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
     public void addNewStr(View view){
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
-        instrType = spinnerStrInstrType.getSelectedItem().toString();
+        //instrType = spinnerStrInstrType.getSelectedItem().toString();
         String strTension = spinnerStrTension.getSelectedItem().toString();
         float strCost;
         try {
@@ -101,7 +101,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         S1.setTension(strTension);
         S1.setCost(strCost);
         S1.insertStrings(context);  // insert to DB
-
+        System.out.println("DEBUG== Str to DB "+strBrandName+"-"+strModelName+" "+instrType+" "+strTension+" "+strCost+" ");
 
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
