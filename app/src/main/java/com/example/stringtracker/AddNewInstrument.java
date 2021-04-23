@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -111,6 +112,19 @@ public class AddNewInstrument extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // can leave this empty
+            }
+        });
+
+        Button buttonRet = findViewById(R.id.buttonReturnAddNewInstr);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
             }
         });
 
@@ -271,5 +285,7 @@ public class AddNewInstrument extends AppCompatActivity {
         intent.putExtra("iName", "null");
         startActivityForResult(intent, ADD_NEW_STRING_REQUEST);
     }
+
+
 
 }
