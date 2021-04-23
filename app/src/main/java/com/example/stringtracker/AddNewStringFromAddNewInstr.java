@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 // This activity is accessed from the AddNewInstrument.java activity OR the EditInstrument.java activity
 // ^ They both disallow changing instrument type of the string we're adding
 // We will have a separate activity for the adding new strings from the Configuration activity
@@ -83,7 +86,7 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         spinnerStrTension.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
-    public void addNewStr(View view){
+    public void addNewStr(View view) throws SQLException {
         String strBrandName = newStrBrandNamePrompt.getText().toString();
         String strModelName = newStrModelNamePrompt.getText().toString();
         //instrType = spinnerStrInstrType.getSelectedItem().toString();
@@ -101,8 +104,19 @@ public class AddNewStringFromAddNewInstr extends AppCompatActivity {
         S1.setTension(strTension);
         S1.setCost(strCost);
         S1.insertStrings(context);  // insert to DB
+        A1.setStringsCnt(A1.getStringsCnt()+1);  // update appState
         System.out.println("DEBUG== Str to DB "+strBrandName+"-"+strModelName+" "+instrType+" "+strTension+" "+strCost+" ");
 
+        // Since we use auto-generated StringsID in DB we need to get it from the last record written
+        // and set in I1 before return to AddNewInstr
+        ArrayList<String> alist = S1.getStringsStrList(context, instrType);
+        String tmp = alist.get(alist.size()-1);
+        System.out.println("##=== lastitem"+tmp);
+        String token = tmp.split(":")[1];
+        int newstrid = Integer.parseInt(token.split(" ")[0].trim());
+        I1.setStringsID(newstrid);
+        S1.setStringsID(newstrid);
+        ///////////////////
         Intent resultIntent = new Intent();
         // TODO: Add instr info (brandName + modelName + instrType + cost + tension) into a str object and add into DB, linking it to the current instrument
         resultIntent.putExtra("appstate", A1.getAppState());

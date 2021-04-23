@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Configuration2 extends AppCompatActivity {
@@ -78,7 +80,7 @@ public class Configuration2 extends AppCompatActivity {
 
         configTextView = (TextView) findViewById(R.id.configTextView);
 
-        int spinnercnt = 0;
+        //int spinnercnt = 0;
         //updateDisplay();
         try {       // *** with DB access we need to deal with exceptions
             populateList();
@@ -98,7 +100,7 @@ public class Configuration2 extends AppCompatActivity {
         // TODO  set starting position for spinner not working
 
         spinner1.setSelection(findPosition(instrList, I1.getInstrID()));
-        spinner2.setSelection(2);//findPosition(stringsList, I1.getStringsID()));
+        spinner2.setSelection(findPosition(stringsList, I1.getStringsID()));
         // *** Actions upon selection for spinners
         // Select Instrument
 
@@ -109,10 +111,10 @@ public class Configuration2 extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                String tmp = instrList.get(position);
-                String token = tmp.split(":")[1];
-                int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
                 if(userIsInteracting) {
+                    String tmp = instrList.get(position);
+                    String token = tmp.split(":")[1];
+                    int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
                     // set new instrumentID load new Instrument and StringSet from DB
                     A1.setInstrID(newinstrid);
                     I1.loadInstr(newinstrid, context);  // get selected instr from DB
@@ -145,9 +147,11 @@ public class Configuration2 extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                 String tmp = stringsList.get(position);
-                String token = tmp.split(":")[1];
-                newStringsID = Integer.parseInt(token.split(" ")[0].trim());
+                if(userIsInteracting) {
+                    String tmp = stringsList.get(position);
+                    String token = tmp.split(":")[1];
+                    newStringsID = Integer.parseInt(token.split(" ")[0].trim());
+                }
             }
 
             @Override
@@ -226,7 +230,7 @@ public class Configuration2 extends AppCompatActivity {
         I1.init();   // clear for new string cycle
         I1.updateInstr(I1.getInstrID(), context);  // be sure to update DB item for new strings selected
         A1.init();  // clear internal time values
-
+        I1.setChangeTimeStamp(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
         saveState();  // be sure changes are saved
 
     }
@@ -315,6 +319,8 @@ public class Configuration2 extends AppCompatActivity {
         A1.setAppState(appState);  // Restore data object states on return
         I1.setInstState(instState);
         S1.setStrState(strState);
+        saveState();  // save state just in case
+
         //System.out.println("*** Ret2Config2 Instrument State:"+instState);
 
         // New instrument added

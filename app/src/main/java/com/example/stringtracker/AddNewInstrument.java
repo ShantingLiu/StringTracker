@@ -26,7 +26,7 @@ public class AddNewInstrument extends AppCompatActivity {
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
-    Instrument I2 = new Instrument();
+    //Instrument I2 = new Instrument();
     Context context = AddNewInstrument.this;
     String appState;  // *** update local A1, I1, S1 objects to present state
     String instState;
@@ -56,7 +56,7 @@ public class AddNewInstrument extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
-        I2.init();
+        I1.init();
 
         acousticCheckBox.setChecked(isAcoustic);
 
@@ -80,12 +80,12 @@ public class AddNewInstrument extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 // create a new adapter with the corresponding values
                 instrType = spinnerInstrTypes.getItemAtPosition(spinnerInstrTypes.getSelectedItemPosition()).toString(); //.toLowerCase();
-                I2.setType(instrType);
+                I1.setType(instrType);
 
                 //S1.loadStrings(I1.getStringsID(), context); // maybe we don't need this line
                 slist.clear();
                 try {
-                    slist = S1.getStringsStrList(context, I2.getType());
+                    slist = S1.getStringsStrList(context, I1.getType());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
@@ -104,7 +104,7 @@ public class AddNewInstrument extends AppCompatActivity {
                 String tmp = slist.get(position);
                 String token = tmp.split(":")[1];
                 int newstringsid = Integer.parseInt(token.split(" ")[0].trim()); // TODO: Check with Keith to see if we need newstringsid here
-                I2.setStringsID(newstringsid);
+                I1.setStringsID(newstringsid);
 
             }
 
@@ -198,11 +198,27 @@ public class AddNewInstrument extends AppCompatActivity {
         String instrModelName = iModel.getText().toString();
         boolean acoustic = acousticCheckBox.isChecked();
         instrType = spinnerInstrTypes.getSelectedItem().toString();
-        I2.setBrand(instrBrandName);
-        I2.setModel(instrModelName);
-        I2.setAcoustic(acoustic);
-        I2.setType(instrType);
-        I2.insertInstr(context);  // adds to DB
+        I1.init();
+        I1.setBrand(instrBrandName);
+        I1.setModel(instrModelName);
+        I1.setAcoustic(acoustic);
+        I1.setType(instrType);
+        I1.setStringsID(S1.getStringsID());
+        I1.insertInstr(context);  // adds to DB
+
+        A1.setInstrumentCnt(A1.getInstrumentCnt()+1);  // update appState
+        // Since we use auto-generated StringsID in DB we need to get it from the last record written
+        // and set in I1 before return to AddNewInstr
+        ArrayList<String> alist = I1.getInstrStrList(context);
+        String tmp = alist.get(alist.size()-1);
+        String token = tmp.split(":")[1];
+        int newinstid = Integer.parseInt(token.split(" ")[0].trim());
+        I1.setInstrID(newinstid);
+        A1.setInstrID(newinstid);
+
+        System.out.println("App:"+A1.getAppState());
+        System.out.println("Ins:"+I1.getInstState());
+        System.out.println("Str"+S1.getStrState());
 
         Intent resultIntent = new Intent();
         // TODO: Then, I1.setAcoustic() to true or false depending on boolean isAcoustic value

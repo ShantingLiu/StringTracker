@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     Button buttonSelInst;
     private String selInstrText;
     private String selStrText;
+    private final boolean TESTMODE = true;  /// set false for production
+    private final boolean ENABLE_SENT = true;  /// set default for production
+    private final int MAX_SESS_TIME = 200;  /// set default for production
 
     // main data objects
     AppState A1 = new AppState();
@@ -84,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         }
 
         // DEBUG forced settings for preferences
-        A1.setTestMode(true);
-        A1.setEnableSent(true);
-        A1.setMaxSessionTime(200);
+        A1.setTestMode(TESTMODE);
+        A1.setEnableSent(ENABLE_SENT);
+        A1.setMaxSessionTime(MAX_SESS_TIME);
         //S1.setAvgLife(800);
 
         // Start/Stop Session Button
@@ -165,11 +168,15 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
         }
         updateSelDisplay(null);
-        timeDebugTV.setBackgroundResource(R.color.background1);
+        System.out.println("App:"+A1.getAppState());
+        System.out.println("Ins:"+I1.getInstState());
+        System.out.println("Str"+S1.getStrState());
+
+        /*timeDebugTV.setBackgroundResource(R.color.background1);
         String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
                 + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
         timeDebugTV.setText(timeText);
-        timeDebugTV.setVisibility(View.VISIBLE);
+        timeDebugTV.setVisibility(View.VISIBLE);*/
     }
 
     // helper to restore app and data object states
@@ -265,6 +272,11 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                 A1.setAppState(appState);  // Restore data object states on return
                 I1.setInstState(instState);
                 S1.setStrState(strState);
+                // DEBUG
+                A1.setTestMode(TESTMODE);  // set to default state
+                A1.setEnableSent(ENABLE_SENT);
+                A1.setMaxSessionTime(MAX_SESS_TIME);
+
                 System.out.println("*** RETURN to MAIN InstrID = "+I1.getInstrID());
                 updateSelDisplay(null);
                 saveAppState();

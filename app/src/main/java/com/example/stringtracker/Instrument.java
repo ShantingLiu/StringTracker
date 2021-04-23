@@ -53,16 +53,16 @@ public class Instrument extends Activity {
     // constructor default values
     Instrument(){
         InstrID = 0;
-        Brand = "";
-        Model = "";
-        Type = "";
+        Brand = "-";
+        Model = "-";
+        Type = "-";
         Acoustic = true;
         StringsID = 0;
-        InstallTimeStamp = "";
-        ChangeTimeStamp = "";
+        InstallTimeStamp = "-";
+        ChangeTimeStamp = "-";
         PlayTime = 0;
         SessionCnt = 0;
-        CurrSessionStart = "";
+        CurrSessionStart = "-";
         LastSessionTime = 0;
         SessionInProgress = false;
     }
