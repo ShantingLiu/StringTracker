@@ -456,7 +456,8 @@ public class StringSet {
             Cost = cursor.getFloat(5);
             AvgLife = cursor.getInt(6);
             ChangeCnt = cursor.getInt(7);
-            FirstSession = Boolean.valueOf(cursor.getString(8));  //???
+            FirstSession = cursor.getInt(8)!=0;  //???
+//            FirstSession = Boolean.valueOf(cursor.getString(8));  //???
             AvgProjStr = cursor.getString(9);
             AvgToneStr = cursor.getString(10);
             AvgIntonStr = cursor.getString(11);

@@ -77,6 +77,8 @@ public class Configuration2 extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+        I1.loadInstr(I1.getInstrID(), context);
+        System.out.println("Acoustic STATE:"+I1.getAcoustic());
 
         configTextView = (TextView) findViewById(R.id.configTextView);
 
@@ -170,6 +172,7 @@ public class Configuration2 extends AppCompatActivity {
                 resultIntent.putExtra("appstate", A1.getAppState());
                 resultIntent.putExtra("inststate", I1.getInstState());
                 resultIntent.putExtra("strstate", S1.getStrState());
+                saveState();
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
