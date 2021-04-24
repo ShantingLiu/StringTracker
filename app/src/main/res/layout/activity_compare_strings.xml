@@ -6,21 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".CompareStrings">
 
-    <Button
-        android:id="@+id/buttonRet3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#A80A0A"
-        android:backgroundTintMode="add"
-        android:text="Return"
-        android:textSize="18sp"
-        app:iconTint="#A80A0A"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
     <Spinner
         android:id="@+id/spinnerString2"
         android:layout_width="412dp"
@@ -28,7 +13,6 @@
         android:layout_marginTop="88dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerInstrumentTypes" />
-
 
     <Spinner
         android:id="@+id/spinnerInstrumentTypes"
@@ -120,7 +104,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonIntonation" />
 
-
-
-
+     <Button
+        android:id="@+id/buttonRet3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#A80A0A"
+        android:backgroundTintMode="add"
+        android:text="Return"
+        android:textSize="18sp"
+        app:iconTint="#A80A0A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

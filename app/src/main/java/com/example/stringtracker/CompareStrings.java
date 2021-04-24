@@ -18,9 +18,6 @@ import java.util.ArrayList;
 
 public class CompareStrings extends AppCompatActivity {
 
-
-
-
     // local copies of the main stringset, instrument, and appstate objects
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
@@ -57,8 +54,8 @@ public class CompareStrings extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_compare_strings);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_compare_strings);
 
         String appState;
         String instState;
