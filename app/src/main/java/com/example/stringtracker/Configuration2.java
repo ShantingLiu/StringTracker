@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +47,11 @@ public class Configuration2 extends AppCompatActivity {
 
     private Button buttonRet;  // *** needed to pass info back to main
     private Button addNewInstrButton;
+    private Button buttonSavePrefs;  // Preferences
+    private CheckBox checkBoxEnSent;
+    private CheckBox checkBoxTestMode;
+    private EditText editTextMaxSess;
+
     private ArrayList<String> instrList = new ArrayList<>();
     private ArrayList<String> addedInstruments = new ArrayList<>();
 
@@ -80,10 +86,14 @@ public class Configuration2 extends AppCompatActivity {
         I1.loadInstr(I1.getInstrID(), context);
         System.out.println("Acoustic STATE:"+I1.getAcoustic());
 
-        configTextView = (TextView) findViewById(R.id.configTextView);
+        configTextView = (TextView) findViewById(R.id.configTextView);   // Prefs
+        editTextMaxSess = (EditText) findViewById(R.id.editTextMaxSess);
+        checkBoxEnSent = (CheckBox) findViewById(R.id.checkBoxEnSent);
+        checkBoxTestMode = (CheckBox) findViewById(R.id.checkBoxTestMode);
+        editTextMaxSess.setText(String.valueOf(A1.getMaxSessionTime()));
+        checkBoxEnSent.setChecked(A1.getEnableSent());
+        checkBoxTestMode.setChecked(A1.getTestMode());
 
-        //int spinnercnt = 0;
-        //updateDisplay();
         try {       // *** with DB access we need to deal with exceptions
             populateList();
         } catch (SQLException throwables) {
@@ -164,6 +174,18 @@ public class Configuration2 extends AppCompatActivity {
         });
 
         // Return button - a good idea to keep this with state passing intact
+        buttonSavePrefs = findViewById(R.id.buttonSavePrefs);
+        buttonSavePrefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                A1.setEnableSent(checkBoxEnSent.isChecked() );
+                A1.setTestMode(checkBoxTestMode.isChecked());
+                A1.setMaxSessionTime(Integer.parseInt(String.valueOf(editTextMaxSess.getText())));
+                saveState();
+            }
+        });
+
+        // Return button - a good idea to keep this with state passing intact
         buttonRet = findViewById(R.id.buttonReturn);
         buttonRet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +199,6 @@ public class Configuration2 extends AppCompatActivity {
                 finish();
             }
         });
-
     } ///////// OnCreate() /////////////////////////////////
 
     // *** Quick search for id position in array list
@@ -323,6 +344,9 @@ public class Configuration2 extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
         saveState();  // save state just in case
+        editTextMaxSess.setText(String.valueOf(A1.getMaxSessionTime()));
+        checkBoxEnSent.setChecked(A1.getEnableSent());
+        checkBoxTestMode.setChecked(A1.getTestMode());
 
         //System.out.println("*** Ret2Config2 Instrument State:"+instState);
 
