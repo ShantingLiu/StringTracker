@@ -78,7 +78,7 @@ public class Analytics extends AppCompatActivity {
         String selStrings =  "String Set ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel()+" ("+S1.getType()+") \n"
                 +"Last Changed: "+I1.getChangeTimeStamp().split(" ")[0];
         String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  Time played:"+I1.getPlayTime()+"min  Life remaining:"+pctLife+"%";
-        String strStats2 =  "Cost/hr(current):"+String.format("%.2f", costPerHr)+" $/hr   Cost/hr(expected):"+String.format("%.2f",costPerHrExp)+" $/hr";
+        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr   Cost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
         analyticsTV.setText("Analytics for Current Selection");
         instrLabelTV.setText(selInstr);
         stringsLabelTV.setText(selStrings);
