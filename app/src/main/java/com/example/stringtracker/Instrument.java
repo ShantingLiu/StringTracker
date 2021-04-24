@@ -310,7 +310,7 @@ public class Instrument extends Activity {
         boolean didSucceed = false;
         InstrDBHelper dbHelper = new InstrDBHelper(context);
 
-        System.out.println("*** Start DB INSERT");
+        System.out.println("*** Start DB INSERT ");
         try {
             ContentValues initialValues = new ContentValues();
             //setContext(this);
@@ -352,7 +352,7 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
     boolean didSucceed = false;
     InstrDBHelper dbHelper = new InstrDBHelper(context);
 
-    System.out.println("*** Start DB UPDATE");
+    System.out.println("*** Start DB UPDATE - Acoustic="+Acoustic);
     try {
         ContentValues contentValues = new ContentValues();
         //setContext(this);
@@ -403,13 +403,13 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
                     "InstallTimeStamp, ChangeTimeStamp, PlayTime, SessionCnt, CurrSessionStart, " +
                     "LastSessionTime, SessionInProgress  from "+DB_NAME+" where InstrumentID="+InsID;
             Cursor cursor = database.rawQuery(query, null);
-
             cursor.moveToFirst();
             InstrID = cursor.getInt(0);
             Brand = cursor.getString(1);
             Model = cursor.getString(2);
             Type = cursor.getString(3);
-            Acoustic = Boolean.valueOf(cursor.getString(4));  //???
+            //Acoustic = Boolean.parseBoolean(cursor.getString(4));  //???
+            Acoustic = cursor.getInt(4)!=0;  //???
             StringsID = cursor.getInt(5);
             InstallTimeStamp = cursor.getString(6);
             ChangeTimeStamp = cursor.getString(7);
@@ -417,10 +417,11 @@ public boolean updateInstr(int InsID, Context context) throws SQLException {   /
             SessionCnt = cursor.getInt(9);
             CurrSessionStart = cursor.getString(10);
             LastSessionTime = cursor.getInt(11);
-            SessionInProgress = Boolean.valueOf(cursor.getString(12));  //???
+            SessionInProgress = cursor.getInt(12)!=0;  //???
+            //SessionInProgress = Boolean.parseBoolean(cursor.getString(12));  //???
 
             cursor.close();
-            System.out.println("*** DB Load Record Success!  InstrID = "+InstrID+" PlayTime = "+PlayTime+" SessCnt = "+SessionCnt);
+            System.out.println("*** DB Load Record Success!  InstrID="+InstrID+" PlayTime="+PlayTime+" SessCnt="+SessionCnt+" Acoustic="+Acoustic);
             didSucceed = true;
         }
         catch (Exception e) {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -55,6 +56,19 @@ public class AddNewStringFromConfig extends AppCompatActivity {
         addListenerOnStrTensionSpinnerItemSelection();
         addItemsOnStrInstrTypeSpinner();
         addListenerOnStrInstrTypeSpinnerItemSelection();
+
+        Button buttonRet = findViewById(R.id.buttonReturnAddNewStr2);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 
     public void addItemsOnStrTensionSpinner(){

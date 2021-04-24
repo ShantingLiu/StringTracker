@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +47,11 @@ public class Configuration2 extends AppCompatActivity {
 
     private Button buttonRet;  // *** needed to pass info back to main
     private Button addNewInstrButton;
+    private Button buttonSavePrefs;  // Preferences
+    private CheckBox checkBoxEnSent;
+    private CheckBox checkBoxTestMode;
+    private EditText editTextMaxSess;
+
     private ArrayList<String> instrList = new ArrayList<>();
     private ArrayList<String> addedInstruments = new ArrayList<>();
 
@@ -77,11 +83,17 @@ public class Configuration2 extends AppCompatActivity {
         A1.setAppState(appState);
         I1.setInstState(instState);
         S1.setStrState(strState);
+        I1.loadInstr(I1.getInstrID(), context);
+        System.out.println("Acoustic STATE:"+I1.getAcoustic());
 
-        configTextView = (TextView) findViewById(R.id.configTextView);
+        configTextView = (TextView) findViewById(R.id.configTextView);   // Prefs
+        editTextMaxSess = (EditText) findViewById(R.id.editTextMaxSess);
+        checkBoxEnSent = (CheckBox) findViewById(R.id.checkBoxEnSent);
+        checkBoxTestMode = (CheckBox) findViewById(R.id.checkBoxTestMode);
+        editTextMaxSess.setText(String.valueOf(A1.getMaxSessionTime()));
+        checkBoxEnSent.setChecked(A1.getEnableSent());
+        checkBoxTestMode.setChecked(A1.getTestMode());
 
-        //int spinnercnt = 0;
-        //updateDisplay();
         try {       // *** with DB access we need to deal with exceptions
             populateList();
         } catch (SQLException throwables) {
@@ -162,6 +174,18 @@ public class Configuration2 extends AppCompatActivity {
         });
 
         // Return button - a good idea to keep this with state passing intact
+        buttonSavePrefs = findViewById(R.id.buttonSavePrefs);
+        buttonSavePrefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                A1.setEnableSent(checkBoxEnSent.isChecked() );
+                A1.setTestMode(checkBoxTestMode.isChecked());
+                A1.setMaxSessionTime(Integer.parseInt(String.valueOf(editTextMaxSess.getText())));
+                saveState();
+            }
+        });
+
+        // Return button - a good idea to keep this with state passing intact
         buttonRet = findViewById(R.id.buttonReturn);
         buttonRet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,11 +194,11 @@ public class Configuration2 extends AppCompatActivity {
                 resultIntent.putExtra("appstate", A1.getAppState());
                 resultIntent.putExtra("inststate", I1.getInstState());
                 resultIntent.putExtra("strstate", S1.getStrState());
+                saveState();
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });
-
     } ///////// OnCreate() /////////////////////////////////
 
     // *** Quick search for id position in array list
@@ -320,6 +344,9 @@ public class Configuration2 extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
         saveState();  // save state just in case
+        editTextMaxSess.setText(String.valueOf(A1.getMaxSessionTime()));
+        checkBoxEnSent.setChecked(A1.getEnableSent());
+        checkBoxTestMode.setChecked(A1.getTestMode());
 
         //System.out.println("*** Ret2Config2 Instrument State:"+instState);
 
@@ -333,6 +360,12 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
+
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -356,6 +389,7 @@ public class Configuration2 extends AppCompatActivity {
 
                     promptSelectNewInstr(); //TODO: DEBUG - not getting here
                 } else { // update instrument command
+
                     try {
                         updateSpinners();
                     } catch (SQLException throwables) {
@@ -363,13 +397,13 @@ public class Configuration2 extends AppCompatActivity {
                     }
                     dataAdapter.notifyDataSetChanged(); // should this go above updateSpinners try-catch?
                     strDataAdapter.notifyDataSetChanged();
-                    // TODO: Update instrument Spinner to show current instrument (what command for DB to get instr name?)
-                    String iName = data.getStringExtra("iName");
-                    String sName = data.getStringExtra("sName");
-                    spinner1.setSelection(dataAdapter.getPosition(iName));
-                    spinner2.setSelection(strDataAdapter.getPosition(sName));
 
-                    Toast.makeText(Configuration2.this, "Updated Instrument \"" + iName + "\" and string "+ sName, Toast.LENGTH_SHORT).show();
+                    int newInstrId = I1.getInstrID();
+                    int newStrId = S1.getStringsID();
+
+                    spinner1.setSelection(findPosition(instrList, newInstrId));
+                    spinner2.setSelection(findPosition(stringsList, newStrId));
+
                 }
 
 
@@ -379,8 +413,6 @@ public class Configuration2 extends AppCompatActivity {
         // When a user deletes an instrument and then selects a string, this code then updates the spinners and states
         if (requestCode == NEW_INSTR_REQUEST) {
             if (resultCode == RESULT_OK) {
-                addedInstruments = data.getStringArrayListExtra("addInstrList");
-                int newCurrInstIndex = data.getIntExtra("selInstrIndex", 0);
                 try {
                     updateSpinners();
                 } catch (SQLException throwables) {
@@ -388,7 +420,12 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
-                spinner1.setSelection(newCurrInstIndex);
+
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -403,7 +440,11 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
-                // TODO: Change selection of str spinner to new string
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
 
@@ -418,6 +459,11 @@ public class Configuration2 extends AppCompatActivity {
                 }
                 dataAdapter.notifyDataSetChanged();
                 strDataAdapter.notifyDataSetChanged();
+                int newInstrId = I1.getInstrID();
+                int newStrId = S1.getStringsID();
+
+                spinner1.setSelection(findPosition(instrList, newInstrId));
+                spinner2.setSelection(findPosition(stringsList, newStrId));
             }
         }
     }

@@ -67,17 +67,18 @@ public class Analytics extends AppCompatActivity {
         float costPerHr = 0.0f;
         float costPerHrExp = 0.0f;
         if(I1.getSessionCnt()>0){
-            pctLife = 100 - (int)(100.0*(float)I1.getPlayTime()/(float)S1.getAvgLife());
             costPerHr = (S1.getCost()/(float)((float)I1.getPlayTime()/60.0f));
             if(S1.getAvgLife()>0){
+                pctLife = 100 - (int)(100.0*(float)I1.getPlayTime()/(float)S1.getAvgLife());
                 costPerHrExp = (S1.getCost()/(float)((float)S1.getAvgLife()/60.0f));
             }
         }
+
         String selInstr =  "Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel()+" ("+I1.getType()+")";
         String selStrings =  "String Set ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel()+" ("+S1.getType()+") \n"
                 +"Last Changed: "+I1.getChangeTimeStamp().split(" ")[0];
         String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  Time played:"+I1.getPlayTime()+"min  Life remaining:"+pctLife+"%";
-        String strStats2 =  "Cost/hr(current):"+String.format("%.2f", costPerHr)+" $/hr   Cost/hr(expected):"+String.format("%.2f",costPerHrExp)+" $/hr";
+        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr   Cost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
         analyticsTV.setText("Analytics for Current Selection");
         instrLabelTV.setText(selInstr);
         stringsLabelTV.setText(selStrings);

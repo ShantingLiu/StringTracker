@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -69,6 +70,19 @@ public class EditString extends AppCompatActivity {
         spinnerStrTension.setSelection(strDataAdapter.getPosition(strTension));
         spinnerStrInstrType.setSelection(DataAdapter.getPosition(instrType));
 
+        // Return button - a good idea to keep this with state passing intact
+        Button buttonRet = findViewById(R.id.buttonReturnEditStr);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 
     public void addItemsOnStrTensionSpinner(){

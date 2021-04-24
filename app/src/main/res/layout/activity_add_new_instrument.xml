@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".AddNewInstrument">
 
+    <Button
+        android:id="@+id/buttonReturnAddNewInstr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#A80A0A"
+        android:backgroundTintMode="add"
+        android:text="Return"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/addNewStrHeader"
         android:layout_width="wrap_content"

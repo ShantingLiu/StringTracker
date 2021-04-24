@@ -6,7 +6,105 @@
     android:layout_height="match_parent"
     tools:context=".CompareStrings">
 
+    <Spinner
+        android:id="@+id/spinnerString2"
+        android:layout_width="412dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="88dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerInstrumentTypes" />
+
+    <Spinner
+        android:id="@+id/spinnerInstrumentTypes"
+        android:layout_width="412dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="13dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStringCompare" />
+
+    <Spinner
+        android:id="@+id/spinnerString1"
+        android:layout_width="412dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerInstrumentTypes" />
+
+    <TextView
+        android:id="@+id/textViewStringCompare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="31dp"
+        android:text="Select Strings to Compare"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewString2"
+        android:layout_width="190dp"
+        android:layout_height="148dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="24dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/textViewString1"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
+
+    <TextView
+        android:id="@+id/textViewString1"
+        android:layout_width="190dp"
+        android:layout_height="148dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="24dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
+
+    <TextView
+        android:id="@+id/textViewGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="11dp"
+        android:text="View Graphs"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewString2" />
+
     <Button
+        android:id="@+id/buttonProjection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="141dp"
+        android:layout_marginTop="11dp"
+        android:text="Projection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewGraph" />
+
+    <Button
+        android:id="@+id/buttonIntonation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="8dp"
+        android:text="Intonation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonProjection" />
+
+    <Button
+        android:id="@+id/buttonTone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="7dp"
+        android:text="Tone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonIntonation" />
+
+     <Button
         android:id="@+id/buttonRet3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,18 +114,7 @@
         android:backgroundTintMode="add"
         android:text="Return"
         android:textSize="18sp"
+        app:iconTint="#A80A0A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/comparebtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="302dp"
-        android:layout_marginBottom="381dp"
-        android:text="compare"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
