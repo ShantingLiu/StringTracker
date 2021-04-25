@@ -2,6 +2,8 @@ package com.example.stringtracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +22,8 @@ public class IntonationActivityGraph extends AppCompatActivity {
     LineChart lineChart;
     LineDataSet stringIntonationDataSet1;
     LineDataSet stringIntonationDataSet2;
+
+    Button buttonRet;
 
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
@@ -71,7 +75,21 @@ public class IntonationActivityGraph extends AppCompatActivity {
 
 
 
-    }
+        buttonRet = findViewById(R.id.buttonRet8);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                //A1.setInstrumentID(888);
+                //A1.saveRunState();  // DEBUG using stored data file for messaging
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+    }//end of oncreate
 
     public ArrayList<Entry> loadStringIntonation(StringSet x){
         //projection

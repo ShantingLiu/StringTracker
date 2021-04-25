@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -26,7 +28,7 @@ public class LineGraphActivity extends AppCompatActivity  {
     LineDataSet intonationDataSet;
     LineDataSet toneDataSet;
 
-
+    Button buttonRet;
 
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
@@ -77,7 +79,22 @@ public class LineGraphActivity extends AppCompatActivity  {
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
         lineChart.invalidate();
-    }
+
+        buttonRet = findViewById(R.id.buttonRet6);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                //A1.setInstrumentID(888);
+                //A1.saveRunState();  // DEBUG using stored data file for messaging
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+    }//end of oncreate
 
     public ArrayList<Entry>stringProjections(){
         //projection
