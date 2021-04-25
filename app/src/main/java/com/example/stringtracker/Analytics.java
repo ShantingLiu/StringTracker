@@ -2,6 +2,8 @@ package com.example.stringtracker;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,8 @@ public class Analytics extends AppCompatActivity {
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
     Button buttonRet;
+    Button buttonCompStr;
+    Button buttonCurrSent;
     TextView analyticsTV;
     TextView instrLabelTV;
     TextView stringsLabelTV;
@@ -59,6 +63,37 @@ public class Analytics extends AppCompatActivity {
             }
         });
 
+        buttonCompStr = findViewById(R.id.buttonCompStr);
+        buttonCompStr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoCompareStrings(v);
+            }
+        });
+
+        buttonCurrSent = findViewById(R.id.buttonCurrSent);
+        buttonCurrSent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SentGraph SentDialog = new SentGraph();
+                FragmentManager fmanager = getSupportFragmentManager();
+                SentDialog.show(fmanager, "Graph Sentiment");
+
+                /*Intent intent = new Intent();
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivity(intent);*/
+            }
+        });
+
+
+
+
+
     }   // OnCreate
 
     // Method to update the strings statistics textview
@@ -77,8 +112,8 @@ public class Analytics extends AppCompatActivity {
         String selInstr =  "Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel()+" ("+I1.getType()+")";
         String selStrings =  "String Set ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel()+" ("+S1.getType()+") \n"
                 +"Last Changed: "+I1.getChangeTimeStamp().split(" ")[0];
-        String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  Time played:"+I1.getPlayTime()+"min  Life remaining:"+pctLife+"%";
-        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr   Cost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
+        String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  \nTime played:"+I1.getPlayTime()+"min \nLife remaining:"+pctLife+"%";
+        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr \nCost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
         analyticsTV.setText("Analytics for Current Selection");
         instrLabelTV.setText(selInstr);
         stringsLabelTV.setText(selStrings);
