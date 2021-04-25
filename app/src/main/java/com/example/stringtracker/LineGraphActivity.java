@@ -1,63 +1,112 @@
 package com.example.stringtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.EntryXComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LineGraphActivity extends AppCompatActivity  {
 
+//    Context context = LineGraphActivity.this;
+    LineChart lineChart;
+    LineDataSet projectionDataSet;
+    LineDataSet intonationDataSet;
+    LineDataSet toneDataSet;
 
-    LineChart linechart;
+
+
+    AppState A1 = new AppState();
+    StringSet S1 = new StringSet();
+    Instrument I1 = new Instrument();
+    private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_graph);
+        lineChart = findViewById(R.id.lineChart);
 
-        linechart = (LineChart) findViewById(R.id.lineChart);
+        String appState;
+        String instState;
+        String strState;
+        Intent mIntent = getIntent();      // passing stringset object states into compare activity
+        appState = mIntent.getStringExtra("appstate");
+        instState = mIntent.getStringExtra("inststate");
+        strState = mIntent.getStringExtra("strstate");
+        A1.setAppState(appState);
+        I1.setInstState(instState);
+        S1.setStrState(strState);
+
+        // back navigation
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        linechart.setOnChartGestureListener(LineGraphActivity.this);
-//        linechart.setOnChartValueSelectedListener(LineGraphActivity.this);
+        //load projection Data into LineDataSet
+       projectionDataSet = new LineDataSet(stringProjections(), "projection");
+       projectionDataSet.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
 
-//        linechart.setDragEnabled(true);
-//        linechart.setScaleEnabled(false);
+        //load Intonation Data into LineDataSet
+       intonationDataSet = new LineDataSet(stringIntonation(), "Intonation");
+       intonationDataSet.setColor(ColorTemplate.COLORFUL_COLORS[3]);
 
+        //load Tone Data into LineDataSet
+       toneDataSet = new LineDataSet(stringTone(), "Tone");
+       toneDataSet.setColor(ColorTemplate.VORDIPLOM_COLORS[4]);
 
-        ArrayList<Entry> yValues = new ArrayList<>();
-        yValues.add(new Entry(0, 60f));
-        yValues.add(new Entry(1, 50f));
-        yValues.add(new Entry(6, 80f));
-        yValues.add(new Entry(9, 90f));
-        yValues.add(new Entry(3, 40f));
-        yValues.add(new Entry(2, 55f));
+//        System.out.println("aman");
 
-        LineDataSet set1 = new LineDataSet(yValues, "Tonality");
-
-        set1.setFillAlpha(110);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set1);
+        dataSets.add(projectionDataSet);
+        dataSets.add(intonationDataSet);
+        dataSets.add(toneDataSet);
 
         LineData data = new LineData(dataSets);
-
-        linechart.setData(data);
-
-
+        lineChart.setData(data);
+        lineChart.invalidate();
     }
+
+    public ArrayList<Entry>stringProjections(){
+        //projection
+       float projection[] = S1.getAvgProj();
+        ArrayList<Entry> projectionData = new ArrayList<Entry>();
+        for(int i = 0; i < projection.length; i++){
+            projectionData.add(new Entry(projection[i], i));
+        }
+        Collections.sort(projectionData, new EntryXComparator());
+        return projectionData;
+    }
+
+    public ArrayList<Entry>stringIntonation() {
+        float intonation[] = S1.getAvgInton();
+        ArrayList<Entry> intonationData = new ArrayList<>();
+        for(int i = 0; i < intonation.length; i++){
+            intonationData.add(new Entry(intonation[i], i));
+        }
+        Collections.sort(intonationData, new EntryXComparator());
+        return intonationData;
+    }
+    public ArrayList<Entry>stringTone() {
+        float tone[] = S1.getAvgTone();
+        ArrayList<Entry> toneData = new ArrayList<>();
+        for(int i = 0; i < tone.length; i++){
+            toneData.add(new Entry(tone[i], i));
+        }
+        Collections.sort(toneData, new EntryXComparator());
+        return toneData;
+    }
+
 }

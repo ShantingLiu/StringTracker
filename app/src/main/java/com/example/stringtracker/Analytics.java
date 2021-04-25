@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+
 public class Analytics extends AppCompatActivity {
     // main data objects
     AppState A1 = new AppState();
@@ -72,13 +74,23 @@ public class Analytics extends AppCompatActivity {
         });
 
         buttonCurrSent = findViewById(R.id.buttonCurrSent);
+        buttonCurrSent.setVisibility(View.VISIBLE);
         buttonCurrSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SentGraph SentDialog = new SentGraph();
-                FragmentManager fmanager = getSupportFragmentManager();
-                SentDialog.show(fmanager, "Graph Sentiment");
 
+                Intent intent = new Intent(Analytics.this, LineGraphActivity.class);
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivity(intent);
+//                FragmentManager fmanager = getSupportFragmentManager();
+//                SentGraph SentDialog = new SentGraph();
+//                SentDialog.show(fmanager, "Graph Sentiment");
+//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
                 /*Intent intent = new Intent();
                 String appState = A1.getAppState();
                 String instState = I1.getInstState();
@@ -129,6 +141,17 @@ public class Analytics extends AppCompatActivity {
 
     public void gotoCompareStrings(View v){
         Intent intent = new Intent(this, CompareStrings.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        startActivity(intent);
+    }
+
+    public void gotoCurrSentGraph(View v){
+        Intent intent = new Intent(this, LineGraphActivity.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
         String strState = S1.getStrState();

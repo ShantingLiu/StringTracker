@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +29,7 @@ public class CompareStrings extends AppCompatActivity {
     StringSet Sb = new StringSet();
 
 
-    Button buttonRet, projection, tone;
+    Button buttonRet, buttonProjection, buttonTone, buttonIntonation;
     Context context = CompareStrings.this;
 
     //Text Views
@@ -143,11 +144,7 @@ public class CompareStrings extends AppCompatActivity {
                 sA.setType(instrType);
                 sB.setType(instrType);
 
-
-
-
-
-            } // I may have to put something similar to this code on the onActivityResult() from the addString screen
+            }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // nothing selected, so set empty options
@@ -186,7 +183,7 @@ public class CompareStrings extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // can leave this empty
+                //  empty
             }
         });
 
@@ -218,14 +215,126 @@ public class CompareStrings extends AppCompatActivity {
             }
         });
 
-        /*
-           In you graph buttons  Graph Projection
-           strData1 = sA.getAvgProj();
-           strData2 = sB.getAvgProj();
+
+        buttonProjection = findViewById(R.id.buttonProjection);
+        buttonProjection.setVisibility(View.VISIBLE);
+        buttonProjection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(CompareStrings.this, ProjectionComparisonGraph.class);
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                String strStateSa = sA.getStrState();
+                String strStateSb = sB.getStrState();
+//                strData1 = sA.getAvgProj();
+//                strData2 = sB.getAvgProj();
+                intent.putExtra("sA", strStateSa);
+                intent.putExtra("sB", strStateSb);
+                startActivity(intent);
 
 
 
-        */
+
+
+
+//                FragmentManager fmanager = getSupportFragmentManager();
+//                SentGraph SentDialog = new SentGraph();
+//                SentDialog.show(fmanager, "Graph Sentiment");
+//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
+                /*Intent intent = new Intent();
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivity(intent);*/
+            }
+        });
+
+        buttonIntonation = findViewById(R.id.buttonIntonation);
+        buttonIntonation.setVisibility(View.VISIBLE);
+        buttonIntonation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(CompareStrings.this, IntonationActivityGraph.class);
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                String strStateSa = sA.getStrState();
+                String strStateSb = sB.getStrState();
+                intent.putExtra("sA", strStateSa);
+                intent.putExtra("sB", strStateSb);
+                startActivity(intent);
+
+//                FragmentManager fmanager = getSupportFragmentManager();
+//                SentGraph SentDialog = new SentGraph();
+//                SentDialog.show(fmanager, "Graph Sentiment");
+//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
+                /*Intent intent = new Intent();
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivity(intent);*/
+            }
+        });
+
+        buttonTone = findViewById(R.id.buttonTone);
+        buttonTone.setVisibility(View.VISIBLE);
+        buttonTone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(CompareStrings.this, IntonationActivityGraph.class);
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                String strStateSa = sA.getStrState();
+                String strStateSb = sB.getStrState();
+                intent.putExtra("sA", strStateSa);
+                intent.putExtra("sB", strStateSb);
+                startActivity(intent);
+
+//                FragmentManager fmanager = getSupportFragmentManager();
+//                SentGraph SentDialog = new SentGraph();
+//                SentDialog.show(fmanager, "Graph Sentiment");
+//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
+                /*Intent intent = new Intent();
+                String appState = A1.getAppState();
+                String instState = I1.getInstState();
+                String strState = S1.getStrState();
+                intent.putExtra("appstate", appState);   // forward object states
+                intent.putExtra("inststate", instState);
+                intent.putExtra("strstate", strState);
+                startActivity(intent);*/
+            }
+        });
+
+
+
+
+
+//           In you graph buttons  Graph Projection
+
+
+
+
+
         buttonRet = findViewById(R.id.buttonRet3);
         buttonRet.setOnClickListener(new View.OnClickListener() {
             @Override
