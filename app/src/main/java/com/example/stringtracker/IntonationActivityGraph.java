@@ -54,11 +54,13 @@ public class IntonationActivityGraph extends AppCompatActivity {
 
 
         stringIntonationDataSet1 = new LineDataSet(loadStringIntonation(sA), "String 1 Intonation");
-        stringIntonationDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
+        stringIntonationDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        stringIntonationDataSet1.setLineWidth(5);
 
 
         stringIntonationDataSet2 = new LineDataSet(loadStringIntonation(sB), "String 2 Intonation");
         stringIntonationDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
+        stringIntonationDataSet2.setLineWidth(5);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(stringIntonationDataSet1);
@@ -67,6 +69,7 @@ public class IntonationActivityGraph extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        lineChart.animateY(3000);
         lineChart.invalidate();
 
 

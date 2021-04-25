@@ -56,11 +56,13 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
 
         stringProjectionDataSet1 = new LineDataSet(loadStringProjection1(sA), "String 1 ProJ");
         stringProjectionDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        stringProjectionDataSet1.setLineWidth(5);
 //        stringProjectionDataSet1
 
 
         stringProjectionDataSet2 = new LineDataSet(loadStringProjection1(sB), "String 2 ProJ");
         stringProjectionDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
+        stringProjectionDataSet2.setLineWidth(5);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(stringProjectionDataSet1);
@@ -69,6 +71,7 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        lineChart.animateY(3000);
         lineChart.invalidate();
 
 

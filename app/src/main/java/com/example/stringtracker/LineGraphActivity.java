@@ -56,15 +56,18 @@ public class LineGraphActivity extends AppCompatActivity  {
 
         //load projection Data into LineDataSet
        projectionDataSet = new LineDataSet(stringProjections(), "projection");
-       projectionDataSet.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
+       projectionDataSet.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+       projectionDataSet.setLineWidth(5);
 
         //load Intonation Data into LineDataSet
        intonationDataSet = new LineDataSet(stringIntonation(), "Intonation");
        intonationDataSet.setColor(ColorTemplate.COLORFUL_COLORS[3]);
+       intonationDataSet.setLineWidth(5);
 
         //load Tone Data into LineDataSet
        toneDataSet = new LineDataSet(stringTone(), "Tone");
        toneDataSet.setColor(ColorTemplate.VORDIPLOM_COLORS[4]);
+       toneDataSet.setLineWidth(5);
 
 //        System.out.println("aman");
 
@@ -76,6 +79,7 @@ public class LineGraphActivity extends AppCompatActivity  {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        lineChart.animateY(3000);
         lineChart.invalidate();
     }
 
