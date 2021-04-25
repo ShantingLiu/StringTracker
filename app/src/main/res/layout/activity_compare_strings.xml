@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".CompareStrings">
 
+    <TextView
+        android:id="@+id/stringLableTV2"
+        android:layout_width="177dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="17dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/stringLableTV1"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
+
     <Spinner
         android:id="@+id/spinnerString2"
         android:layout_width="412dp"
@@ -43,21 +53,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewString2"
+        android:id="@+id/stringStatsTV2"
         android:layout_width="190dp"
         android:layout_height="148dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="52dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textViewString1"
+        app:layout_constraintStart_toEndOf="@+id/stringStatsTV1"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
 
     <TextView
-        android:id="@+id/textViewString1"
+        android:id="@+id/stringStatsTV1"
         android:layout_width="190dp"
         android:layout_height="148dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
@@ -66,13 +76,13 @@
         android:id="@+id/textViewGraph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="8dp"
         android:text="View Graphs"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewString2" />
+        app:layout_constraintTop_toBottomOf="@+id/stringStatsTV2" />
 
     <Button
         android:id="@+id/buttonProjection"
@@ -117,4 +127,14 @@
         app:iconTint="#A80A0A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/stringLableTV1"
+        android:layout_width="177dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="17dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

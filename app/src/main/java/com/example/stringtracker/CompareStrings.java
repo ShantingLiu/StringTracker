@@ -10,9 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -24,12 +24,29 @@ public class CompareStrings extends AppCompatActivity {
     StringSet S2 = new StringSet();   // 2nd stringset for comparison
     Instrument I1 = new Instrument();
 
-    StringSet Sa = new StringSet();
+
     StringSet Sb = new StringSet();
-    Instrument Ia = new Instrument();
+
 
     Button buttonRet, projection, tone;
     Context context = CompareStrings.this;
+
+    //Text Views
+
+
+    TextView stringLabelTV1;
+    TextView stringStatTV1;
+    String strStats1;
+    String selectedString1 = "String Set 1";
+
+    TextView stringLabelTV2;
+    TextView stringStatTV2;
+    String strStats2;
+    String selectedString2 = "String Set 2";
+
+
+
+
 
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     ArrayList<String> slist = new ArrayList<String>();
@@ -68,6 +85,13 @@ public class CompareStrings extends AppCompatActivity {
         I1.setInstState(instState);
         S1.setStrState(strState);
         int strId = S1.getStringsID();  // get current string selection for starting value
+
+        //set textViews
+        stringLabelTV1 = (TextView) findViewById(R.id.stringLableTV1);
+        stringLabelTV2 = (TextView) findViewById(R.id.stringLableTV2);
+        stringStatTV1 = (TextView) findViewById(R.id.stringStatsTV1);
+        stringStatTV2 = (TextView) findViewById(R.id.stringStatsTV2);
+
 
 
         StringSet sA = new StringSet();
@@ -118,6 +142,10 @@ public class CompareStrings extends AppCompatActivity {
                 sA.setType(instrType);
                 sB.setType(instrType);
 
+
+
+
+
             } // I may have to put something similar to this code on the onActivityResult() from the addString screen
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -137,8 +165,22 @@ public class CompareStrings extends AppCompatActivity {
                 int newstrid = Integer.parseInt(token.split(" ")[0].trim());
                 // load selected string data into obj
                 sA.loadStrings(newstrid, context);
+
+
+                //load String stats
+
+                stringLabelTV1.setText(selectedString1);
+                stringLabelTV1.setVisibility(View.VISIBLE);
+
+                String strStats1 = "Brand: " + sA.getBrand() + "\n" + "Model: " + sA.getModel() + "\n"+ "Avg Life: " + sA.getAvgLife()+ "\n" + "Cost: " + sA.getCost();
+                stringStatTV1.setText(strStats1);
+                stringStatTV1.setVisibility(View.VISIBLE);
+
+
+
                 strGraphName1 = sA.getBrand()+"-"+sA.getModel(); // create label for graph item 1
                 System.out.println("strGraphName1="+strGraphName1);
+
             }
 
             @Override
@@ -156,8 +198,17 @@ public class CompareStrings extends AppCompatActivity {
                 int newstrid = Integer.parseInt(token.split(" ")[0].trim());
                 // load selected string data into obj
                 sB.loadStrings(newstrid, context);
+
+                stringLabelTV2.setText(selectedString2);
+                stringLabelTV2.setVisibility(View.VISIBLE);
+                String strStats2 = "Brand: " + sB.getBrand() + "\n" + "Model: " + sB.getModel() + "\n" + "Avg Life: " + sB.getAvgLife() + "\n" + "Cost: " + sB.getCost();
+                stringStatTV2.setText(strStats2);
+                stringStatTV2.setVisibility(View.VISIBLE);
+
+
                 strGraphName2 = sB.getBrand()+"-"+sB.getModel();  // create label for graph item 2
                 System.out.println("strGraphName2="+strGraphName2);
+
             }
 
             @Override
@@ -249,6 +300,32 @@ public class CompareStrings extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> arg0) {
             // TODO Auto-generated method stub
         }
+    }
+
+    public void updateStatsDisplay(){
+        int pctLife = 0;
+        float costPerHr = 0.0f;
+        float costPerHrExp = 0.0f;
+        if(I1.getSessionCnt()>0){
+            costPerHr = (S1.getCost()/(float)((float)I1.getPlayTime()/60.0f));
+            if(S1.getAvgLife()>0){
+                pctLife = 100 - (int)(100.0*(float)I1.getPlayTime()/(float)S1.getAvgLife());
+                costPerHrExp = (S1.getCost()/(float)((float)S1.getAvgLife()/60.0f));
+            }
+        }
+
+//        String selInstr =  "Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel()+" ("+I1.getType()+")";
+//        String selStrings =  "String Set ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel()+" ("+S1.getType()+") \n"
+//                +"Last Changed: "+I1.getChangeTimeStamp().split(" ")[0];
+//        String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  Time played:"+I1.getPlayTime()+"min  Life remaining:"+pctLife+"%";
+//        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr   Cost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
+
+
+
+
+        stringLabelTV2.setVisibility(View.VISIBLE);
+        stringStatTV1.setVisibility(View.VISIBLE);
+        stringStatTV2.setVisibility(View.VISIBLE);
     }
 
 }
