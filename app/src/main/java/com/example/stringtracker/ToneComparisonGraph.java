@@ -78,7 +78,7 @@ public class ToneComparisonGraph extends AppCompatActivity {
         float tone[] = x.getAvgTone();
         ArrayList<Entry> toneData = new ArrayList<Entry>();
         for(int i = 0; i < tone.length; i++){
-            toneData.add(new Entry(tone[i], i));
+            toneData.add(new Entry(i, tone[i]));
         }
         Collections.sort(toneData, new EntryXComparator());
         return toneData;

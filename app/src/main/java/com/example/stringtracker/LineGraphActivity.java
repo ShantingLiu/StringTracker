@@ -84,7 +84,7 @@ public class LineGraphActivity extends AppCompatActivity  {
        float projection[] = S1.getAvgProj();
         ArrayList<Entry> projectionData = new ArrayList<Entry>();
         for(int i = 0; i < projection.length; i++){
-            projectionData.add(new Entry(projection[i], i));
+            projectionData.add(new Entry(i, projection[i]));
         }
         Collections.sort(projectionData, new EntryXComparator());
         return projectionData;
@@ -94,7 +94,7 @@ public class LineGraphActivity extends AppCompatActivity  {
         float intonation[] = S1.getAvgInton();
         ArrayList<Entry> intonationData = new ArrayList<>();
         for(int i = 0; i < intonation.length; i++){
-            intonationData.add(new Entry(intonation[i], i));
+            intonationData.add(new Entry(i, intonation[i]));
         }
         Collections.sort(intonationData, new EntryXComparator());
         return intonationData;
@@ -103,7 +103,7 @@ public class LineGraphActivity extends AppCompatActivity  {
         float tone[] = S1.getAvgTone();
         ArrayList<Entry> toneData = new ArrayList<>();
         for(int i = 0; i < tone.length; i++){
-            toneData.add(new Entry(tone[i], i));
+            toneData.add(new Entry(i, tone[i]));
         }
         Collections.sort(toneData, new EntryXComparator());
         return toneData;

@@ -78,7 +78,7 @@ public class IntonationActivityGraph extends AppCompatActivity {
         float projection[] = x.getAvgInton();
         ArrayList<Entry> projectionData = new ArrayList<Entry>();
         for(int i = 0; i < projection.length; i++){
-            projectionData.add(new Entry(projection[i], i));
+            projectionData.add(new Entry(i, projection[i]));
         }
         Collections.sort(projectionData, new EntryXComparator());
         return projectionData;

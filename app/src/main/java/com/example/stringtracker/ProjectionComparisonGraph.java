@@ -55,7 +55,8 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
 
 
         stringProjectionDataSet1 = new LineDataSet(loadStringProjection1(sA), "String 1 ProJ");
-        stringProjectionDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
+        stringProjectionDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+//        stringProjectionDataSet1
 
 
         stringProjectionDataSet2 = new LineDataSet(loadStringProjection1(sB), "String 2 ProJ");
@@ -79,7 +80,7 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
         float projection[] = x.getAvgProj();
         ArrayList<Entry> projectionData = new ArrayList<Entry>();
         for(int i = 0; i < projection.length; i++){
-            projectionData.add(new Entry(projection[i], i));
+            projectionData.add(new Entry(i, projection[i]));
         }
         Collections.sort(projectionData, new EntryXComparator());
         return projectionData;
