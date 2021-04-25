@@ -34,18 +34,11 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             = "com.example.android.StringTracker_test.extra.MESSAGE";
 
     public static final int TEXT_REQUEST = 1;
-    private TextView selectedInstrTV;
-    private TextView mStringsSel;
-    private Button mButton;
-    //private boolean isFragmentDisplayed = false;
     static final String STATE_FRAGMENT = "state_of_fragment";
     Button buttonStartSes;
     Button buttonSelInst;
     private String selInstrText;
     private String selStrText;
-    private final boolean TESTMODE = true;  /// set false for production
-    private final boolean ENABLE_SENT = true;  /// set default for production
-    private final int MAX_SESS_TIME = 200;  /// set default for production
 
     // main data objects
     AppState A1 = new AppState();
@@ -86,12 +79,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             S1.loadStrings(I1.getStringsID(), context);
         }
 
-        // DEBUG forced settings for preferences
-        /*A1.setTestMode(TESTMODE);
-        A1.setEnableSent(ENABLE_SENT);
-        A1.setMaxSessionTime(MAX_SESS_TIME);*/
-        //S1.setAvgLife(800);
-
         // Start/Stop Session Button
         buttonStartSes = findViewById(R.id.startButton);
         // Set startup button color based on run state
@@ -120,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                 //System.out.println("AvgProj:"+S1.getAvgProjStr());
                 //System.out.println("AvgTone:"+S1.getAvgToneStr());
                 //System.out.println("AvgInton:"+S1.getAvgIntonStr());
-                System.out.println("IState:"+I1.getInstState());
                 saveAppState();
             }
         });
@@ -145,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                 }
             }
         });
-
     }  // end OnCreate //////////////
 
     // Method that goes through the StopSession sequences prompting th euser for Sentiment Feedback if enabled
@@ -170,12 +155,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         System.out.println("App:"+A1.getAppState());
         System.out.println("Ins:"+I1.getInstState());
         System.out.println("Str"+S1.getStrState());
-
-        /*timeDebugTV.setBackgroundResource(R.color.background1);
-        String timeText = "SessionCnt = " + I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-                + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
-        timeDebugTV.setText(timeText);
-        timeDebugTV.setVisibility(View.VISIBLE);*/
     }
 
     // helper to restore app and data object states
@@ -234,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         if (!A1.firstRun()) {
             startActivityForResult(intent, TEXT_REQUEST);
         }
-
     }
 
     public void launchSelectInstrument(View view) {
@@ -252,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         if (!A1.firstRun()) {
             startActivityForResult(intent, TEXT_REQUEST);
         }
-
     }
 
     // Method collects returned appState strings (or other messages) and updates object
@@ -297,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
         Toast.makeText(MainActivity.this, "Ratings:  "
                 + String.format("Proj=%.2f Tone=%.2f Inton=%.2f", ratingProj, ratingTone, ratingInton), Toast.LENGTH_LONG).show();
-
     }
 
     // Helper to update instrument and strings selected
@@ -311,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         selInstTV.setBackgroundResource(R.color.background1);
         selInstTV.setVisibility(View.VISIBLE);
         selStrText = "Strings ID:" + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel();
-        ///selStrText = "Strings: " + S1.getStringsID() + " - " + S1.getBrand() + ": " + S1.getModel() + "\n AvgProj: " + S1.getAvgProjStr();
+
         // select background color based on strings AvgLife
         if(S1.getAvgLife()>0) {
             int pctlife = (int) (((float) I1.getPlayTime() / (float) S1.getAvgLife()) * 100.0f);
@@ -335,8 +311,6 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         String timeText = "SessionCnt = "+I1.getSessionCnt() + "  LastSessTime = "
                 + I1.getLastSessionTime() + "min \nTotalPlayT = " + I1.getPlayTime()+"min";
 
-        //String timeText = "SessionCnt = "+I1.getSessionCnt() + ", SessionT = " + (A1.getStopT() - A1.getStartT())
-        //        + "ms \n LastSessT = " + I1.getLastSessionTime() + ", TotalPlayT = " + I1.getPlayTime();
         timeDebugTV.setText(timeText);
         timeDebugTV.setVisibility(View.VISIBLE);
 

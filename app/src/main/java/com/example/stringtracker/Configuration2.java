@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -199,6 +200,23 @@ public class Configuration2 extends AppCompatActivity {
                 finish();
             }
         });
+
+        checkBoxEnSent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+                public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                Toast.makeText(Configuration2.this, "Ratings:  "
+                        + String.format("Click SAVE PREFS to  save this setting!"), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        checkBoxTestMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                Toast.makeText(Configuration2.this, "Ratings:  "
+                        + String.format("Click SAVE PREFS to  save this setting!"), Toast.LENGTH_LONG).show();
+            }
+        });
+
     } ///////// OnCreate() /////////////////////////////////
 
     // *** Quick search for id position in array list
@@ -256,6 +274,8 @@ public class Configuration2 extends AppCompatActivity {
         A1.init();  // clear internal time values
         I1.setChangeTimeStamp(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
         saveState();  // be sure changes are saved
+        Toast.makeText(Configuration2.this, "Ratings:  "
+                + String.format("String Change Event Executed!"), Toast.LENGTH_LONG).show();
 
     }
 
@@ -403,10 +423,7 @@ public class Configuration2 extends AppCompatActivity {
 
                     spinner1.setSelection(findPosition(instrList, newInstrId));
                     spinner2.setSelection(findPosition(stringsList, newStrId));
-
                 }
-
-
             }
         }
 
