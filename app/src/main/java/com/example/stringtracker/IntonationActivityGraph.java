@@ -57,11 +57,11 @@ public class IntonationActivityGraph extends AppCompatActivity {
         sB.setStrState(strState2);
 
 
-        stringIntonationDataSet1 = new LineDataSet(loadStringIntonation(sA), "String 1 Intonation");
-        stringIntonationDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
+        stringIntonationDataSet1 = new LineDataSet(stringIntonation(sA), "String 1 Intonation");
+        stringIntonationDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[4]);
 
 
-        stringIntonationDataSet2 = new LineDataSet(loadStringIntonation(sB), "String 2 Intonation");
+        stringIntonationDataSet2 = new LineDataSet(stringIntonation(sB), "String 2 Intonation");
         stringIntonationDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -72,7 +72,6 @@ public class IntonationActivityGraph extends AppCompatActivity {
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
         lineChart.invalidate();
-
 
 
         buttonRet = findViewById(R.id.buttonRet8);
@@ -91,14 +90,13 @@ public class IntonationActivityGraph extends AppCompatActivity {
         });
     }//end of oncreate
 
-    public ArrayList<Entry> loadStringIntonation(StringSet x){
-        //projection
-        float projection[] = x.getAvgInton();
-        ArrayList<Entry> projectionData = new ArrayList<Entry>();
-        for(int i = 0; i < projection.length; i++){
-            projectionData.add(new Entry(projection[i], i));
+    public ArrayList<Entry> stringIntonation(StringSet x) {
+        float intonation[] = x.getAvgInton();
+        ArrayList<Entry> intonationData = new ArrayList<>();
+        for (int i = 0; i < intonation.length; i++) {
+            intonationData.add(new Entry(intonation[i], i));
         }
-        Collections.sort(projectionData, new EntryXComparator());
-        return projectionData;
+        Collections.sort(intonationData, new EntryXComparator());
+        return intonationData;
     }
 }

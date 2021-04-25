@@ -297,7 +297,7 @@ public class CompareStrings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(CompareStrings.this, IntonationActivityGraph.class);
+                Intent intent = new Intent(CompareStrings.this, ToneComparisonGraph.class);
                 String appState = A1.getAppState();
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();

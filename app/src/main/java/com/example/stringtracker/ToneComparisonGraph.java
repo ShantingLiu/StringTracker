@@ -35,7 +35,7 @@ public class ToneComparisonGraph extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intonation_comparison_graph);
+        setContentView(R.layout.activity_tone_comparison_graph);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lineChart = findViewById(R.id.lineChartTone);
         String appState;
@@ -58,7 +58,7 @@ public class ToneComparisonGraph extends AppCompatActivity {
 
 
         stringToneDataSet1 = new LineDataSet(loadStringTone(sA), "String 1 Tone");
-        stringToneDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
+        stringToneDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[4]);
 
 
         stringToneDataSet2 = new LineDataSet(loadStringTone(sB), "String 2 Tone");
@@ -90,10 +90,9 @@ public class ToneComparisonGraph extends AppCompatActivity {
 
     }//end of oncreate
 
-    public ArrayList<Entry> loadStringTone(StringSet x){
-        //Tone
+    public ArrayList<Entry>loadStringTone(StringSet x) {
         float tone[] = x.getAvgTone();
-        ArrayList<Entry> toneData = new ArrayList<Entry>();
+        ArrayList<Entry> toneData = new ArrayList<>();
         for(int i = 0; i < tone.length; i++){
             toneData.add(new Entry(tone[i], i));
         }
