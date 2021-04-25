@@ -56,7 +56,10 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
 
         sA.setStrState(strState1);
         sB.setStrState(strState2);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
 
+        LineData chartData = new LineData();
 
         stringProjectionDataSet1 = new LineDataSet(loadStringProjection1(sA), "String 1 ProJ");
         stringProjectionDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
@@ -69,9 +72,19 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
         dataSets.add(stringProjectionDataSet1);
         dataSets.add(stringProjectionDataSet2);
 
+        chartData.addDataSet(stringProjectionDataSet1);
+        chartData.addDataSet(stringProjectionDataSet2);
+       //ArrayList<ILineDataSet> dataSets2 = new ArrayList<>();
+       // dataSets2.add(stringProjectionDataSet2);
+        //dataSets.add(stringProjectionDataSet1);
 
-        LineData data = new LineData(dataSets);
-        lineChart.setData(data);
+        chartData = new LineData(dataSets);
+
+        //LineData data = new LineData(dataSets);//what ever is set here is plotted
+        //LineData data2 = new LineData(dataSets);
+        //lineChart.setData(data);
+
+        lineChart.setData(chartData);
         lineChart.invalidate();
 
         buttonRet = findViewById(R.id.buttonRet7);
