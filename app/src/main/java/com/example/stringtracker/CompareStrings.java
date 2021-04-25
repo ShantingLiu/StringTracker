@@ -57,6 +57,7 @@ public class CompareStrings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare_strings);
 
+
         String appState;
         String instState;
         String strState;
