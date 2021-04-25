@@ -79,6 +79,7 @@ public class Analytics extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 Intent intent = new Intent(Analytics.this, LineGraphActivity.class);
                 String appState = A1.getAppState();
                 String instState = I1.getInstState();
