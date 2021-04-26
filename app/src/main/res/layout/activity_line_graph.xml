@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#9FFDED"
     tools:context=".LineGraphActivity">
 
     <com.github.mikephil.charting.charts.LineChart
@@ -21,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="#A80A0A"
+        android:backgroundTint="#518078"
         android:backgroundTintMode="add"
         android:text="Return" />
 

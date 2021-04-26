@@ -38,6 +38,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
+        android:background="#9FFDED"
         app:layout_constraintBottom_toTopOf="@+id/buttonRet5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.555"

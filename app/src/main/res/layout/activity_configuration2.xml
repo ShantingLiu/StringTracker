@@ -4,18 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#9FFDED"
     tools:context=".Configuration2">
 
   <TextView
       android:id="@+id/textView2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="24dp"
+      android:layout_marginBottom="16dp"
+      android:background="#9FFDED"
       android:text="String Tracker - Configuration"
-      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/buttonReturn"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/buttonReturn" />
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent" />
 
   <Spinner
       android:id="@+id/spinner1"
@@ -24,6 +26,7 @@
       android:layout_marginStart="50dp"
       android:layout_marginTop="10dp"
       android:layout_marginEnd="50dp"
+      android:background="#9FFDED"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.55"
       app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +86,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="30dp"
       android:layout_marginBottom="22dp"
+      android:background="#9FFDED"
       android:text="Selected Instrument:"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -97,6 +101,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="45dp"
+      android:background="#9FFDED"
       android:text="Selected Strings:"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -112,6 +117,7 @@
       android:layout_marginStart="50dp"
       android:layout_marginTop="10dp"
       android:layout_marginEnd="50dp"
+      android:background="#9FFDED"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/selStrings" />
@@ -122,7 +128,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:layout_marginBottom="8dp"
-      android:backgroundTint="#A80A0A"
+      android:backgroundTint="#518078"
       android:backgroundTintMode="add"
       android:text="Return"
       android:textSize="18sp"
@@ -134,7 +140,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="24dp"
-      android:backgroundTint="#A80A0A"
+      android:backgroundTint="#518078"
       android:backgroundTintMode="add"
       android:onClick="changeStrings"
       android:text="Change Strings"
@@ -195,6 +201,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
+      android:background="#9FFDED"
       android:text="Preferences"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -207,6 +214,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="56dp"
+      android:background="#9FFDED"
       android:text="Max Session Time (min)"
       app:layout_constraintBottom_toTopOf="@+id/editTextMaxSess"
       app:layout_constraintStart_toStartOf="parent" />
