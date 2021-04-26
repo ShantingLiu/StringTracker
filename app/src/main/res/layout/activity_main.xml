@@ -13,13 +13,12 @@
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="56dp"
         android:text="Start/Stop"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeDebug" />
+        app:layout_constraintTop_toBottomOf="@+id/stringsLifeTV" />
 
     <TextView
         android:id="@+id/selInstrTV"
@@ -71,14 +70,13 @@
         android:id="@+id/timeDebug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="13dp"
         android:backgroundTint="@color/lightTeal"
         android:text="Session Time"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stringsLifeTV" />
+        app:layout_constraintTop_toBottomOf="@+id/startButton" />
 
     <Button
         android:id="@+id/config2"
