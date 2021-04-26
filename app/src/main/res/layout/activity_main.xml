@@ -48,11 +48,12 @@
         android:id="@+id/analyticsButton"
         android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_marginTop="64dp"
         android:onClick="launchAnalytics"
         android:text="Analytics"
-        app:layout_constraintBottom_toTopOf="@+id/config2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeDebug" />
 
     <TextView
         android:id="@+id/selStringsTV"
@@ -82,12 +83,13 @@
         android:id="@+id/config2"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="163dp"
+        android:layout_marginTop="24dp"
         android:onClick="launchConfig2"
         android:text="Configuration"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/analyticsButton" />
 
     <TextView
         android:id="@+id/stringsLifeTV"
