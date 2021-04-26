@@ -39,6 +39,7 @@
         android:layout_marginTop="48dp"
         android:background="@color/darkForest"
         android:text="Change Instrument"
+        app:cornerRadius="?android:attr/buttonCornerRadius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
