@@ -3,15 +3,16 @@ package com.example.stringtracker;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int colorCodeDark = Color.parseColor("#297D6F");
+        window.setStatusBarColor(colorCodeDark);
+
         // Check for first run of program and init to defaults otherwise load previous state
         if (A1.firstRun()) {      // if .firstRun() returns true it is the first time the app has been run
             A1.init();
@@ -113,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
         // Select Instrument Button
         buttonSelInst = findViewById(R.id.selInstrButton);
+        buttonSelInst.setBackgroundColor(Color.parseColor("#518078"));
         buttonSelInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

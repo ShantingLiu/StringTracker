@@ -17,4 +17,9 @@
     <color name="lifecolor3">#F990A7</color>
     <color name="lifecolor4">#B19BB5</color>
     <color name="starcolor">#FDD835</color>
+    <color name="lightTeal">#9FFDED</color>
+    <color name="forestGreen">#297D6F</color>
+    <color name="brightTeal">#53FCE0</color>
+    <color name="darkForest">#518078</color>
+    <color name="dullTeal">#42C9B3</color>
 </resources>
