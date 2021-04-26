@@ -88,18 +88,6 @@ public class Analytics extends AppCompatActivity {
                 intent.putExtra("inststate", instState);
                 intent.putExtra("strstate", strState);
                 startActivity(intent);
-//                FragmentManager fmanager = getSupportFragmentManager();
-//                SentGraph SentDialog = new SentGraph();
-//                SentDialog.show(fmanager, "Graph Sentiment");
-//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
-                /*Intent intent = new Intent();
-                String appState = A1.getAppState();
-                String instState = I1.getInstState();
-                String strState = S1.getStrState();
-                intent.putExtra("appstate", appState);   // forward object states
-                intent.putExtra("inststate", instState);
-                intent.putExtra("strstate", strState);
-                startActivity(intent);*/
             }
         });
 
@@ -161,5 +149,32 @@ public class Analytics extends AppCompatActivity {
         intent.putExtra("strstate", strState);
         startActivity(intent);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String appState;
+        String instState;
+        String strState;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                //A1.loadRunState();  // DEBUG tests using file for message passing
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+
+                updateStatsDisplay();
+                System.out.println("*** RETURN to Analytics InstrID = "+I1.getInstrID());
+            }
+            // DEBUG MESSAGES
+            if (resultCode == RESULT_CANCELED) {
+                System.out.println("###Cancelled Return from CompareStrings or Sentiment Graph!");
+            }
+        }
+    }
+
 
 }

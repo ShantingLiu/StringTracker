@@ -22,19 +22,12 @@ public class CompareStrings extends AppCompatActivity {
     // local copies of the main stringset, instrument, and appstate objects
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
-    StringSet S2 = new StringSet();   // 2nd stringset for comparison
     Instrument I1 = new Instrument();
-
-
-    StringSet Sb = new StringSet();
-
 
     Button buttonRet, buttonProjection, buttonTone, buttonIntonation;
     Context context = CompareStrings.this;
 
     //Text Views
-
-
     TextView stringLabelTV1;
     TextView stringStatTV1;
     String strStats1;
@@ -44,10 +37,6 @@ public class CompareStrings extends AppCompatActivity {
     TextView stringStatTV2;
     String strStats2;
     String selectedString2 = "String Set 2";
-
-
-
-
 
     private final String[] instrTypes = new String[]{"Cello", "Bass", "Banjo", "Guitar", "Mandolin", "Viola", "Violin", "Other"};
     ArrayList<String> slist = new ArrayList<String>();
@@ -60,8 +49,6 @@ public class CompareStrings extends AppCompatActivity {
     String instrType;
     String strGraphName1 = "none";
     String strGraphName2 = "none";
-    float [] strData1;
-    float [] strData2;
 
     private boolean userIsInteracting = false;
     @Override
@@ -74,7 +61,6 @@ public class CompareStrings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare_strings);
-
 
         String appState;
         String instState;
@@ -93,8 +79,6 @@ public class CompareStrings extends AppCompatActivity {
         stringLabelTV2 = (TextView) findViewById(R.id.stringLableTV2);
         stringStatTV1 = (TextView) findViewById(R.id.stringStatsTV1);
         stringStatTV2 = (TextView) findViewById(R.id.stringStatsTV2);
-
-
 
         StringSet sA = new StringSet();
         StringSet sB = new StringSet();
@@ -164,17 +148,13 @@ public class CompareStrings extends AppCompatActivity {
                 // load selected string data into obj
                 sA.loadStrings(newstrid, context);
 
-
                 //load String stats
-
                 stringLabelTV1.setText(selectedString1);
                 stringLabelTV1.setVisibility(View.VISIBLE);
 
                 String strStats1 = "Brand: " + sA.getBrand() + "\n" + "Model: " + sA.getModel() + "\n"+ "Avg Life: " + sA.getAvgLife()+ "\n" + "Cost: " + sA.getCost();
                 stringStatTV1.setText(strStats1);
                 stringStatTV1.setVisibility(View.VISIBLE);
-
-
 
                 strGraphName1 = sA.getBrand()+"-"+sA.getModel(); // create label for graph item 1
                 System.out.println("strGraphName1="+strGraphName1);
@@ -231,29 +211,9 @@ public class CompareStrings extends AppCompatActivity {
                 intent.putExtra("strstate", strState);
                 String strStateSa = sA.getStrState();
                 String strStateSb = sB.getStrState();
-//                strData1 = sA.getAvgProj();
-//                strData2 = sB.getAvgProj();
                 intent.putExtra("sA", strStateSa);
                 intent.putExtra("sB", strStateSb);
                 startActivity(intent);
-
-
-
-
-
-
-//                FragmentManager fmanager = getSupportFragmentManager();
-//                SentGraph SentDialog = new SentGraph();
-//                SentDialog.show(fmanager, "Graph Sentiment");
-//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
-                /*Intent intent = new Intent();
-                String appState = A1.getAppState();
-                String instState = I1.getInstState();
-                String strState = S1.getStrState();
-                intent.putExtra("appstate", appState);   // forward object states
-                intent.putExtra("inststate", instState);
-                intent.putExtra("strstate", strState);
-                startActivity(intent);*/
             }
         });
 
@@ -276,18 +236,6 @@ public class CompareStrings extends AppCompatActivity {
                 intent.putExtra("sB", strStateSb);
                 startActivity(intent);
 
-//                FragmentManager fmanager = getSupportFragmentManager();
-//                SentGraph SentDialog = new SentGraph();
-//                SentDialog.show(fmanager, "Graph Sentiment");
-//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
-                /*Intent intent = new Intent();
-                String appState = A1.getAppState();
-                String instState = I1.getInstState();
-                String strState = S1.getStrState();
-                intent.putExtra("appstate", appState);   // forward object states
-                intent.putExtra("inststate", instState);
-                intent.putExtra("strstate", strState);
-                startActivity(intent);*/
             }
         });
 
@@ -309,32 +257,10 @@ public class CompareStrings extends AppCompatActivity {
                 intent.putExtra("sA", strStateSa);
                 intent.putExtra("sB", strStateSb);
                 startActivity(intent);
-
-//                FragmentManager fmanager = getSupportFragmentManager();
-//                SentGraph SentDialog = new SentGraph();
-//                SentDialog.show(fmanager, "Graph Sentiment");
-//                fmanager.beginTransaction().replace(R.id.container,SentDialog).commit();
-                /*Intent intent = new Intent();
-                String appState = A1.getAppState();
-                String instState = I1.getInstState();
-                String strState = S1.getStrState();
-                intent.putExtra("appstate", appState);   // forward object states
-                intent.putExtra("inststate", instState);
-                intent.putExtra("strstate", strState);
-                startActivity(intent);*/
             }
         });
 
-
-
-
-
-//           In you graph buttons  Graph Projection
-
-
-
-
-
+        // Return button to Analytics
         buttonRet = findViewById(R.id.buttonRet3);
         buttonRet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,14 +349,6 @@ public class CompareStrings extends AppCompatActivity {
                 costPerHrExp = (S1.getCost()/(float)((float)S1.getAvgLife()/60.0f));
             }
         }
-
-//        String selInstr =  "Instrument ID:"+I1.getInstrID()+" "+I1.getBrand()+"-"+I1.getModel()+" ("+I1.getType()+")";
-//        String selStrings =  "String Set ID:"+S1.getStringsID()+" "+S1.getBrand()+"-"+S1.getModel()+" ("+S1.getType()+") \n"
-//                +"Last Changed: "+I1.getChangeTimeStamp().split(" ")[0];
-//        String strStats1 =  "Avg Life:"+S1.getAvgLife()+"min  Time played:"+I1.getPlayTime()+"min  Life remaining:"+pctLife+"%";
-//        String strStats2 =  "Cost/hr(current):$"+String.format("%.2f", costPerHr)+"/hr   Cost/hr(expected):$"+String.format("%.2f",costPerHrExp)+"/hr";
-
-
 
 
         stringLabelTV2.setVisibility(View.VISIBLE);

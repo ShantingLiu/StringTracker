@@ -9,7 +9,21 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="627dp"
+        android:layout_above="@+id/buttonRetLG"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/buttonRetLG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#A80A0A"
+        android:backgroundTintMode="add"
+        android:text="Return" />
 
 
 </RelativeLayout>

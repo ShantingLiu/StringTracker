@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -26,13 +28,11 @@ public class LineGraphActivity extends AppCompatActivity  {
     LineDataSet intonationDataSet;
     LineDataSet toneDataSet;
 
-
-
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
     private Context context;
-
+    Button buttonRet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,6 @@ public class LineGraphActivity extends AppCompatActivity  {
 
 //        System.out.println("aman");
 
-
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(projectionDataSet);
         dataSets.add(intonationDataSet);
@@ -81,7 +80,22 @@ public class LineGraphActivity extends AppCompatActivity  {
         lineChart.setData(data);
         lineChart.animateY(3000);
         lineChart.invalidate();
-    }
+
+        // Return button to Analytics
+        buttonRet = findViewById(R.id.buttonRetLG);
+        buttonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+    }  // OnCreate() //////
 
     public ArrayList<Entry>stringProjections(){
         //projection
