@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9FFDED"
+    android:background="#FFFFFF"
     tools:context=".CompareStrings">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="23dp"
         android:layout_marginStart="33dp"
         android:layout_marginTop="17dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/stringLableTV1"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="31dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Select Strings to Compare"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -61,7 +61,7 @@
         android:layout_height="148dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="52dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/stringStatsTV1"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
@@ -72,7 +72,7 @@
         android:layout_height="148dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="52dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
         android:layout_marginTop="8dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="View Graphs"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -92,38 +92,41 @@
 
     <Button
         android:id="@+id/buttonProjection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="141dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="11dp"
         android:text="Projection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewGraph" />
 
     <Button
         android:id="@+id/buttonIntonation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:text="Intonation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonProjection" />
 
     <Button
         android:id="@+id/buttonTone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="7dp"
         android:text="Tone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonIntonation" />
 
     <Button
         android:id="@+id/buttonRet3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:background="#518078"
@@ -131,7 +134,7 @@
         android:backgroundTintMode="add"
         android:text="Return"
         android:textSize="18sp"
-        app:iconTint="#A80A0A"
+        app:iconTint="#518078"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -141,7 +144,7 @@
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="17dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />

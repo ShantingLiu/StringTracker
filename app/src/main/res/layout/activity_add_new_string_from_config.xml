@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9FFDED"
+    android:background="#FFFFFF"
     tools:context=".AddNewStringFromConfig">
 
     <Button
         android:id="@+id/addNewStrConfirm2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="60dp"
         android:onClick="addNewStr2"
         android:text="Add String"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Add New String"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="String Tension:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.456"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="129dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Brand Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="43dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Model Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/strBrandNamePrompt2" />
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
         android:layout_marginTop="36dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Cost:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stringInstrTypeSpinner" />
@@ -132,8 +132,8 @@
 
     <Button
         android:id="@+id/buttonReturnAddNewStr2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#518078"
@@ -148,7 +148,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Instrument Type:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

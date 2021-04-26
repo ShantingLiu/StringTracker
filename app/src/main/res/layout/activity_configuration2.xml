@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9FFDED"
+    android:background="#FFFFFF"
     tools:context=".Configuration2">
 
   <TextView
       android:id="@+id/textView2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:background="#9FFDED"
+      android:layout_marginBottom="4dp"
+      android:background="#FFFFFF"
       android:text="String Tracker - Configuration"
       app:layout_constraintBottom_toTopOf="@+id/buttonReturn"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintHorizontal_bias="0.51"
       app:layout_constraintStart_toStartOf="parent" />
 
   <Spinner
@@ -26,7 +26,7 @@
       android:layout_marginStart="50dp"
       android:layout_marginTop="10dp"
       android:layout_marginEnd="50dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.55"
       app:layout_constraintStart_toStartOf="parent"
@@ -34,9 +34,9 @@
 
   <Button
       android:id="@+id/addNewInstrButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="91dp"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="80dp"
       android:layout_marginTop="5dp"
       android:text="Add New"
       app:layout_constraintStart_toStartOf="parent"
@@ -44,9 +44,9 @@
 
   <Button
       android:id="@+id/addNewInstrButton2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="93dp"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
+      android:layout_marginStart="80dp"
       android:layout_marginTop="5dp"
       android:onClick="launchAddNewStr"
       android:text="Add New"
@@ -55,22 +55,22 @@
 
   <Button
       android:id="@+id/editInstrButton2"
-      android:layout_width="86dp"
-      android:layout_height="49dp"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
       android:layout_marginStart="50dp"
-      android:layout_marginTop="5dp"
+      android:layout_marginTop="4dp"
       android:layout_marginEnd="107dp"
       android:onClick="launchEditStr"
       android:text="Edit"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.103"
+      app:layout_constraintHorizontal_bias="0.493"
       app:layout_constraintStart_toEndOf="@+id/addNewInstrButton2"
       app:layout_constraintTop_toBottomOf="@+id/spinner2" />
 
   <Button
       android:id="@+id/editInstrButton1"
-      android:layout_width="86dp"
-      android:layout_height="49dp"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
       android:layout_marginStart="60dp"
       android:layout_marginTop="5dp"
       android:layout_marginEnd="115dp"
@@ -86,7 +86,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="30dp"
       android:layout_marginBottom="22dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       android:text="Selected Instrument:"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -101,7 +101,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="45dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       android:text="Selected Strings:"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -117,15 +117,15 @@
       android:layout_marginStart="50dp"
       android:layout_marginTop="10dp"
       android:layout_marginEnd="50dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/selStrings" />
 
   <Button
       android:id="@+id/buttonReturn"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="120dp"
+      android:layout_height="50dp"
       android:layout_marginStart="8dp"
       android:layout_marginBottom="8dp"
       android:backgroundTint="#518078"
@@ -137,8 +137,8 @@
 
   <Button
       android:id="@+id/buttonChangeStr"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="300dp"
+      android:layout_height="50dp"
       android:layout_marginTop="24dp"
       android:backgroundTint="#518078"
       android:backgroundTintMode="add"
@@ -152,25 +152,29 @@
 
   <Button
       android:id="@+id/buttonSavePrefs"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="136dp"
+      android:layout_width="150dp"
+      android:layout_height="50dp"
+      android:layout_marginTop="192dp"
+      android:background="#FFFFFF"
       android:text="Save Prefs"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/editTextMaxSess"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/buttonChangeStr" />
 
   <EditText
       android:id="@+id/editTextMaxSess"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="32dp"
-      android:layout_marginTop="136dp"
+      android:layout_marginTop="144dp"
       android:backgroundTint="@color/background2"
       android:backgroundTintMode="multiply"
       android:ems="10"
       android:hint="Enter Max Session Time"
       android:inputType="number|text"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/buttonChangeStr" />
 
@@ -183,6 +187,7 @@
       android:layout_marginEnd="16dp"
       android:text="Enable \nSentiment"
       app:layout_constraintEnd_toStartOf="@+id/checkBoxTestMode"
+      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/buttonChangeStr" />
 
@@ -191,7 +196,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="64dp"
-      android:layout_marginEnd="172dp"
+      android:layout_marginEnd="128dp"
       android:text="Test \nMode"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/buttonChangeStr" />
@@ -201,7 +206,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       android:text="Preferences"
       android:textSize="18sp"
       android:textStyle="bold"
@@ -213,10 +218,11 @@
       android:id="@+id/textViewMaxLabel"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="56dp"
-      android:background="#9FFDED"
+      android:background="#FFFFFF"
       android:text="Max Session Time (min)"
       app:layout_constraintBottom_toTopOf="@+id/editTextMaxSess"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

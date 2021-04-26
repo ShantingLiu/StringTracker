@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9FFDED"
+    android:background="#FFFFFF"
     tools:context=".EditInstrument">
 
     <Button
         android:id="@+id/buttonReturnEditInstr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#518078"
@@ -22,8 +22,8 @@
 
     <Button
         android:id="@+id/editInstrAddStrButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="11dp"
         android:onClick="launchAddNewStr"
         android:text="Add New String"
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Attached String:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Edit Instrument"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -85,8 +85,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="73dp"
-        android:background="#9FFDED"
-        android:backgroundTint="#9FFDED"
+        android:background="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
         android:text="Brand Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Model Name:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editInstrBrandPrompt" />
@@ -131,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="#9FFDED"
+        android:background="#FFFFFF"
         android:text="Instrument Type:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -152,8 +152,8 @@
 
     <Button
         android:id="@+id/updateEditInstr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="59dp"
         android:layout_marginBottom="132dp"
         android:onClick="updateInstr"
@@ -167,8 +167,8 @@
 
     <Button
         android:id="@+id/deleteEditInstr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="76dp"
         android:onClick="deleteInstr"
