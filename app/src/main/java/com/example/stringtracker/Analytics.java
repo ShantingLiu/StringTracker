@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+
 public class Analytics extends AppCompatActivity {
     // main data objects
     AppState A1 = new AppState();
@@ -72,21 +74,20 @@ public class Analytics extends AppCompatActivity {
         });
 
         buttonCurrSent = findViewById(R.id.buttonCurrSent);
+        buttonCurrSent.setVisibility(View.VISIBLE);
         buttonCurrSent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SentGraph SentDialog = new SentGraph();
-                FragmentManager fmanager = getSupportFragmentManager();
-                SentDialog.show(fmanager, "Graph Sentiment");
 
-                /*Intent intent = new Intent();
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                Intent intent = new Intent(Analytics.this, LineGraphActivity.class);
                 String appState = A1.getAppState();
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();
                 intent.putExtra("appstate", appState);   // forward object states
                 intent.putExtra("inststate", instState);
                 intent.putExtra("strstate", strState);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
 
@@ -137,5 +138,43 @@ public class Analytics extends AppCompatActivity {
         intent.putExtra("strstate", strState);
         startActivity(intent);
     }
+
+    public void gotoCurrSentGraph(View v){
+        Intent intent = new Intent(this, LineGraphActivity.class);
+        String appState = A1.getAppState();
+        String instState = I1.getInstState();
+        String strState = S1.getStrState();
+        intent.putExtra("appstate", appState);   // forward object states
+        intent.putExtra("inststate", instState);
+        intent.putExtra("strstate", strState);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String appState;
+        String instState;
+        String strState;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                appState = data.getStringExtra("appstate");
+                instState = data.getStringExtra("inststate");
+                strState = data.getStringExtra("strstate");
+                //A1.loadRunState();  // DEBUG tests using file for message passing
+                A1.setAppState(appState);  // Restore data object states on return
+                I1.setInstState(instState);
+                S1.setStrState(strState);
+
+                updateStatsDisplay();
+                System.out.println("*** RETURN to Analytics InstrID = "+I1.getInstrID());
+            }
+            // DEBUG MESSAGES
+            if (resultCode == RESULT_CANCELED) {
+                System.out.println("###Cancelled Return from CompareStrings or Sentiment Graph!");
+            }
+        }
+    }
+
 
 }

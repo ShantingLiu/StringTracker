@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".SelectStrings">
 
     <Button
         android:id="@+id/buttonRet5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="#A80A0A"
+        android:backgroundTint="#518078"
         android:backgroundTintMode="add"
         android:text="Return"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
         android:text="Select StringSet for Instrument"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,6 +35,7 @@
         android:layout_width="404dp"
         android:layout_height="568dp"
         android:layout_marginTop="16dp"
+        android:background="#9FFDED"
         app:layout_constraintBottom_toTopOf="@+id/buttonRet5"
         app:layout_constraintTop_toBottomOf="@+id/strSelTV"
         tools:layout_editor_absoluteX="5dp" />

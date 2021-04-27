@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,13 +49,12 @@ public class SelectInstrument extends AppCompatActivity {
         insSelTV.setText(selInstText);
         insSelTV.setVisibility(View.VISIBLE);
 
-
-        //A1.loadRunState();
         lv_instruments  = findViewById(R.id.lv_instruments);
+        lv_instruments.setBackgroundColor(Color.WHITE);
+
         ilist = I1.getInstrStrList(context);
         ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, ilist);
         lv_instruments.setAdapter(ad);
-
         lv_instruments.setOnItemClickListener(new AdapterView.OnItemClickListener()  {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,7 +62,7 @@ public class SelectInstrument extends AppCompatActivity {
                 String tmp = ilist.get(position);
                 String token = tmp.split(":")[1];
                 int newinstrid = Integer.parseInt(token.split(" ")[0].trim());
-
+                view.setBackgroundColor(getColor(R.color.background1 ));
                 // set new instrumentID load new Instrument and StringSet from DB
                 A1.setInstrID(newinstrid);
                 I1.loadInstr(newinstrid, context);

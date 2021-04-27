@@ -3,15 +3,16 @@ package com.example.stringtracker;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,8 +31,10 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
     private static final String LOG_TAG =
             MainActivity.class.getSimpleName();
 
-    public static final String EXTRA_MESSAGE
-            = "com.example.android.StringTracker_test.extra.MESSAGE";
+    //  This flag causes the program to generate 10 random instruments and string sets
+    //  then insert them into the DBs upon initial run after installation.
+    //  Set this to false for normal build
+    public static final boolean TEST_INIT_DB = true;
 
     public static final int TEXT_REQUEST = 1;
     static final String STATE_FRAGMENT = "state_of_fragment";
@@ -63,9 +66,18 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
         timeDebugTV = (TextView) findViewById(R.id.timeDebug);
         timeDebugTV.setBackgroundResource(R.color.background1);
 
-       // Check for first run of program and init to defaults otherwise load previous state
-        if (A1.firstRun()) {      // if .firstRun() returns true it is the first time the app has been run
-            A1.init();
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int colorCodeDark = Color.parseColor("#297D6F");
+        window.setStatusBarColor(colorCodeDark);
+
+        // Check for first run of program and init to defaults otherwise load previous state
+        if (A1.init()){    // if A1.init() returns true it is the first time the app has been run
+
+            if(TEST_INIT_DB) {
+                populateDB();   // DEBUG populate DB with 10 random instruments and string sets
+            }
+
             A1.setInstState(I1.getInstState());  // update object state strings in AppState for 1st run
             A1.setStrState(S1.getStrState());
             updateSelDisplay("FirstRun: ");
@@ -95,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
             public void onClick(View v) {
                 if(A1.sessionStarted()) {  // Stop session
                     stopSession();
-                 } else {                // Start session
+                } else {                // Start session
                     A1.startSession();
                     I1.setCurrSessionStart(A1.getCurrSessionStart());
                     buttonStartSes.setText("Stop");
@@ -104,15 +116,13 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
                     timeDebugTV.setText("Session Started");
                     timeDebugTV.setVisibility(View.VISIBLE);
                 }
-                //System.out.println("AvgProj:"+S1.getAvgProjStr());
-                //System.out.println("AvgTone:"+S1.getAvgToneStr());
-                //System.out.println("AvgInton:"+S1.getAvgIntonStr());
                 saveAppState();
             }
         });
 
         // Select Instrument Button
         buttonSelInst = findViewById(R.id.selInstrButton);
+        buttonSelInst.setBackgroundColor(Color.parseColor("#518078"));
         buttonSelInst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,5 +326,101 @@ public class MainActivity extends AppCompatActivity implements SessionSentiment.
 
     }
 
+    // DEBUG routine to insert 10 random instruments and strings into the DB
+    void populateDB(){
+        for(int j = 0; j<10; ++j){
+            genStrInst();
+            S1.insertStrings(context);
+            I1.insertInstr(context);
+            A1.setInstrumentCnt(A1.getInstrumentCnt()+1);
+            A1.setStringsCnt(A1.getStringsCnt()+1);
+            A1.setFirstRun(false);  // since we have now populated the DB we set firstRun to false;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////
+    // DEBUG test code randomly generates instrument and stringset values for A1 and S1
+    public void genStrInst() {
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
+        String sBrand[] = {"GHS", "D'Addario", "Martin", "Elixir", "Thomastik"};
+        String sModel[] = {"A-270", "J-74", "Bright-Bronze", "Stainless-FW", "Precision"};
+        String sTension[] = {"X-Light", "Light", "Medium", "Heavy"};
+        String sType[] = {"Guitar", "Banjo", "Mandolin", "Violin", "Cello"};
+
+        String iBrand[] = {"Gibson", "Collings", "Fender", "Taylor", "Weber"};
+        String iModel[] = {"L5", "D-28", "Artist", "F-5", "Yellowstone"};
+
+        int rand_sBr = rand.nextInt(5);
+        int rand_sMo = rand.nextInt(5);
+        int rand_sTe = rand.nextInt(4);
+        int rand_sTy = rand.nextInt(5);
+        int rand_sID = rand.nextInt(4)+1;
+
+        int rand_iBr = rand.nextInt(5);
+        int rand_iMo = rand.nextInt(5);
+        int rand_iID = rand.nextInt(4)+1;
+
+        int rand_cost = rand.nextInt(40)+5;
+        int rand_changeCnt = rand.nextInt(10)+1;
+        int rand_avgLife = rand.nextInt(600)+480;
+
+        float [] proj = new float[10];
+        float [] tone = new float[10] ;
+        float [] inton = new float[10];
+        float stval = 3.0f;
+        float stdif = 0.20f;
+        proj[0] = (float)rand.nextInt(100)/80.0f + 3.4f;
+        tone[0] = (float)rand.nextInt(100)/80.0f + 3.0f;
+        inton[0] = (float)rand.nextInt(100)/80.0f + 3.2f;
+        for(int i = 1; i<10; ++i){
+            if(proj[i-1]<1.6f){
+                proj[i] = proj[i-1] + stdif + (float)i*(float)rand.nextInt(100)/500.0f;
+            } else if(proj[i-1]>4.3f){
+                proj[i] = proj[i-1] - stdif - (float)i*(float)rand.nextInt(100)/580.0f;
+            } else {
+                proj[i] = proj[i-1] + stdif - (float)i*(float)rand.nextInt(100)/540.0f;
+            }
+
+            if(tone[i-1]<1.7f){
+                tone[i] = tone[i-1] + stdif + (float)i*(float)rand.nextInt(100)/450.0f;
+            } else if(tone[i-1]>4.1f){
+                tone[i] = tone[i-1] - stdif - (float)i*(float)rand.nextInt(100)/400.0f;
+            } else {
+                tone[i] = tone[i-1] + stdif - (float)i*(float)rand.nextInt(100)/480.0f;
+            }
+
+            if(inton[i-1]<1.8f){
+                inton[i] = inton[i-1] + stdif + (float)i*(float)rand.nextInt(100)/600.0f;
+            } else if(inton[i-1]>4.5f){
+                inton[i] = inton[i-1] - stdif - (float)i*(float)rand.nextInt(100)/650.0f;
+            } else {
+                inton[i] = inton[i-1] + stdif - (float)i*(float)rand.nextInt(100)/680.0f;
+            }
+        }
+        S1.setAvgProj(proj);
+        S1.setAvgTone(tone);
+        S1.setAvgInton(inton);
+        S1.convFloat2Str();
+
+        S1.setStringsID(rand_sID);
+        S1.setBrand(sBrand[rand_sBr]);
+
+        S1.setModel(sModel[rand_sMo]);
+        S1.setTension(sTension[rand_sTe]);
+        S1.setType(sType[rand_sTy]);
+        S1.setAvgLife(rand_avgLife);
+        S1.setChangeCnt(rand_changeCnt);
+        S1.setCost(rand_cost);
+
+        I1.setInstrID(rand_iID);
+        I1.setBrand(iBrand[rand_iBr]);
+        I1.setModel(iModel[rand_iMo]);
+        I1.setType(sType[rand_sTy]);
+        I1.setPlayTime(0);
+        I1.setSessionCnt(0);
+        I1.setStringsID(rand_sID);  // match up strings with instrument
+        I1.setChangeTimeStamp(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
+
+    }
 /////////////////////////////////////////////////////////////////////////
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#9FFDED"
     tools:context=".SelInstrFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,6 +16,7 @@
     <ListView
         android:id="@+id/lv_instruments"
         android:layout_width="match_parent"
-        android:layout_height="742dp" />
+        android:layout_height="742dp"
+        android:background="#9FFDED" />
 
 </FrameLayout>
