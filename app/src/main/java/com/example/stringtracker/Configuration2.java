@@ -183,6 +183,7 @@ public class Configuration2 extends AppCompatActivity {
                 A1.setTestMode(checkBoxTestMode.isChecked());
                 A1.setMaxSessionTime(Integer.parseInt(String.valueOf(editTextMaxSess.getText())));
                 saveState();
+                Toast.makeText(Configuration2.this, "Preferences Saved!", Toast.LENGTH_LONG).show();
             }
         });
 
