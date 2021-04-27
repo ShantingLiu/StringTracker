@@ -8,8 +8,18 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChartProjection"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="421dp"
+        android:layout_height="634dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonProjRet"
+        tools:layout_editor_absoluteX="-10dp" />
+
+    <Button
+        android:id="@+id/buttonProjRet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Return"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

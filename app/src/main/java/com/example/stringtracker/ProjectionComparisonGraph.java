@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -28,6 +30,7 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
     Instrument I1 = new Instrument();
     StringSet sA = new StringSet();
     StringSet sB = new StringSet();
+    Button buttonProjRet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,19 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
         lineChart.invalidate();
 
 
-
+        // Return button to Analytics
+        buttonProjRet = findViewById(R.id.buttonProjRet);
+        buttonProjRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
     }
 
     public ArrayList<Entry> loadStringProjection1( StringSet x){
