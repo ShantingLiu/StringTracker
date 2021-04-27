@@ -42,7 +42,7 @@ public class GraphingActivity extends AppCompatActivity {
         lineChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GraphingActivity.this, LineGraphActivity.class));
+                startActivity(new Intent(GraphingActivity.this, CurrentStringSentGraph.class));
             }
         });
 

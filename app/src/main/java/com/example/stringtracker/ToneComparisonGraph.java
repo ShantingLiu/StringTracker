@@ -1,11 +1,13 @@
 package com.example.stringtracker;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -19,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ToneComparisonGraph extends AppCompatActivity {
+
+    Button buttonToneRet;
+
     LineChart lineChart;
     LineDataSet stringToneDataSet1;
     LineDataSet stringToneDataSet2;
@@ -29,13 +34,13 @@ public class ToneComparisonGraph extends AppCompatActivity {
     Instrument I1 = new Instrument();
     StringSet sA = new StringSet();
     StringSet sB = new StringSet();
-    Button buttonToneRet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tone_comparison_graph);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lineChart = findViewById(R.id.lineChartTone);
         String appState;
         String instState;
@@ -55,14 +60,15 @@ public class ToneComparisonGraph extends AppCompatActivity {
         sA.setStrState(strState1);
         sB.setStrState(strState2);
 
+        String string1 = sA.getBrand() +" Model: " + sA.getModel();
+        String string2 = sB.getBrand() +" Model: " + sB.getModel();
 
-        stringToneDataSet1 = new LineDataSet(loadStringTone(sA), "String 1 Tone");
-        stringToneDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        stringToneDataSet1 = new LineDataSet(loadStringTone(sA), string1);
+        stringToneDataSet1.setColor(Color.RED);
         stringToneDataSet1.setLineWidth(5);
 
-
-        stringToneDataSet2 = new LineDataSet(loadStringTone(sB), "String 2 Tone");
-        stringToneDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
+        stringToneDataSet2 = new LineDataSet(loadStringTone(sB), string2);
+        stringToneDataSet2.setColor(Color.BLUE);
         stringToneDataSet2.setLineWidth(5);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -72,6 +78,8 @@ public class ToneComparisonGraph extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        int color = ContextCompat.getColor(ToneComparisonGraph.this, R.color.lifecolor0); //Background Color
+        lineChart.setBackgroundColor(color);
         lineChart.animateY(3000);
         lineChart.invalidate();
 

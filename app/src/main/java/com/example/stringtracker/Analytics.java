@@ -2,14 +2,11 @@ package com.example.stringtracker;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.github.mikephil.charting.charts.LineChart;
 
 public class Analytics extends AppCompatActivity {
     // main data objects
@@ -80,7 +77,7 @@ public class Analytics extends AppCompatActivity {
             public void onClick(View v) {
 
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                Intent intent = new Intent(Analytics.this, LineGraphActivity.class);
+                Intent intent = new Intent(Analytics.this, CurrentStringSentGraph.class);
                 String appState = A1.getAppState();
                 String instState = I1.getInstState();
                 String strState = S1.getStrState();
@@ -140,7 +137,7 @@ public class Analytics extends AppCompatActivity {
     }
 
     public void gotoCurrSentGraph(View v){
-        Intent intent = new Intent(this, LineGraphActivity.class);
+        Intent intent = new Intent(this, CurrentStringSentGraph.class);
         String appState = A1.getAppState();
         String instState = I1.getInstState();
         String strState = S1.getStrState();

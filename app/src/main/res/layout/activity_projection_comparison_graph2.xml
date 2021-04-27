@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#009FFDED"
     tools:context=".ProjectionComparisonGraph">
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChartProjection"
-        android:layout_width="421dp"
-        android:layout_height="634dp"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonProjRet"
-        tools:layout_editor_absoluteX="-10dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonProjRet"

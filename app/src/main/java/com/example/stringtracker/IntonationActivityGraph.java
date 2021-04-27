@@ -1,9 +1,13 @@
 package com.example.stringtracker;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -17,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class IntonationActivityGraph extends AppCompatActivity {
+
+    Button buttonIntonRet;
+
     LineChart lineChart;
     LineDataSet stringIntonationDataSet1;
     LineDataSet stringIntonationDataSet2;
@@ -32,7 +39,7 @@ public class IntonationActivityGraph extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intonation_comparison_graph);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lineChart = findViewById(R.id.lineChartIntonation);
         String appState;
         String instState;
@@ -52,15 +59,17 @@ public class IntonationActivityGraph extends AppCompatActivity {
         sA.setStrState(strState1);
         sB.setStrState(strState2);
 
+        String string1 = sA.getBrand() +" Model: " + sA.getModel();
+        String string2 = sB.getBrand() +" Model: " + sB.getModel();
 
-        stringIntonationDataSet1 = new LineDataSet(loadStringIntonation(sA), "String 1 Intonation");
-        stringIntonationDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        stringIntonationDataSet1 = new LineDataSet(loadStringIntonation(sA), string1);
+        stringIntonationDataSet1.setColor(Color.RED);
         stringIntonationDataSet1.setLineWidth(5);
 
-
-        stringIntonationDataSet2 = new LineDataSet(loadStringIntonation(sB), "String 2 Intonation");
-        stringIntonationDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
+        stringIntonationDataSet2 = new LineDataSet(loadStringIntonation(sB), string2);
+        stringIntonationDataSet2.setColor(Color.BLUE);
         stringIntonationDataSet2.setLineWidth(5);
+
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(stringIntonationDataSet1);
@@ -69,8 +78,25 @@ public class IntonationActivityGraph extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        int color = ContextCompat.getColor(IntonationActivityGraph.this, R.color.lifecolor0); //Background Color
+        lineChart.setBackgroundColor(color);
         lineChart.animateY(3000);
         lineChart.invalidate();
+
+        //RETURN BUTTON
+
+        buttonIntonRet = findViewById(R.id.buttonIntonRet);
+        buttonIntonRet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("appstate", A1.getAppState());
+                resultIntent.putExtra("inststate", I1.getInstState());
+                resultIntent.putExtra("strstate", S1.getStrState());
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
 
 
 

@@ -1,8 +1,10 @@
 package com.example.stringtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +38,7 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_projection_comparison_graph2);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         lineChart = findViewById(R.id.lineChartProjection);
         String appState;
         String instState;
@@ -56,16 +58,22 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
         sA.setStrState(strState1);
         sB.setStrState(strState2);
 
+        //get brands of strings
+        String string1 = sA.getBrand() +" Model: " + sA.getModel();
+        String string2 = sB.getBrand() +" Model: " + sB.getModel();
 
-        stringProjectionDataSet1 = new LineDataSet(loadStringProjection1(sA), "String 1 ProJ");
-        stringProjectionDataSet1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+//        int color1 = ContextCompat.getColor(ProjectionComparisonGraph.this, R.color.red_String);
+//        int color2 = ContextCompat.getColor(ProjectionComparisonGraph.this, R.color.blue_String);
+
+        stringProjectionDataSet1 = new LineDataSet(loadStringProjection1(sA), string1);
+        stringProjectionDataSet1.setColor(Color.RED);
         stringProjectionDataSet1.setLineWidth(5);
-//        stringProjectionDataSet1
 
-
-        stringProjectionDataSet2 = new LineDataSet(loadStringProjection1(sB), "String 2 ProJ");
-        stringProjectionDataSet2.setColor(ColorTemplate.VORDIPLOM_COLORS[3]);
+        stringProjectionDataSet2 = new LineDataSet(loadStringProjection1(sB), string2);
+        stringProjectionDataSet2.setColor(Color.BLUE);
         stringProjectionDataSet2.setLineWidth(5);
+
+
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(stringProjectionDataSet1);
@@ -74,6 +82,8 @@ public class ProjectionComparisonGraph extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        int color = ContextCompat.getColor(ProjectionComparisonGraph.this, R.color.lifecolor0); //Background Color
+        lineChart.setBackgroundColor(color);
         lineChart.animateY(3000);
         lineChart.invalidate();
 

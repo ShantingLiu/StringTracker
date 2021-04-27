@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/stringLableTV2"
-        android:layout_width="177dp"
+        android:layout_width="186dp"
         android:layout_height="23dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="17dp"
-        android:background="#FFFFFF"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="#2196F3"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/stringLableTV1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
 
     <Spinner
@@ -57,19 +57,19 @@
 
     <TextView
         android:id="@+id/stringStatsTV2"
-        android:layout_width="190dp"
-        android:layout_height="148dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="186dp"
+        android:layout_height="104dp"
         android:layout_marginTop="52dp"
+        android:layout_marginEnd="8dp"
         android:background="#FFFFFF"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/stringStatsTV1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
 
     <TextView
         android:id="@+id/stringStatsTV1"
-        android:layout_width="190dp"
-        android:layout_height="148dp"
+        android:layout_width="186dp"
+        android:layout_height="104dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="52dp"
         android:background="#FFFFFF"
@@ -105,7 +105,7 @@
         android:id="@+id/buttonIntonation"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="11dp"
         android:text="Intonation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -116,7 +116,7 @@
         android:id="@+id/buttonTone"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="11dp"
         android:text="Tone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -140,11 +140,11 @@
 
     <TextView
         android:id="@+id/stringLableTV1"
-        android:layout_width="177dp"
+        android:layout_width="186dp"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="17dp"
-        android:background="#FFFFFF"
+        android:background="#F44336"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />

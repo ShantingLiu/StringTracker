@@ -17,19 +17,16 @@
 
         <activity
             android:name=".ProjectionComparisonGraph"
-            android:parentActivityName=".CompareStrings"
             />
         <activity
             android:name=".IntonationActivityGraph"
-            android:parentActivityName=".CompareStrings"
             />
         <activity
             android:name=".ToneComparisonGraph"
-            android:parentActivityName=".CompareStrings"
             />
         <activity
-            android:name=".LineGraphActivity"
-            android:parentActivityName=".Analytics" />
+            android:name=".CurrentStringSentGraph"
+            />
         <activity android:name=".EditString" />
         <activity android:name=".AddNewStringFromAddNewInstr" />
         <activity android:name=".AddNewStringFromConfig" />

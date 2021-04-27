@@ -3,7 +3,6 @@ package com.example.stringtracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.github.mikephil.charting.utils.EntryXComparator;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LineGraphActivity extends AppCompatActivity  {
+public class CurrentStringSentGraph extends AppCompatActivity  {
 
 //    Context context = LineGraphActivity.this;
     LineChart lineChart;
@@ -31,13 +30,13 @@ public class LineGraphActivity extends AppCompatActivity  {
     AppState A1 = new AppState();
     StringSet S1 = new StringSet();
     Instrument I1 = new Instrument();
-    private Context context;
+
     Button buttonRet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_line_graph);
+        setContentView(R.layout.activity_current_string_sent_graph);
         lineChart = findViewById(R.id.lineChart);
 
         String appState;
@@ -52,7 +51,7 @@ public class LineGraphActivity extends AppCompatActivity  {
         S1.setStrState(strState);
 
         // back navigation
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //load projection Data into LineDataSet
        projectionDataSet = new LineDataSet(stringProjections(), "projection");
@@ -78,6 +77,8 @@ public class LineGraphActivity extends AppCompatActivity  {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        int color = ContextCompat.getColor(CurrentStringSentGraph.this, R.color.lifecolor0); //Background Color
+        lineChart.setBackgroundColor(color);
         lineChart.animateY(3000);
         lineChart.invalidate();
 
