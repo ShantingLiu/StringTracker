@@ -36,12 +36,12 @@
         android:id="@+id/editStrConfirm"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginTop="32dp"
         android:onClick="confirmEditStr"
         android:text="Update String"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editStrTensionSpinner" />
 
     <TextView
         android:id="@+id/editStrHeader"
@@ -50,6 +50,8 @@
         android:layout_marginTop="28dp"
         android:background="#FFFFFF"
         android:text="Edit String"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +61,7 @@
         android:id="@+id/editStrTensionPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="16dp"
         android:background="#FFFFFF"
         android:text="String Tension:"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,18 +74,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="129dp"
+        android:layout_marginTop="32dp"
         android:background="#FFFFFF"
         android:text="Brand Name:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/editStrHeader" />
 
     <TextView
         android:id="@+id/editStrModelNamePrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="38dp"
         android:background="#FFFFFF"
         android:text="Model Name:"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="129dp"
+        android:layout_marginTop="112dp"
         android:background="#FFFFFF"
         android:text="Cost:"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +106,7 @@
         android:id="@+id/editStrBrandName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/newBrandName"
@@ -115,7 +117,7 @@
         android:id="@+id/editStrModelName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/newModelName"
@@ -127,12 +129,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Cost"
         app:layout_constraintStart_toEndOf="@+id/editStrCostPrompt"
-        app:layout_constraintTop_toBottomOf="@+id/editStrInstrTypePrompt" />
+        app:layout_constraintTop_toBottomOf="@+id/editStrInstrTypeSpinner" />
 
     <Spinner
         android:id="@+id/editStrTensionSpinner"
@@ -150,7 +152,7 @@
         android:id="@+id/editStrInstrTypePrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:background="#FFFFFF"
         android:text="Instrument Type:"
         app:layout_constraintEnd_toEndOf="parent"

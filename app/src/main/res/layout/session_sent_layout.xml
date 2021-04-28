@@ -12,39 +12,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="#80ACD1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/projbar_label" />
 
     <RatingBar
         android:id="@+id/ratingBarTone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="#80ACD1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBarProj"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tonebar_label" />
 
     <RatingBar
         android:id="@+id/ratingBarInton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="384dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="#80ACD1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBarTone"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/intonbar_label" />
 
     <Button
         android:id="@+id/buttonSave"
@@ -66,13 +64,13 @@
         android:id="@+id/projbar_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="12dp"
         android:background="#FFFFFF"
         android:text="@string/rating_proj"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sentLabel" />
 
     <TextView
         android:id="@+id/tonebar_label"
@@ -81,7 +79,7 @@
         android:layout_marginTop="32dp"
         android:background="#FFFFFF"
         android:text="@string/rating_tone"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBarProj" />
@@ -93,7 +91,7 @@
         android:layout_marginTop="32dp"
         android:background="#FFFFFF"
         android:text="@string/rating_inton"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ratingBarTone" />

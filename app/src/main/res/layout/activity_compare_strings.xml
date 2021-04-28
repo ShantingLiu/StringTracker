@@ -9,27 +9,30 @@
 
     <TextView
         android:id="@+id/stringLableTV2"
-        android:layout_width="186dp"
+        android:layout_width="180dp"
         android:layout_height="23dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
         android:background="#2196F3"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stringLableTV1"
         app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
 
     <Spinner
         android:id="@+id/spinnerString2"
-        android:layout_width="412dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="88dp"
+        android:layout_width="393dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerInstrumentTypes" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerString1" />
 
     <Spinner
         android:id="@+id/spinnerInstrumentTypes"
         android:layout_width="412dp"
         android:layout_height="40dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="13dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewStringCompare" />
@@ -38,7 +41,8 @@
         android:id="@+id/spinnerString1"
         android:layout_width="412dp"
         android:layout_height="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerInstrumentTypes" />
 
@@ -46,47 +50,46 @@
         android:id="@+id/textViewStringCompare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:text="Select Strings to Compare"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/stringStatsTV2"
-        android:layout_width="186dp"
-        android:layout_height="104dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="2dp"
         android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
+        app:layout_constraintStart_toEndOf="@+id/stringStatsTV1"
+        app:layout_constraintTop_toBottomOf="@+id/stringLableTV2" />
 
     <TextView
         android:id="@+id/stringStatsTV1"
-        android:layout_width="186dp"
-        android:layout_height="104dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="2dp"
         android:background="#FFFFFF"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerString2" />
+        app:layout_constraintTop_toBottomOf="@+id/stringLableTV1" />
 
     <TextView
         android:id="@+id/textViewGraph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:text="View Graphs"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stringStatsTV2" />
 
@@ -94,7 +97,7 @@
         android:id="@+id/buttonProjection"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="6dp"
         android:text="Projection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -105,7 +108,7 @@
         android:id="@+id/buttonIntonation"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="6dp"
         android:text="Intonation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -116,7 +119,7 @@
         android:id="@+id/buttonTone"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="6dp"
         android:text="Tone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -125,7 +128,7 @@
 
     <Button
         android:id="@+id/buttonRet3"
-        android:layout_width="120dp"
+        android:layout_width="130dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
@@ -133,17 +136,17 @@
         android:backgroundTint="#518078"
         android:backgroundTintMode="add"
         android:text="Return"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:iconTint="#518078"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/stringLableTV1"
-        android:layout_width="186dp"
+        android:layout_width="180dp"
         android:layout_height="23dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
         android:background="#F44336"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
