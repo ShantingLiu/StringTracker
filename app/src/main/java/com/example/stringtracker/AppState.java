@@ -92,7 +92,7 @@ public class AppState extends Activity { //AppCompatActivity {
         StopT = System.currentTimeMillis();
         if(testMode) {
             // 100ths of a sec time unit for testMode
-            LastSessionTime = (int) TimeUnit.MILLISECONDS.toMillis(StopT - StartT) / 10;
+            LastSessionTime = (int) TimeUnit.MILLISECONDS.toMillis(StopT - StartT) / 20;
         } else {
             // minutes played for normal operation
             LastSessionTime = (int) TimeUnit.MILLISECONDS.toMinutes(StopT - StartT) ;
